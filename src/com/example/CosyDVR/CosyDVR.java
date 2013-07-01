@@ -5,11 +5,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import java.io.File;
 
 
 public class CosyDVR extends Activity{
@@ -27,6 +29,11 @@ public class CosyDVR extends Activity{
       recording = false;
 
       setContentView(R.layout.main);
+      
+      File tmpdir = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/");
+      File favdir = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/fav/");
+      tmpdir.mkdirs();
+      favdir.mkdirs();
 
       favButton = (Button)findViewById(R.id.fav_button);
       recButton = (Button)findViewById(R.id.rec_button);
@@ -71,6 +78,10 @@ public class CosyDVR extends Activity{
   @Override
   public void onClick(View v) {
    // TODO Auto-generated method stub
+	  if(mBound) {
+		  mService.toggleFavorite();
+		  favButton.setText(getString(R.string.fav) + " [" + mService.isFavorite() + "]");
+	  }
  }};
 
   Button.OnClickListener recButtonOnClickListener

@@ -22,6 +22,10 @@ import android.text.format.DateFormat;
 import android.os.IBinder;
 import android.os.Binder;
 import java.util.Date;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.io.File;
+import java.lang.String;
 
 
 
@@ -33,9 +37,12 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     private SurfaceView surfaceView;
     private Camera camera = null;
     private MediaRecorder mediaRecorder = null;
-    private boolean recording = false;
+    private boolean isrecording = false;
     private boolean isflashon = false;
-    SurfaceHolder mSurfaceHolder = null;
+    private int isfavorite = 0;
+    private String currentfile = null;
+    //private String previousfile = null;
+    private SurfaceHolder mSurfaceHolder = null;
 
 
     /**
@@ -82,92 +89,118 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     	mSurfaceHolder = surfaceHolder;
     }
 
-    public boolean isRecording(){
-    	return recording;
+    public int isFavorite(){
+    	return isfavorite;
     }
     
+    public boolean isRecording(){
+    	return isrecording;
+    }
+
     public void StopRecording() {
     	StopReset();
     	ReleaseLock();
     }
-    public void RestartRecording() {
+    public void Restartrecording() {
     	AudioManager manager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
     	manager.setStreamSolo(AudioManager.STREAM_SYSTEM,true);
     	manager.setStreamMute(AudioManager.STREAM_SYSTEM,true);
     	StopReset();
     	ReleaseLock();
+    	
     	OpenUnlock();
     	PrepareStart();
     	manager.setStreamMute(AudioManager.STREAM_SYSTEM,false);
     	manager.setStreamSolo(AudioManager.STREAM_SYSTEM,false);
     }
     
-    public void StartRecording() {
-    	OpenUnlock();
-    	PrepareStart();
-    }
+	public void StartRecording() {
+		OpenUnlock();
+	   	PrepareStart();
+	}
 
-    private void StopReset() {
-	mediaRecorder.stop();
-    mediaRecorder.reset();
-    }
+	private void StopReset() {
+		mediaRecorder.stop();
+	    mediaRecorder.reset();
+	    if(currentfile != null && isfavorite != 0) {
+	    	File tmpfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile);
+	    	File favfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/fav/" + currentfile);
+	    	tmpfile.renameTo(favfile);
+	    	if(isfavorite == 1) {
+	    		isfavorite = 0;
+	    	}
+	    }
+	}
     
-    private void ReleaseLock() {
-    mediaRecorder.release();
+	private void ReleaseLock() {
+	    mediaRecorder.release();
+	
+	    camera.lock();
+	    camera.release();
+	}
 
-    camera.lock();
-    camera.release();
+	private void OpenUnlock() {
+	    camera = Camera.open();
+	    mediaRecorder = new MediaRecorder();
+	    camera.unlock();
+	
+	    mediaRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());
+	    mediaRecorder.setCamera(camera);
+	}
 
-}
-private void OpenUnlock() {
-    camera = Camera.open();
-    mediaRecorder = new MediaRecorder();
-    camera.unlock();
-
-    mediaRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());
-    mediaRecorder.setCamera(camera);
-}
 	private void PrepareStart() {
-    mediaRecorder.setMaxDuration(600000);
-    mediaRecorder.setMaxFileSize(0); // 0 - no limit
-  //mediaRecorder.setOnErrorListener
-    mediaRecorder.setOnInfoListener(this);
+	    mediaRecorder.setMaxDuration(15000);
+	    mediaRecorder.setMaxFileSize(0); // 0 - no limit
+	  //mediaRecorder.setOnErrorListener
+	    mediaRecorder.setOnInfoListener(this);
 
 
-    mediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-    mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+	    mediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+	    mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+	
+	    mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+	
+	    mediaRecorder.setAudioEncoder(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioCodec);//MediaRecorder.AudioEncoder.HE_AAC
+	    mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+	
+	    currentfile = DateFormat.format("yyyy-MM-dd_kk-mm-ss", new Date().getTime()) + ".mp4";
+	    mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile);
+	
+	    mediaRecorder.setAudioChannels(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioChannels);
+	    mediaRecorder.setAudioSamplingRate(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioSampleRate);
+	    mediaRecorder.setAudioEncodingBitRate(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioBitRate);
+	
+	    mediaRecorder.setVideoEncodingBitRate(2000000);
+	    mediaRecorder.setVideoSize(1280,720);// 640x480,800x480
+	    mediaRecorder.setVideoFrameRate(30);
+	
+	    
+	    try { mediaRecorder.prepare(); } catch (Exception e) {}
+	    mediaRecorder.start();
+	}
+	
+	public void freeSpace() {
+		File dir = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile);
+		File[] filelist = dir.listFiles();
+		Arrays.sort(filelist, new Comparator<File>() {
+            public int compare(File f1, File f2) {
+                return Long.valueOf(f2.lastModified()).compareTo(
+                        f1.lastModified());
+            }
+        });		
+	}
 
-    mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-
-    mediaRecorder.setAudioEncoder(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioCodec);//MediaRecorder.AudioEncoder.HE_AAC
-    mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-
-    mediaRecorder.setOutputFile(
-            Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + 
-            DateFormat.format("yyyy-MM-dd_kk-mm-ss", new Date().getTime()) +
-            ".mp4"
-    );
-
-    mediaRecorder.setAudioChannels(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioChannels);
-    mediaRecorder.setAudioSamplingRate(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioSampleRate);
-    mediaRecorder.setAudioEncodingBitRate(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioBitRate);
-
-    mediaRecorder.setVideoEncodingBitRate(2000000);
-    mediaRecorder.setVideoSize(1280,720);// 640x480,800x480
-    mediaRecorder.setVideoFrameRate(30);
-
-    
-    try { mediaRecorder.prepare(); } catch (Exception e) {}
-    mediaRecorder.start();
-}
+    public void toggleFavorite() {
+    	isfavorite = (isfavorite + 1) % 3;
+    }
 
     public void toggleRecording() {
-    	if(recording){
+    	if(isrecording){
     		StopRecording();
-            recording = false;
+            isrecording = false;
     	} else {
     		StartRecording();
-    		recording = true;
+    		isrecording = true;
     	}
     }
 
@@ -201,17 +234,17 @@ private void OpenUnlock() {
 		windowManager.updateViewLayout(surfaceView, layoutParams);
 	}
 
-    // Stop recording and remove SurfaceView
+    // Stop isrecording and remove SurfaceView
     @Override
     public void onDestroy() {
-    	if(recording){
+    	if(isrecording){
     		mediaRecorder.stop();
             mediaRecorder.reset();
             mediaRecorder.release();
 
             camera.lock();
             camera.release();
-    		recording = false;
+    		isrecording = false;
     	}
 
         windowManager.removeView(surfaceView);
@@ -230,7 +263,7 @@ private void OpenUnlock() {
     @Override
     public void onInfo(MediaRecorder mr, int what, int extra) {                     
         if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
-            this.RestartRecording();
+            this.Restartrecording();
         }          
     }
 }
