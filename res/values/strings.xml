@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CosyDVR</string>
+    <string name="rec">REC</string>
+    <string name="stop">STOP</string>
+    <string name="fav">FAV</string>
+    <string name="flash">FLASH</string>
+</resources>
