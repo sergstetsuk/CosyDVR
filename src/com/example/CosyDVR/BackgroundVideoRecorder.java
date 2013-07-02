@@ -1,7 +1,5 @@
 package com.example.CosyDVR;
 
-//import com.example.CosyDVR.VideoRecorderOnInfoListener;
-
 import android.app.Service;
 import android.app.Notification;
 import android.content.Context;
@@ -26,11 +24,20 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.io.File;
 import java.lang.String;
+import android.os.PowerManager;
 
 
 
 public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Callback, MediaRecorder.OnInfoListener {
-
+//CONSTANTS-OPTIONS
+	public long MAX_TEMP_FOLDER_SIZE = 10000000;
+	public long MIN_FREE_SPACE = 1000000;
+	public int MAX_VIDEO_DURATION = 600000;
+	public int VIDEO_WIDTH = 1280;
+	public int VIDEO_HEIGHT= 720;
+	public int MAX_VIDEO_BIT_RATE = 5000000;
+	//public int AUDIO_SOURCE = CAMERA;
+	
     // Binder given to clients
     private final IBinder mBinder = new LocalBinder();
     private WindowManager windowManager;
@@ -43,6 +50,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     private String currentfile = null;
     //private String previousfile = null;
     private SurfaceHolder mSurfaceHolder = null;
+    private PowerManager.WakeLock WakeLock;
 
 
     /**
@@ -69,17 +77,19 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 
         // Create new SurfaceView, set its size to 1x1, move it to the top left corner and set this service as a callback
         windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        surfaceView = new SurfaceView(this);
+         surfaceView = new SurfaceView(this);
         LayoutParams layoutParams = new WindowManager.LayoutParams(
         	//WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
-        	720,480,
+        	1,1,
             WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
             WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
             PixelFormat.TRANSLUCENT
         );
-        layoutParams.gravity = Gravity.CENTER; //Gravity.LEFT | Gravity.TOP;
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
         windowManager.addView(surfaceView, layoutParams);
         surfaceView.getHolder().addCallback(this);
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        WakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "CosyDVRWakeLock");
 
     }
     
@@ -98,96 +108,106 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     }
 
     public void StopRecording() {
-    	StopReset();
-    	ReleaseLock();
+    	StopResetReleaseLock();
     }
     public void Restartrecording() {
     	AudioManager manager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
     	manager.setStreamSolo(AudioManager.STREAM_SYSTEM,true);
     	manager.setStreamMute(AudioManager.STREAM_SYSTEM,true);
-    	StopReset();
-    	ReleaseLock();
-    	
-    	OpenUnlock();
-    	PrepareStart();
+    	StopResetReleaseLock();
+    	OpenUnlockPrepareStart();
+    	freeSpace();
     	manager.setStreamMute(AudioManager.STREAM_SYSTEM,false);
     	manager.setStreamSolo(AudioManager.STREAM_SYSTEM,false);
     }
     
 	public void StartRecording() {
-		OpenUnlock();
-	   	PrepareStart();
+		OpenUnlockPrepareStart();
 	}
 
-	private void StopReset() {
-		mediaRecorder.stop();
-	    mediaRecorder.reset();
-	    if(currentfile != null && isfavorite != 0) {
-	    	File tmpfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile);
-	    	File favfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/fav/" + currentfile);
-	    	tmpfile.renameTo(favfile);
-	    	if(isfavorite == 1) {
-	    		isfavorite = 0;
-	    	}
-	    }
-	}
-    
-	private void ReleaseLock() {
-	    mediaRecorder.release();
-	
-	    camera.lock();
-	    camera.release();
-	}
-
-	private void OpenUnlock() {
-	    camera = Camera.open();
-	    mediaRecorder = new MediaRecorder();
-	    camera.unlock();
-	
-	    mediaRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());
-	    mediaRecorder.setCamera(camera);
+	private void StopResetReleaseLock() {
+		if(isrecording) {
+			mediaRecorder.stop();
+		    mediaRecorder.reset();
+		    if(currentfile != null && isfavorite != 0) {
+		    	File tmpfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile);
+		    	File favfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/fav/" + currentfile);
+		    	tmpfile.renameTo(favfile);
+		    	if(isfavorite == 1) {
+		    		isfavorite = 0;
+		    	}
+		    }
+		    mediaRecorder.release();
+		
+		    camera.lock();
+		    camera.release();
+		    WakeLock.release();
+		    isrecording = false;
+		}
 	}
 
-	private void PrepareStart() {
-	    mediaRecorder.setMaxDuration(15000);
-	    mediaRecorder.setMaxFileSize(0); // 0 - no limit
-	  //mediaRecorder.setOnErrorListener
-	    mediaRecorder.setOnInfoListener(this);
-
-
-	    mediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-	    mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+	private void OpenUnlockPrepareStart() {
+		if(!isrecording) {
+			WakeLock.acquire();
+		    camera = Camera.open();
+		    mediaRecorder = new MediaRecorder();
+		    camera.unlock();
+		
+		    mediaRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());
+		    mediaRecorder.setCamera(camera);
 	
-	    mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+		    mediaRecorder.setMaxDuration(this.MAX_VIDEO_DURATION);
+		    mediaRecorder.setMaxFileSize(0); // 0 - no limit
+		  //mediaRecorder.setOnErrorListener
+		    mediaRecorder.setOnInfoListener(this);
 	
-	    mediaRecorder.setAudioEncoder(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioCodec);//MediaRecorder.AudioEncoder.HE_AAC
-	    mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
 	
-	    currentfile = DateFormat.format("yyyy-MM-dd_kk-mm-ss", new Date().getTime()) + ".mp4";
-	    mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile);
-	
-	    mediaRecorder.setAudioChannels(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioChannels);
-	    mediaRecorder.setAudioSamplingRate(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioSampleRate);
-	    mediaRecorder.setAudioEncodingBitRate(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioBitRate);
-	
-	    mediaRecorder.setVideoEncodingBitRate(2000000);
-	    mediaRecorder.setVideoSize(1280,720);// 640x480,800x480
-	    mediaRecorder.setVideoFrameRate(30);
-	
-	    
-	    try { mediaRecorder.prepare(); } catch (Exception e) {}
-	    mediaRecorder.start();
+		    mediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+		    mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+		
+		    mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+		
+		    mediaRecorder.setAudioEncoder(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioCodec);//MediaRecorder.AudioEncoder.HE_AAC
+		    mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+		
+		    currentfile = DateFormat.format("yyyy-MM-dd_kk-mm-ss", new Date().getTime()) + ".mp4";
+		    mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile);
+		
+		    mediaRecorder.setAudioChannels(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioChannels);
+		    mediaRecorder.setAudioSamplingRate(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioSampleRate);
+		    mediaRecorder.setAudioEncodingBitRate(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioBitRate);
+		
+		    mediaRecorder.setVideoEncodingBitRate(this.MAX_VIDEO_BIT_RATE);
+		    mediaRecorder.setVideoSize(this.VIDEO_WIDTH,this.VIDEO_HEIGHT);// 640x480,800x480
+		    mediaRecorder.setVideoFrameRate(30);
+		
+		    
+		    try { mediaRecorder.prepare(); } catch (Exception e) {}
+		    mediaRecorder.start();
+		    isrecording = true;
+		}
 	}
 	
 	public void freeSpace() {
-		File dir = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile);
+		File dir = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/");
 		File[] filelist = dir.listFiles();
 		Arrays.sort(filelist, new Comparator<File>() {
             public int compare(File f1, File f2) {
                 return Long.valueOf(f2.lastModified()).compareTo(
                         f1.lastModified());
             }
-        });		
+        });
+			long totalSize = 0; //in kB
+			int i;
+		for(i = 0; i < filelist.length; i++){
+			totalSize += filelist[i].length()/1024;
+		}
+		i = filelist.length - 1;
+		while (i > 0 && (totalSize > this.MAX_TEMP_FOLDER_SIZE || dir.getFreeSpace() < this.MIN_FREE_SPACE)) {
+			totalSize -= filelist[i].length()/1024;
+			filelist[i].delete();
+			i--;
+		}
 	}
 
     public void toggleFavorite() {
@@ -197,10 +217,8 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     public void toggleRecording() {
     	if(isrecording){
     		StopRecording();
-            isrecording = false;
     	} else {
     		StartRecording();
-    		isrecording = true;
     	}
     }
 
@@ -219,6 +237,12 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     }
 
     public void ChangeSurface(int width, int height){
+    	if(this.VIDEO_WIDTH/this.VIDEO_HEIGHT > width/height) {
+    		height = (int) (width * this.VIDEO_HEIGHT / this.VIDEO_WIDTH);
+    	}
+    	else {
+    		width = (int) (height * this.VIDEO_WIDTH / this.VIDEO_HEIGHT);
+    	}
         LayoutParams layoutParams = new WindowManager.LayoutParams(
             	//WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
             	width,height,
@@ -229,7 +253,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
         if (width == 1) {
             layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
         } else {
-        	layoutParams.gravity = Gravity.CENTER; //Gravity.LEFT | Gravity.TOP;
+        	layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
         }
 		windowManager.updateViewLayout(surfaceView, layoutParams);
 	}
@@ -237,15 +261,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     // Stop isrecording and remove SurfaceView
     @Override
     public void onDestroy() {
-    	if(isrecording){
-    		mediaRecorder.stop();
-            mediaRecorder.reset();
-            mediaRecorder.release();
-
-            camera.lock();
-            camera.release();
-    		isrecording = false;
-    	}
+    	StopResetReleaseLock();
 
         windowManager.removeView(surfaceView);
 

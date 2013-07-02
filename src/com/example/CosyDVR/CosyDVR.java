@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
+import android.graphics.Point;
 import android.os.IBinder;
 import java.io.File;
 
@@ -20,6 +22,7 @@ public class CosyDVR extends Activity{
     Button favButton,recButton,flsButton;
     boolean mBound = false;
     boolean recording;
+    private int mWidth=1,mHeight=1;
 
   /** Called when the activity is first created. */
   @Override
@@ -67,7 +70,7 @@ public class CosyDVR extends Activity{
   @Override
   public void onResume(){
 	  if(mBound) {
-		  mService.ChangeSurface(720, 480);
+		  mService.ChangeSurface(mWidth, mHeight);
 	  }
 	  super.onResume();
   }
@@ -119,11 +122,17 @@ private ServiceConnection mConnection = new ServiceConnection() {
         mService = binder.getService();
         mBound = true;
         if(!mService.isRecording()){
-       	 //stopService(new Intent(CosyDVR.this, BackgroundVideoRecorder.class));
-       	 recButton.setText(getString(R.string.rec));
+       	 	//stopService(new Intent(CosyDVR.this, BackgroundVideoRecorder.class));
+       	 	recButton.setText(getString(R.string.rec));
         }else{
             recButton.setText(getString(R.string.stop));
         }
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        mWidth = size.x;
+        mHeight = size.y - favButton.getHeight();
+        mService.ChangeSurface(mWidth, mHeight);
      }
 
     @Override
