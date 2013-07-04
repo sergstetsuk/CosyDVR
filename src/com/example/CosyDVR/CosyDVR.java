@@ -19,7 +19,7 @@ import java.io.File;
 public class CosyDVR extends Activity{
 
     BackgroundVideoRecorder mService;
-    Button favButton,recButton,flsButton;
+    Button favButton,recButton,flsButton,exiButton;
     boolean mBound = false;
     boolean recording;
     private int mWidth=1,mHeight=1;
@@ -41,21 +41,39 @@ public class CosyDVR extends Activity{
       favButton = (Button)findViewById(R.id.fav_button);
       recButton = (Button)findViewById(R.id.rec_button);
       flsButton = (Button)findViewById(R.id.fls_button);
+      exiButton = (Button)findViewById(R.id.exi_button);
       
       favButton.setOnClickListener(favButtonOnClickListener);
       recButton.setOnClickListener(recButtonOnClickListener);
       flsButton.setOnClickListener(flsButtonOnClickListener);
-      
- 	  Intent intent = new Intent(CosyDVR.this, BackgroundVideoRecorder.class);
-      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      startService(intent);
-      bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+      exiButton.setOnClickListener(exiButtonOnClickListener);
+     
   }
+
+  @Override
+  public void onWindowFocusChanged(boolean hasFocus) {
+      super.onWindowFocusChanged(hasFocus);
+      if(hasFocus){
+          //aqcuire screen size 
+          Display display = getWindowManager().getDefaultDisplay();
+          Point size = new Point();
+          display.getSize(size);
+          mWidth = size.x;
+          mHeight = size.y - favButton.getHeight();
+
+          Intent intent = new Intent(CosyDVR.this, BackgroundVideoRecorder.class);
+          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          startService(intent);
+          bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+      }
+   }
 
   @Override  
   public void onDestroy(){
-	  unbindService(mConnection);
-	  stopService(new Intent(CosyDVR.this, BackgroundVideoRecorder.class));
+	  if(mBound) {
+		  unbindService(mConnection);
+          mBound = false;
+	  }
 	  super.onDestroy();
   }
   
@@ -101,14 +119,28 @@ public void onClick(View v) {
  mService.toggleRecording();
 }};
 
-  Button.OnClickListener flsButtonOnClickListener
-  = new Button.OnClickListener(){
+Button.OnClickListener flsButtonOnClickListener
+= new Button.OnClickListener(){
 @Override
 public void onClick(View v) {
- // TODO Auto-generated method stub
+// TODO Auto-generated method stub
 	  if(mBound) {
 		  mService.toggleFlash();
 	  }
+}};
+
+Button.OnClickListener exiButtonOnClickListener
+= new Button.OnClickListener(){
+@Override
+public void onClick(View v) {
+// TODO Auto-generated method stub
+	if(mBound) {
+		unbindService(CosyDVR.this.mConnection);
+        CosyDVR.this.mBound = false;
+	}
+	stopService(new Intent(CosyDVR.this, BackgroundVideoRecorder.class));
+    CosyDVR.this.finish();
+    //System.exit(0);
 }};
 
 /** Defines callbacks for service binding, passed to bindService() */
@@ -127,11 +159,6 @@ private ServiceConnection mConnection = new ServiceConnection() {
         }else{
             recButton.setText(getString(R.string.stop));
         }
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        mWidth = size.x;
-        mHeight = size.y - favButton.getHeight();
         mService.ChangeSurface(mWidth, mHeight);
      }
 
@@ -139,5 +166,6 @@ private ServiceConnection mConnection = new ServiceConnection() {
     public void onServiceDisconnected(ComponentName arg0) {
         mBound = false;
     }
+    
 };
 }
