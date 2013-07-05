@@ -1,8 +1,8 @@
 package com.example.CosyDVR;
 
 import android.app.Service;
-//import android.app.Notification;
-//import android.support.v4.app.NotificationCompat.Builder;
+import android.app.Notification;
+import android.support.v4.app.NotificationCompat;
 import android.content.Context;
 import android.content.Intent;
 import android.view.SurfaceHolder;
@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.Gravity;
 import android.view.SurfaceView;
+import android.widget.TextView;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
@@ -18,12 +19,17 @@ import android.media.MediaRecorder;
 import android.media.AudioManager;
 import android.os.Environment;
 import android.text.format.DateFormat;
+import android.os.Handler;
 //import android.os.Build;
 import android.os.IBinder;
 import android.os.Binder;
+import android.os.Message;
+
 import java.util.Date;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.io.File;
 import java.lang.String;
 import android.os.PowerManager;
@@ -38,12 +44,13 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	public int VIDEO_WIDTH = 1280;
 	public int VIDEO_HEIGHT= 720;
 	public int MAX_VIDEO_BIT_RATE = 5000000;
+	public int REFRESH_TIME = 1000;
 	//public int AUDIO_SOURCE = CAMERA;
 	
     // Binder given to clients
     private final IBinder mBinder = new LocalBinder();
-    private WindowManager windowManager;
-    private SurfaceView surfaceView;
+    private WindowManager windowManager = null ;
+    private SurfaceView surfaceView = null;
     private Camera camera = null;
     private MediaRecorder mediaRecorder = null;
     private boolean isrecording = false;
@@ -52,7 +59,13 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     private String currentfile = null;
     //private String previousfile = null;
     private SurfaceHolder mSurfaceHolder = null;
-    private PowerManager.WakeLock WakeLock;
+    private PowerManager.WakeLock WakeLock = null;
+    private Timer mTimer = null;
+    private TimerTask mTimerTask = null;
+
+    public TextView mTextView = null;
+    public long mSrtCounter = 0;
+    public Handler mHandler= null;
 
 
     /**
@@ -69,16 +82,17 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     @Override
     public void onCreate() {
         // Start foreground service to avoid unexpected kill
-/*        Notification notification = new Notification.Builder(this)
-            .setContentTitle("Background Video Recorder")
-            .setContentText("")
-            .setSmallIcon(R.drawable.cosydvricon)
-            .build();
-        startForeground(1234, notification);
-*/
+	        Notification notification = new NotificationCompat.Builder(this)
+	            .setContentTitle("CosyDVR Background Recorder Service")
+	            .setContentText("")
+	            .setSmallIcon(R.drawable.cosydvricon)
+	            .build();
+	        startForeground(1, notification);
+
         // Create new SurfaceView, set its size to 1x1, move it to the top left corner and set this service as a callback
         windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
          surfaceView = new SurfaceView(this);
+         mTextView = new TextView(this);
         LayoutParams layoutParams = new WindowManager.LayoutParams(
         	//WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
         	1,1,
@@ -88,10 +102,25 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
         );
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
         windowManager.addView(surfaceView, layoutParams);
+        layoutParams = new WindowManager.LayoutParams(
+            	WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+                PixelFormat.TRANSLUCENT
+            );
+        layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
+        windowManager.addView(mTextView, layoutParams);
+        mTextView.setText("-- km/h");
+
         surfaceView.getHolder().addCallback(this);
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         WakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "CosyDVRWakeLock");
-
+        
+        mHandler = new Handler() {
+            public void handleMessage(Message msg) {
+           		mTextView.setText(String.valueOf(mSrtCounter) + " km/h");
+            }
+        };
     }
     
     // Method called right after Surface created (initializing and starting MediaRecorder)
@@ -101,6 +130,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     }
 
     public int isFavorite(){
+    	//mTextView.setText(String.valueOf(mSrtCounter) + " km/h");
     	return isfavorite;
     }
     
@@ -110,13 +140,19 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 
     public void StopRecording() {
     	StopResetReleaseLock();
+    	   mTimer.cancel();
+    	   mTimer.purge();
+    	   mTimer = null;
+    	   mTimerTask.cancel();
+    	   mTimerTask = null;
+    	   
     }
     public void Restartrecording() {
     	AudioManager manager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
     	manager.setStreamSolo(AudioManager.STREAM_SYSTEM,true);
     	manager.setStreamMute(AudioManager.STREAM_SYSTEM,true);
-    	StopResetReleaseLock();
-    	OpenUnlockPrepareStart();
+    	StopRecording();
+    	StartRecording();
     	freeSpace();
     	manager.setStreamMute(AudioManager.STREAM_SYSTEM,false);
     	manager.setStreamSolo(AudioManager.STREAM_SYSTEM,false);
@@ -124,6 +160,17 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     
 	public void StartRecording() {
 		OpenUnlockPrepareStart();
+		mSrtCounter = 0;
+        mTimer = new Timer();
+        mTimerTask = new TimerTask() {
+        	@Override
+        	public void run() {
+        		// What you want to do goes here
+            	mSrtCounter++;
+        		mHandler.obtainMessage(1).sendToTarget();
+        	}
+        };
+        mTimer.scheduleAtFixedRate(mTimerTask, 0, REFRESH_TIME);
 	}
 
 	private void StopResetReleaseLock() {
@@ -204,11 +251,19 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 			totalSize += filelist[i].length()/1024;
 		}
 		i = filelist.length - 1;
-		while (i > 0 && (totalSize > this.MAX_TEMP_FOLDER_SIZE || dir.getFreeSpace() < this.MIN_FREE_SPACE)) {
-			totalSize -= filelist[i].length()/1024;
-			filelist[i].delete();
-			i--;
-		}
+//		if(Build.VERSION.SDK_INT >= 11) {
+			while (i > 0 && (totalSize > this.MAX_TEMP_FOLDER_SIZE || dir.getFreeSpace() < this.MIN_FREE_SPACE)) {
+				totalSize -= filelist[i].length()/1024;
+				filelist[i].delete();
+				i--;
+			}
+//		} else {
+//			while (i > 0 && (totalSize > this.MAX_TEMP_FOLDER_SIZE)) {
+//				totalSize -= filelist[i].length()/1024;
+//				filelist[i].delete();
+//				i--;
+//			}
+//		}
 	}
 
     public void toggleFavorite() {
@@ -257,7 +312,12 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
         	layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
         }
 		windowManager.updateViewLayout(surfaceView, layoutParams);
-	}
+	    if(width>1) {
+	    	mTextView.setVisibility(TextView.VISIBLE);
+	    } else {
+	    	mTextView.setVisibility(TextView.INVISIBLE);
+	    }
+    }
 
     // Stop isrecording and remove SurfaceView
     @Override
@@ -265,7 +325,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     	StopResetReleaseLock();
 
         windowManager.removeView(surfaceView);
-
+        windowManager.removeView(mTextView);
     }
 
     @Override

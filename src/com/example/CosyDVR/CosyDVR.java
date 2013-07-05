@@ -4,6 +4,7 @@ import com.example.CosyDVR.BackgroundVideoRecorder;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.Context;
+//import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Display;
@@ -56,10 +57,15 @@ public class CosyDVR extends Activity{
       if(hasFocus){
           //aqcuire screen size 
           Display display = getWindowManager().getDefaultDisplay();
-          Point size = new Point();
-          display.getSize(size);
-          mWidth = size.x;
-          mHeight = size.y - favButton.getHeight();
+//          if (Build.VERSION.SDK_INT >= 13){
+	          Point size = new Point();
+	          display.getSize(size);
+	          mWidth = size.x;
+	          mHeight = size.y - favButton.getHeight();
+//          }else {
+//        	  mWidth = display.getWidth();
+//        	  mHeight = display.getHeight();
+//          }
 
           Intent intent = new Intent(CosyDVR.this, BackgroundVideoRecorder.class);
           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
