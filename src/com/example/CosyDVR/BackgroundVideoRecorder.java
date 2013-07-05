@@ -1,7 +1,8 @@
 package com.example.CosyDVR;
 
 import android.app.Service;
-import android.app.Notification;
+//import android.app.Notification;
+//import android.support.v4.app.NotificationCompat.Builder;
 import android.content.Context;
 import android.content.Intent;
 import android.view.SurfaceHolder;
@@ -17,6 +18,7 @@ import android.media.MediaRecorder;
 import android.media.AudioManager;
 import android.os.Environment;
 import android.text.format.DateFormat;
+//import android.os.Build;
 import android.os.IBinder;
 import android.os.Binder;
 import java.util.Date;
@@ -66,15 +68,14 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
  
     @Override
     public void onCreate() {
-
         // Start foreground service to avoid unexpected kill
-        Notification notification = new Notification.Builder(this)
+/*        Notification notification = new Notification.Builder(this)
             .setContentTitle("Background Video Recorder")
             .setContentText("")
-            .setSmallIcon(R.drawable.icon)
+            .setSmallIcon(R.drawable.cosydvricon)
             .build();
         startForeground(1234, notification);
-
+*/
         // Create new SurfaceView, set its size to 1x1, move it to the top left corner and set this service as a callback
         windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
          surfaceView = new SurfaceView(this);
