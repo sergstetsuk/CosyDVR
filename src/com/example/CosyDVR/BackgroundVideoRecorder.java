@@ -2,7 +2,7 @@ package com.example.CosyDVR;
 
 import android.app.Service;
 import android.app.Notification;
-import android.support.v4.app.NotificationCompat;
+//import android.support.v4.app.NotificationCompat;
 import android.content.Context;
 import android.content.Intent;
 import android.view.SurfaceHolder;
@@ -14,6 +14,10 @@ import android.widget.TextView;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
+//import android.location.Criteria;
+import android.location.Location;
+//import android.location.LocationListener;
+import android.location.LocationManager;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.media.AudioManager;
@@ -24,6 +28,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Binder;
 import android.os.Message;
+import android.os.SystemClock;
 
 import java.util.Date;
 import java.util.Arrays;
@@ -31,6 +36,9 @@ import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.lang.String;
 import android.os.PowerManager;
 
@@ -45,6 +53,8 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	public int VIDEO_HEIGHT= 720;
 	public int MAX_VIDEO_BIT_RATE = 5000000;
 	public int REFRESH_TIME = 1000;
+	public String VIDEO_FILE_EXT = ".mp4";
+	public String SRT_FILE_EXT = ".srt";
 	//public int AUDIO_SOURCE = CAMERA;
 	
     // Binder given to clients
@@ -65,10 +75,77 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 
     public TextView mTextView = null;
     public long mSrtCounter = 0;
-    public Handler mHandler= null;
+    public Handler mHandler = null;
+    
+    private File mSrtFile = null;
+    private OutputStreamWriter mSrtWriter = null;
+    private long mSrtBegin = 0;
+    private long mNewFileBegin = 0;
 
+    private LocationManager mLocationManager;
 
-    /**
+    private final class HandlerExtension extends Handler {
+		public void handleMessage(Message msg) {
+//			mTextView.setText(String.valueOf(mSrtCounter) + " km/h");
+			String srt = new String();
+			long now = mSrtBegin;
+			int hour = (int)((now - mNewFileBegin)/(1000*60*60));
+			int min =  (int)((now - mNewFileBegin)%(1000*60*60)/(1000*60));
+			int sec =  (int)((now - mNewFileBegin)%(1000*60)/(1000));
+			int mil =  (int)((now - mNewFileBegin)%(1000));
+		    srt = srt + String.format("%d\n%02d:%02d:%02d,%03d --> ", mSrtCounter, hour, min, sec, mil);
+
+			now = SystemClock.elapsedRealtime();
+			hour = (int)((now - mNewFileBegin)/(1000*60*60));
+			min =  (int)((now - mNewFileBegin)%(1000*60*60)/(1000*60));
+			sec =  (int)((now - mNewFileBegin)%(1000*60)/(1000));
+			mil =  (int)((now - mNewFileBegin)%(1000));
+		    srt = srt + String.format("%02d:%02d:%02d,%03d\n", hour, min, sec, mil);
+		    srt = srt + DateFormat.format("yyyy-MM-dd_kk-mm-ss", new Date().getTime()).toString() + "\n";
+
+		    // Get the location manager
+		    //Criteria criteria = new Criteria();
+		    //String bestProvider = locationManager.getBestProvider(criteria, false);
+		    //Location location = locationManager.getLastKnownLocation(bestProvider);
+/*		    Location location = null;
+		    try {
+		    Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		    } catch (Exception e) {};*/
+
+		    Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		    
+		    double lat=-1,lon=-1,alt=-1;
+		    float spd=-1,acc=-1;
+		    long tim=0;
+
+                try {
+                lat = location.getLatitude();
+                lat = location.getLatitude();
+		    	tim = location.getElapsedRealtimeNanos();
+		        alt = location.getAltitude();
+		        acc = location.getAccuracy();
+		        spd = location.getSpeed();
+                    
+                } catch (NullPointerException e) {
+                	tim = 0;
+                }
+
+                srt = srt + String.format("lat:%1.5f,lon:%1.5f,alt:%1.0f,spd:%1.2fkm/h,acc:%01.1fm,tim:%d\n\n", lat, lon, alt, spd*3.6, acc,tim);
+//                if(tim/1000 > mSrtBegin && tim/1000 < now){
+		   	    try {
+		   	    	mSrtWriter.write(srt);
+		   	    } catch(IOException e){};
+		   	 mTextView.setText(srt);
+/*		    } else {
+               	    try {
+		   	    	mSrtWriter.write(String.format("lat:-,lon:-,alt:-,spd:-,acc:-,tim:%d\n\n",tim));
+		   	    } catch(IOException e) {}
+                }*/
+		    mSrtBegin = now;
+		}
+	}
+
+	/**
      * Class used for the client Binder.  Because we know this service always
      * runs in the same process as its clients, we don't need to deal with IPC.
      */
@@ -82,7 +159,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     @Override
     public void onCreate() {
         // Start foreground service to avoid unexpected kill
-	        Notification notification = new NotificationCompat.Builder(this)
+	        Notification notification = new Notification.Builder(this)
 	            .setContentTitle("CosyDVR Background Recorder Service")
 	            .setContentText("")
 	            .setSmallIcon(R.drawable.cosydvricon)
@@ -115,12 +192,11 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
         surfaceView.getHolder().addCallback(this);
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         WakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "CosyDVRWakeLock");
-        
-        mHandler = new Handler() {
-            public void handleMessage(Message msg) {
-           		mTextView.setText(String.valueOf(mSrtCounter) + " km/h");
-            }
-        };
+
+        mLocationManager = (LocationManager) 
+	            getSystemService(LOCATION_SERVICE);
+
+        mHandler = new HandlerExtension();
     }
     
     // Method called right after Surface created (initializing and starting MediaRecorder)
@@ -130,7 +206,6 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     }
 
     public int isFavorite(){
-    	//mTextView.setText(String.valueOf(mSrtCounter) + " km/h");
     	return isfavorite;
     }
     
@@ -139,13 +214,30 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     }
 
     public void StopRecording() {
-    	StopResetReleaseLock();
-    	   mTimer.cancel();
-    	   mTimer.purge();
-    	   mTimer = null;
-    	   mTimerTask.cancel();
-    	   mTimerTask = null;
-    	   
+    	if (isrecording){
+	    	StopResetReleaseLock();
+	    	mTimer.cancel();
+	    	mTimer.purge();
+	    	mTimer = null;
+	    	mTimerTask.cancel();
+	    	mTimerTask = null;
+	    	try {
+		    	mSrtWriter.flush();
+		    	mSrtWriter.close();
+	    	} catch(IOException e) {};
+	
+	    	if(currentfile != null && isfavorite != 0) {
+	    		File tmpfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile + VIDEO_FILE_EXT);
+	    		File favfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/fav/" + currentfile + VIDEO_FILE_EXT);
+	    		tmpfile.renameTo(favfile);
+	    		tmpfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile + SRT_FILE_EXT);
+	    		favfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/fav/" + currentfile + SRT_FILE_EXT);
+	    		tmpfile.renameTo(favfile);
+				if(isfavorite == 1) {
+					isfavorite = 0;
+				}
+	    	}
+    	}
     }
     public void Restartrecording() {
     	AudioManager manager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -161,6 +253,14 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	public void StartRecording() {
 		OpenUnlockPrepareStart();
 		mSrtCounter = 0;
+		mSrtFile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile + SRT_FILE_EXT);
+		mSrtFile.setWritable(true);
+		try {
+			mSrtWriter = new FileWriter(mSrtFile);
+		} catch(IOException e) {};
+		mNewFileBegin = SystemClock.elapsedRealtime(); 
+		mSrtBegin = mNewFileBegin;
+
         mTimer = new Timer();
         mTimerTask = new TimerTask() {
         	@Override
@@ -177,14 +277,6 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 		if(isrecording) {
 			mediaRecorder.stop();
 		    mediaRecorder.reset();
-		    if(currentfile != null && isfavorite != 0) {
-		    	File tmpfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile);
-		    	File favfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/fav/" + currentfile);
-		    	tmpfile.renameTo(favfile);
-		    	if(isfavorite == 1) {
-		    		isfavorite = 0;
-		    	}
-		    }
 		    mediaRecorder.release();
 		
 		    camera.lock();
@@ -218,8 +310,8 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 		    mediaRecorder.setAudioEncoder(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioCodec);//MediaRecorder.AudioEncoder.HE_AAC
 		    mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
 		
-		    currentfile = DateFormat.format("yyyy-MM-dd_kk-mm-ss", new Date().getTime()) + ".mp4";
-		    mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile);
+		    currentfile = DateFormat.format("yyyy-MM-dd_kk-mm-ss", new Date().getTime()).toString();
+		    mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile + VIDEO_FILE_EXT);
 		
 		    mediaRecorder.setAudioChannels(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioChannels);
 		    mediaRecorder.setAudioSamplingRate(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioSampleRate);
@@ -230,7 +322,9 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 		    mediaRecorder.setVideoFrameRate(30);
 		
 		    
-		    try { mediaRecorder.prepare(); } catch (Exception e) {}
+		    try { 
+		    	mediaRecorder.prepare();
+		    } catch (Exception e) {}
 		    mediaRecorder.start();
 		    isrecording = true;
 		}
@@ -322,10 +416,11 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     // Stop isrecording and remove SurfaceView
     @Override
     public void onDestroy() {
-    	StopResetReleaseLock();
+    	StopRecording();
 
         windowManager.removeView(surfaceView);
         windowManager.removeView(mTextView);
+        //mLocationManager.
     }
 
     @Override
