@@ -14,9 +14,9 @@ import android.widget.TextView;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
-//import android.location.Criteria;
+import android.location.Criteria;
 import android.location.Location;
-//import android.location.LocationListener;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
@@ -29,6 +29,7 @@ import android.os.IBinder;
 import android.os.Binder;
 import android.os.Message;
 import android.os.SystemClock;
+import android.os.Bundle;
 
 import java.util.Date;
 import java.util.Arrays;
@@ -44,7 +45,7 @@ import android.os.PowerManager;
 
 
 
-public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Callback, MediaRecorder.OnInfoListener {
+public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Callback, MediaRecorder.OnInfoListener, LocationListener  {
 //CONSTANTS-OPTIONS
 	public long MAX_TEMP_FOLDER_SIZE = 10000000;
 	public long MIN_FREE_SPACE = 1000000;
@@ -105,8 +106,8 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 
 		    // Get the location manager
 		    //Criteria criteria = new Criteria();
-		    //String bestProvider = locationManager.getBestProvider(criteria, false);
-		    //Location location = locationManager.getLastKnownLocation(bestProvider);
+		    //String bestProvider = mLocationManager.getBestProvider(criteria, false);
+		    //Location location = mLocationManager.getLastKnownLocation(bestProvider);
 /*		    Location location = null;
 		    try {
 		    Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -120,8 +121,9 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 
                 try {
                 lat = location.getLatitude();
-                lat = location.getLatitude();
-		    	tim = location.getElapsedRealtimeNanos();
+                lon = location.getLongitude();
+		    	//tim = location.getElapsedRealtimeNanos();
+                tim = location.getTime();
 		        alt = location.getAltitude();
 		        acc = location.getAccuracy();
 		        spd = location.getSpeed();
@@ -197,6 +199,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	            getSystemService(LOCATION_SERVICE);
 
         mHandler = new HandlerExtension();
+        startGps();
     }
     
     // Method called right after Surface created (initializing and starting MediaRecorder)
@@ -237,6 +240,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 					isfavorite = 0;
 				}
 	    	}
+	    	isrecording = false;
     	}
     }
     public void Restartrecording() {
@@ -271,6 +275,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
         	}
         };
         mTimer.scheduleAtFixedRate(mTimerTask, 0, REFRESH_TIME);
+    	isrecording = true;
 	}
 
 	private void StopResetReleaseLock() {
@@ -282,7 +287,6 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 		    camera.lock();
 		    camera.release();
 		    WakeLock.release();
-		    isrecording = false;
 		}
 	}
 
@@ -326,7 +330,6 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 		    	mediaRecorder.prepare();
 		    } catch (Exception e) {}
 		    mediaRecorder.start();
-		    isrecording = true;
 		}
 	}
 	
@@ -418,9 +421,9 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     public void onDestroy() {
     	StopRecording();
 
+    	stopGps();
         windowManager.removeView(surfaceView);
         windowManager.removeView(mTextView);
-        //mLocationManager.
     }
 
     @Override
@@ -438,4 +441,34 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
             this.Restartrecording();
         }          
     }
+
+    private void startGps() {
+        if (mLocationManager == null)
+            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (mLocationManager != null) {
+            Criteria criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+            criteria.setAltitudeRequired(false);
+            criteria.setBearingRequired(true);
+            criteria.setCostAllowed(false);
+            criteria.setSpeedRequired(true);
+            String provider = mLocationManager.getBestProvider(criteria, true);
+            if (provider != null)
+                mLocationManager.requestLocationUpdates(provider, 1, 1, (LocationListener) this);   //mintime,mindistance        
+        }       
+    }
+
+    private void stopGps() {
+        if (mLocationManager != null)
+            mLocationManager.removeUpdates((LocationListener) this);
+        mLocationManager = null;
+    }
+
+    public void onLocationChanged(Location location) {
+        // Doing something with the position...
+    }       
+    public void onProviderDisabled(String provider) {}
+    public void onProviderEnabled(String provider) {}
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
+
 }
