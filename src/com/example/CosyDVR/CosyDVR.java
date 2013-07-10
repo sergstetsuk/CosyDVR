@@ -136,6 +136,7 @@ public void onClick(View v) {
 // TODO Auto-generated method stub
 	  if(mBound) {
 		  mService.toggleFocus();
+		  focButton.setText(getString(R.string.focus) + " [" + mService.getFocusMode() + "]");
 	  }
 }};
 

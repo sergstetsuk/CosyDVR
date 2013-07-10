@@ -5,6 +5,7 @@ import android.app.Notification;
 //import android.support.v4.app.NotificationCompat;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -15,7 +16,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
-import android.location.Criteria;
+//import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -87,9 +88,15 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     private long mSrtBegin = 0;
     private long mNewFileBegin = 0;
 
-    private LocationManager mLocationManager;
+    private LocationManager mLocationManager = null;
     private long mPrevTim = 0;
-
+    
+    private String[] mFocusModes = {Parameters.FOCUS_MODE_INFINITY,
+    							 Parameters.FOCUS_MODE_CONTINUOUS_VIDEO,
+    							 //Parameters.FOCUS_MODE_FIXED,
+    							 //Parameters.FOCUS_MODE_EDOF,
+    							 Parameters.FOCUS_MODE_MACRO};
+    
     private final class HandlerExtension extends Handler {
 		public void handleMessage(Message msg) {
 			if (!isrecording) {
@@ -115,31 +122,32 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 		    //Criteria criteria = new Criteria();
 		    //String bestProvider = mLocationManager.getBestProvider(criteria, false);
 		    //Location location = mLocationManager.getLastKnownLocation(bestProvider);
-/*		    Location location = null;
+		    Location location = null;
 		    try {
-		    Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		    } catch (Exception e) {};*/
+		    	location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		    } catch (Exception e) {};
 
-		    Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//		    Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		    
 		    double lat=-1,lon=-1,alt=-1;
 		    float spd=0,acc=-1;
+		    int sat=0;
 		    long tim=0;
 
                 try {
                 lat = location.getLatitude();
                 lon = location.getLongitude();
-		    	//tim = location.getElapsedRealtimeNanos();
                 tim = location.getTime()/1000; //millisec to sec
 		        alt = location.getAltitude();
 		        acc = location.getAccuracy();
-		        spd = location.getSpeed();
+		        spd = location.getSpeed() * 3.6f;
+		        sat = location.getExtras().getInt("satellites");
                     
                 } catch (NullPointerException e) {
                 	tim = 0;
                 }
 
-                srt = srt + String.format("lat:%1.6f,lon:%1.6f,alt:%1.0f,spd:%1.2fkm/h,acc:%01.1fm,tim:%d\n\n", lat, lon, alt, spd*3.6, acc,tim);
+                srt = srt + String.format("lat:%1.6f,lon:%1.6f,alt:%1.0f,spd:%1.2fkm/h,acc:%01.1fm,sat:%d,tim:%d\n\n", lat, lon, alt, spd, acc, sat, tim);
 		   	    try {
 		   	    	mSrtWriter.write(srt);
 		   	    } catch(IOException e){};
@@ -148,7 +156,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 		   		 mPrevTim = tim;
 		   	 }
              if(tim != mPrevTim){
-		   	  mSpeedView.setText(String.format("%1.2f",spd));
+		   	  mSpeedView.setText(String.format("%1.1f",spd));
 		   	  mPrevTim = tim;
              } else {
    		   	  mSpeedView.setText(String.format("---"));
@@ -200,6 +208,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
             );
         layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
         windowManager.addView(mTextView, layoutParams);
+        mTextView.setShadowLayer(5,0,0,Color.parseColor("#000000"));
         mTextView.setText("--");
 
         mSpeedView = new TextView(this);
@@ -212,7 +221,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
         layoutParams.gravity = Gravity.RIGHT | Gravity.TOP;
         windowManager.addView(mSpeedView, layoutParams);
         mSpeedView.setTextColor(Color.parseColor("#CC6666"));
-        mSpeedView.setShadowLayer(3,0,0,Color.parseColor("#FFFFFF"));
+        mSpeedView.setShadowLayer(5,0,0,Color.parseColor("#FFFFFF"));
         mSpeedView.setTextSize(56);
         mSpeedView.setText("---");
 
@@ -220,10 +229,8 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         WakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "CosyDVRWakeLock");
 
-        mLocationManager = (LocationManager) 
-	            getSystemService(LOCATION_SERVICE);
-
         mHandler = new HandlerExtension();
+
         startGps();
     }
     
@@ -231,6 +238,10 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
     	mSurfaceHolder = surfaceHolder;
+    }
+
+    public int getFocusMode(){
+    	return focusmode;
     }
 
     public int isFavorite(){
@@ -282,7 +293,10 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	public void StartRecording() {
 		OpenUnlockPrepareStart();
 		Parameters parameters = camera.getParameters();
-		parameters.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+		//parameters.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+		parameters.setFocusMode(Parameters.FOCUS_MODE_INFINITY);
+
+		//parameters.setFocusMode(Parameters.FOCUS_MODE_FIXED); 
 		if(!isnight){
     		parameters.setSceneMode(Parameters.SCENE_MODE_AUTO);
     	} else {
@@ -398,12 +412,16 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	}
 
 	public void toggleFocus() {
-    	focusmode = (focusmode + 1) % 5;
+    	focusmode = (focusmode + 1) % mFocusModes.length;
+		Parameters parameters = camera.getParameters();
+    	parameters.setFocusMode(mFocusModes[focusmode]);
+    	camera.setParameters(parameters);
     }
 
 	public void toggleNight() {
     	if(camera != null){
     		Parameters parameters = camera.getParameters();
+        	parameters.setFocusMode(mFocusModes[focusmode]);	//restore chosen focus mode
 	    	if(isnight){
 	    		parameters.setSceneMode(Parameters.SCENE_MODE_AUTO);
 	    		isnight = false;
@@ -497,28 +515,6 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
         }          
     }
 
-    private void startGps() {
-        if (mLocationManager == null)
-            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (mLocationManager != null) {
-            Criteria criteria = new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-            criteria.setAltitudeRequired(false);
-            criteria.setBearingRequired(true);
-            criteria.setCostAllowed(false);
-            criteria.setSpeedRequired(true);
-            String provider = mLocationManager.getBestProvider(criteria, true);
-            if (provider != null)
-                mLocationManager.requestLocationUpdates(provider, 1, 1, (LocationListener) this);   //mintime,mindistance        
-        }       
-    }
-
-    private void stopGps() {
-        if (mLocationManager != null)
-            mLocationManager.removeUpdates((LocationListener) this);
-        mLocationManager = null;
-    }
-
     public void onLocationChanged(Location location) {
         // Doing something with the position...
     }       
@@ -526,4 +522,23 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     public void onProviderEnabled(String provider) {}
     public void onStatusChanged(String provider, int status, Bundle extras) {}
 
+    private void startGps() {
+      if (mLocationManager == null)
+          mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+      if (mLocationManager != null) {
+      	try {
+              mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 1, (LocationListener) this);   //mintime,mindistance
+      	} catch (Exception e) {
+      	    Log.e("CosyDVR", "exception: " + e.getMessage());             
+      	    Log.e("CosyDVR", "exception: " + e.toString());
+      	}
+             
+      }       
+  }
+
+  private void stopGps() {
+      if (mLocationManager != null)
+          mLocationManager.removeUpdates((LocationListener) this);
+      mLocationManager = null;
+  }
 }
