@@ -20,7 +20,7 @@ import java.io.File;
 public class CosyDVR extends Activity{
 
     BackgroundVideoRecorder mService;
-    Button favButton,recButton,flsButton,exiButton;
+    Button favButton,recButton,flsButton,exiButton,focButton,nigButton;
     boolean mBound = false;
     boolean recording;
     private int mWidth=1,mHeight=1;
@@ -41,11 +41,15 @@ public class CosyDVR extends Activity{
 
       favButton = (Button)findViewById(R.id.fav_button);
       recButton = (Button)findViewById(R.id.rec_button);
+      focButton = (Button)findViewById(R.id.foc_button);
+      nigButton = (Button)findViewById(R.id.nig_button);
       flsButton = (Button)findViewById(R.id.fls_button);
       exiButton = (Button)findViewById(R.id.exi_button);
       
       favButton.setOnClickListener(favButtonOnClickListener);
       recButton.setOnClickListener(recButtonOnClickListener);
+      focButton.setOnClickListener(focButtonOnClickListener);
+      nigButton.setOnClickListener(nigButtonOnClickListener);
       flsButton.setOnClickListener(flsButtonOnClickListener);
       exiButton.setOnClickListener(exiButtonOnClickListener);
      
@@ -123,6 +127,26 @@ public void onClick(View v) {
      recButton.setText(getString(R.string.stop));
  }
  mService.toggleRecording();
+}};
+
+Button.OnClickListener focButtonOnClickListener
+= new Button.OnClickListener(){
+@Override
+public void onClick(View v) {
+// TODO Auto-generated method stub
+	  if(mBound) {
+		  mService.toggleFocus();
+	  }
+}};
+
+Button.OnClickListener nigButtonOnClickListener
+= new Button.OnClickListener(){
+@Override
+public void onClick(View v) {
+// TODO Auto-generated method stub
+	  if(mBound) {
+		  mService.toggleNight();
+	  }
 }};
 
 Button.OnClickListener flsButtonOnClickListener

@@ -6,4 +6,6 @@
     <string name="fav">FAV</string>
     <string name="flash">FLASH</string>
     <string name="exit">EXIT</string>
+    <string name="focus">FOCUS</string>
+    <string name="night">NIGHT</string>
 </resources>

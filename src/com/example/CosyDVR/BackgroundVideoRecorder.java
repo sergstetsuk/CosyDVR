@@ -11,6 +11,7 @@ import android.view.WindowManager.LayoutParams;
 import android.view.Gravity;
 import android.view.SurfaceView;
 import android.widget.TextView;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
@@ -66,7 +67,9 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     private MediaRecorder mediaRecorder = null;
     private boolean isrecording = false;
     private boolean isflashon = false;
+    private boolean isnight = false;
     private int isfavorite = 0;
+    private int focusmode = 0;
     private String currentfile = null;
     //private String previousfile = null;
     private SurfaceHolder mSurfaceHolder = null;
@@ -75,6 +78,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     private TimerTask mTimerTask = null;
 
     public TextView mTextView = null;
+    public TextView mSpeedView = null;
     public long mSrtCounter = 0;
     public Handler mHandler = null;
     
@@ -84,10 +88,13 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     private long mNewFileBegin = 0;
 
     private LocationManager mLocationManager;
+    private long mPrevTim = 0;
 
     private final class HandlerExtension extends Handler {
 		public void handleMessage(Message msg) {
-//			mTextView.setText(String.valueOf(mSrtCounter) + " km/h");
+			if (!isrecording) {
+				return;
+			}
 			String srt = new String();
 			long now = mSrtBegin;
 			int hour = (int)((now - mNewFileBegin)/(1000*60*60));
@@ -116,14 +123,14 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 		    Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		    
 		    double lat=-1,lon=-1,alt=-1;
-		    float spd=-1,acc=-1;
+		    float spd=0,acc=-1;
 		    long tim=0;
 
                 try {
                 lat = location.getLatitude();
                 lon = location.getLongitude();
 		    	//tim = location.getElapsedRealtimeNanos();
-                tim = location.getTime();
+                tim = location.getTime()/1000; //millisec to sec
 		        alt = location.getAltitude();
 		        acc = location.getAccuracy();
 		        spd = location.getSpeed();
@@ -132,17 +139,20 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
                 	tim = 0;
                 }
 
-                srt = srt + String.format("lat:%1.5f,lon:%1.5f,alt:%1.0f,spd:%1.2fkm/h,acc:%01.1fm,tim:%d\n\n", lat, lon, alt, spd*3.6, acc,tim);
-//                if(tim/1000 > mSrtBegin && tim/1000 < now){
+                srt = srt + String.format("lat:%1.6f,lon:%1.6f,alt:%1.0f,spd:%1.2fkm/h,acc:%01.1fm,tim:%d\n\n", lat, lon, alt, spd*3.6, acc,tim);
 		   	    try {
 		   	    	mSrtWriter.write(srt);
 		   	    } catch(IOException e){};
 		   	 mTextView.setText(srt);
-/*		    } else {
-               	    try {
-		   	    	mSrtWriter.write(String.format("lat:-,lon:-,alt:-,spd:-,acc:-,tim:%d\n\n",tim));
-		   	    } catch(IOException e) {}
-                }*/
+		   	 if(mPrevTim==0 && tim!=mPrevTim){
+		   		 mPrevTim = tim;
+		   	 }
+             if(tim != mPrevTim){
+		   	  mSpeedView.setText(String.format("%1.2f",spd));
+		   	  mPrevTim = tim;
+             } else {
+   		   	  mSpeedView.setText(String.format("---"));
+             }
 		    mSrtBegin = now;
 		}
 	}
@@ -171,7 +181,6 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
         // Create new SurfaceView, set its size to 1x1, move it to the top left corner and set this service as a callback
         windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
          surfaceView = new SurfaceView(this);
-         mTextView = new TextView(this);
         LayoutParams layoutParams = new WindowManager.LayoutParams(
         	//WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
         	1,1,
@@ -181,6 +190,8 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
         );
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
         windowManager.addView(surfaceView, layoutParams);
+
+        mTextView = new TextView(this);
         layoutParams = new WindowManager.LayoutParams(
             	WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
@@ -189,7 +200,21 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
             );
         layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
         windowManager.addView(mTextView, layoutParams);
-        mTextView.setText("-- km/h");
+        mTextView.setText("--");
+
+        mSpeedView = new TextView(this);
+        layoutParams = new WindowManager.LayoutParams(
+            	WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+                PixelFormat.TRANSLUCENT
+            );
+        layoutParams.gravity = Gravity.RIGHT | Gravity.TOP;
+        windowManager.addView(mSpeedView, layoutParams);
+        mSpeedView.setTextColor(Color.parseColor("#CC6666"));
+        mSpeedView.setShadowLayer(3,0,0,Color.parseColor("#FFFFFF"));
+        mSpeedView.setTextSize(56);
+        mSpeedView.setText("---");
 
         surfaceView.getHolder().addCallback(this);
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -256,6 +281,15 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     
 	public void StartRecording() {
 		OpenUnlockPrepareStart();
+		Parameters parameters = camera.getParameters();
+		parameters.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+		if(!isnight){
+    		parameters.setSceneMode(Parameters.SCENE_MODE_AUTO);
+    	} else {
+    		parameters.setSceneMode(Parameters.SCENE_MODE_NIGHT);
+    	}
+
+		camera.setParameters(parameters);
 		mSrtCounter = 0;
 		mSrtFile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile + SRT_FILE_EXT);
 		mSrtFile.setWritable(true);
@@ -363,7 +397,25 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 //		}
 	}
 
-    public void toggleFavorite() {
+	public void toggleFocus() {
+    	focusmode = (focusmode + 1) % 5;
+    }
+
+	public void toggleNight() {
+    	if(camera != null){
+    		Parameters parameters = camera.getParameters();
+	    	if(isnight){
+	    		parameters.setSceneMode(Parameters.SCENE_MODE_AUTO);
+	    		isnight = false;
+	    	} else {
+	    		parameters.setSceneMode(Parameters.SCENE_MODE_NIGHT);
+	            isnight = true;
+	    	}
+	    	camera.setParameters(parameters);
+    	}
+    }
+
+	public void toggleFavorite() {
     	isfavorite = (isfavorite + 1) % 3;
     }
 
@@ -411,8 +463,10 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 		windowManager.updateViewLayout(surfaceView, layoutParams);
 	    if(width>1) {
 	    	mTextView.setVisibility(TextView.VISIBLE);
+	    	mSpeedView.setVisibility(TextView.VISIBLE);
 	    } else {
 	    	mTextView.setVisibility(TextView.INVISIBLE);
+	    	mSpeedView.setVisibility(TextView.INVISIBLE);
 	    }
     }
 
@@ -424,6 +478,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     	stopGps();
         windowManager.removeView(surfaceView);
         windowManager.removeView(mTextView);
+        windowManager.removeView(mSpeedView);
     }
 
     @Override

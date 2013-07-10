@@ -7,6 +7,7 @@
 
     <Button
         android:id="@+id/fav_button"
+        style="android:buttonBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -16,6 +17,7 @@
 
     <Button
         android:id="@+id/rec_button"
+        style="android:buttonBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -24,7 +26,28 @@
         android:textSize="12sp" />
 
     <Button
+        android:id="@+id/foc_button"
+        style="android:buttonBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/purple_button"
+        android:text="@string/focus"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/nig_button"
+        style="android:buttonBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/black_button"
+        android:text="@string/night"
+        android:textSize="12sp" />
+
+    <Button
         android:id="@+id/fls_button"
+        style="android:buttonBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -34,6 +57,7 @@
 
     <Button
         android:id="@+id/exi_button"
+        style="android:buttonBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
