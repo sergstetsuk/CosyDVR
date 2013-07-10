@@ -4,11 +4,11 @@ import com.example.CosyDVR.BackgroundVideoRecorder;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.Context;
-//import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
@@ -52,6 +52,8 @@ public class CosyDVR extends Activity{
       nigButton.setOnClickListener(nigButtonOnClickListener);
       flsButton.setOnClickListener(flsButtonOnClickListener);
       exiButton.setOnClickListener(exiButtonOnClickListener);
+
+      getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
      
   }
 
