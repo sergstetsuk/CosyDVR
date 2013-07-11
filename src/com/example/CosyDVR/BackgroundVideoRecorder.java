@@ -151,7 +151,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
             }
 
             srt = srt + String.format("lat:%1.6f,lon:%1.6f,alt:%1.0f,spd:%1.1fkm/h,acc:%01.1fm,sat:%d,tim:%d\n\n", lat, lon, alt, spd, acc, sat, tim);
-            gpx = gpx + String.format("<trkpt lon=\"%f\" lat=\"%f\">\n", lon, lat);
+            gpx = gpx + String.format("<trkpt lon=\"%1.8f\" lat=\"%1.8f\">\n", lon, lat).replace(",",".");
             gpx = gpx + String.format("<ele>%1.0f</ele>\n", alt);
             gpx = gpx + "<time>" + DateFormat.format("yyyy-MM-dd", datetime.getTime()).toString() + "T" + DateFormat.format("kk:mm:ss", datetime.getTime()).toString() + "Z</time>\n";
             gpx = gpx + "</trkpt>\n";
@@ -160,7 +160,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 			}
 	   	    try {
 	   	    	mSrtWriter.write(srt);
-	   	    	if(tim != mPrevTim) {
+	   	    	if(tim != mPrevTim && lat>0) {
 	   	    		mGpxWriter.write(gpx);		   	    		
 	   	    	}
 	   	    } catch(IOException e){};
@@ -170,6 +170,13 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	   	    	mPrevTim = tim;
 	   	    } else {
 	   	    	mSpeedView.setText(String.format("---"));
+	   	    }
+	   	    if (sat<3) {
+	   	    	mSpeedView.setTextColor(Color.parseColor("#FF0000")); //red
+	   	    } else if (sat < 6) {
+	   	    	mSpeedView.setTextColor(Color.parseColor("#FFC800")); //yellow
+	   	    } else {
+	   	    	mSpeedView.setTextColor(Color.parseColor("#0b9800")); //green
 	   	    }
 	   	    mSrtBegin = now;
 		}
@@ -231,7 +238,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
             );
         layoutParams.gravity = Gravity.RIGHT | Gravity.TOP;
         windowManager.addView(mSpeedView, layoutParams);
-        mSpeedView.setTextColor(Color.parseColor("#CC6666"));
+        mSpeedView.setTextColor(Color.parseColor("#A0A0A0"));
         mSpeedView.setShadowLayer(5,0,0,Color.parseColor("#000000"));
         mSpeedView.setTextSize(56);
         mSpeedView.setText("---");
