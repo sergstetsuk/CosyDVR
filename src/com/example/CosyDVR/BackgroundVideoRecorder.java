@@ -12,6 +12,7 @@ import android.view.WindowManager.LayoutParams;
 import android.view.Gravity;
 import android.view.SurfaceView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
@@ -564,6 +565,8 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
       if (mLocationManager != null) {
       	try {
               mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 1, (LocationListener) this);   //mintime,mindistance
+              if ( !mLocationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) )
+            	  Toast.makeText(getApplicationContext(), getString(R.string.gps_disabled), Toast.LENGTH_LONG).show(); 
       	} catch (Exception e) {
       	    Log.e("CosyDVR", "exception: " + e.getMessage());             
       	    Log.e("CosyDVR", "exception: " + e.toString());
