@@ -172,8 +172,10 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	   	    	mSpeedView.setText(String.format("---"));
 	   	    }
 	   	    if (sat<3) {
+	   	        mSpeedView.setTextColor(Color.parseColor("#A0A0A0")); //gray
+	   	    } else if (sat<6) {
 	   	    	mSpeedView.setTextColor(Color.parseColor("#FF0000")); //red
-	   	    } else if (sat < 6) {
+	   	    } else if (sat<9) {
 	   	    	mSpeedView.setTextColor(Color.parseColor("#FFC800")); //yellow
 	   	    } else {
 	   	    	mSpeedView.setTextColor(Color.parseColor("#0b9800")); //green
