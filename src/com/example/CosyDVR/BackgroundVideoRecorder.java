@@ -170,7 +170,11 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	   	    	mSpeedView.setText(String.format("%1.1f",spd));
 	   	    	mPrevTim = tim;
 	   	    } else {
-	   	    	mSpeedView.setText(String.format("---"));
+	            if ( !mLocationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+	            	mSpeedView.setText(getString(R.string.gps_off));	            	
+	            } else {
+	            	mSpeedView.setText(String.format("---"));
+	            }
 	   	    }
 	   	    if (sat<3) {
 	   	        mSpeedView.setTextColor(Color.parseColor("#A0A0A0")); //gray
@@ -259,6 +263,8 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
     	mSurfaceHolder = surfaceHolder;
+        //if autostart
+        StartRecording();
     }
 
     public int getFocusMode(){
@@ -565,8 +571,8 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
       if (mLocationManager != null) {
       	try {
               mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 1, (LocationListener) this);   //mintime,mindistance
-              if ( !mLocationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) )
-            	  Toast.makeText(getApplicationContext(), getString(R.string.gps_disabled), Toast.LENGTH_LONG).show(); 
+              //if ( !mLocationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) )
+            	//  Toast.makeText(getApplicationContext(), getString(R.string.gps_disabled), Toast.LENGTH_LONG).show(); 
       	} catch (Exception e) {
       	    Log.e("CosyDVR", "exception: " + e.getMessage());             
       	    Log.e("CosyDVR", "exception: " + e.toString());
