@@ -12,7 +12,7 @@ import android.view.WindowManager.LayoutParams;
 import android.view.Gravity;
 import android.view.SurfaceView;
 import android.widget.TextView;
-import android.widget.Toast;
+//import android.widget.Toast;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
@@ -29,6 +29,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Binder;
 import android.os.Message;
+//import android.os.ParcelFileDescriptor;
 import android.os.SystemClock;
 import android.os.Bundle;
 
@@ -42,6 +43,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.lang.String;
+//import java.net.InetAddress;
+//import java.net.Socket;
+//import java.net.UnknownHostException;
+
 import android.os.PowerManager;
 
 
@@ -53,7 +58,8 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	public int MAX_VIDEO_DURATION = 600000;
 	public int VIDEO_WIDTH = 1280;
 	public int VIDEO_HEIGHT= 720;
-	public int MAX_VIDEO_BIT_RATE = 5000000;
+	public int MAX_VIDEO_BIT_RATE = 5000000; //=for DVR;
+	//public int MAX_VIDEO_BIT_RATE = 256000; //=for streaming;
 	public int REFRESH_TIME = 1000;
 	public String VIDEO_FILE_EXT = ".mp4";
 	public String SRT_FILE_EXT = ".srt";
@@ -69,7 +75,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     private boolean isrecording = false;
     private boolean isflashon = false;
     private boolean isnight = false;
-    private int isfavorite = 0;
+    private int isfavorite = 0; //0-no 1=permanentfav 2=favonce
     private int focusmode = 0;
     private String currentfile = null;
 
@@ -151,7 +157,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
             	tim = 0;
             }
 
-            srt = srt + String.format("lat:%1.6f,lon:%1.6f,alt:%1.0f,spd:%1.1fkm/h,acc:%01.1fm,sat:%d,tim:%d\n\n", lat, lon, alt, spd, acc, sat, tim);
+            srt = srt + String.format("lat:%1.6f,lon:%1.6f,alt:%1.0f\nspd:%1.1fkm/h,acc:%01.1fm,sat:%d,tim:%d\n\n", lat, lon, alt, spd, acc, sat, tim);
             gpx = gpx + String.format("<trkpt lon=\"%1.8f\" lat=\"%1.8f\">\n", lon, lat).replace(",",".");
             gpx = gpx + String.format("<ele>%1.0f</ele>\n", alt);
             gpx = gpx + "<time>" + DateFormat.format("yyyy-MM-dd", datetime.getTime()).toString() + "T" + DateFormat.format("kk:mm:ss", datetime.getTime()).toString() + "Z</time>\n";
@@ -308,7 +314,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	    		tmpfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile + GPX_FILE_EXT);
 	    		favfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/fav/" + currentfile + GPX_FILE_EXT);
 	    		tmpfile.renameTo(favfile);
-				if(isfavorite == 1) {
+				if(isfavorite == 2) {
 					isfavorite = 0;
 				}
 	    	}
@@ -406,8 +412,24 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 		    mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
 		
 		    currentfile = DateFormat.format("yyyy-MM-dd_kk-mm-ss", new Date().getTime()).toString();
+		    // if we write to file
 		    mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile + VIDEO_FILE_EXT);
-		
+		    //if we stream
+		    /*String hostname = "rtmp://a.rtmp.youtube.com/stetsuk.80gq-20ea-tet3-2hfb";
+		    int port = 1234;
+		    Socket socket;
+			try {
+				socket = new Socket(InetAddress.getByName(hostname), port);
+				ParcelFileDescriptor pfd = ParcelFileDescriptor.fromSocket(socket);
+				mediaRecorder.setOutputFile(pfd.getFileDescriptor());
+		    } catch (UnknownHostException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}*/
+
 		    mediaRecorder.setAudioChannels(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioChannels);
 		    mediaRecorder.setAudioSamplingRate(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioSampleRate);
 		    mediaRecorder.setAudioEncodingBitRate(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioBitRate);
@@ -476,6 +498,17 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     	}
     }
 
+	public void toggleZoom() {
+		if(camera != null){
+			Parameters parameters = camera.getParameters();
+			if(parameters.isZoomSupported()) {
+				parameters.setZoom((parameters.getZoom()+1)%(parameters.getMaxZoom()+1));
+				camera.setParameters(parameters);
+			}
+		}
+		
+    }
+	
 	public void toggleFavorite() {
     	isfavorite = (isfavorite + 1) % 3;
     }

@@ -20,7 +20,7 @@ import java.io.File;
 public class CosyDVR extends Activity{
 
     BackgroundVideoRecorder mService;
-    Button favButton,recButton,flsButton,exiButton,focButton,nigButton;
+    Button zomButton,favButton,recButton,flsButton,exiButton,focButton,nigButton;
     boolean mBound = false;
     boolean recording;
     private int mWidth=1,mHeight=1;
@@ -39,6 +39,7 @@ public class CosyDVR extends Activity{
       tmpdir.mkdirs();
       favdir.mkdirs();
 
+      zomButton = (Button)findViewById(R.id.zom_button);
       favButton = (Button)findViewById(R.id.fav_button);
       recButton = (Button)findViewById(R.id.rec_button);
       focButton = (Button)findViewById(R.id.foc_button);
@@ -46,6 +47,7 @@ public class CosyDVR extends Activity{
       flsButton = (Button)findViewById(R.id.fls_button);
       exiButton = (Button)findViewById(R.id.exi_button);
       
+      zomButton.setOnClickListener(zomButtonOnClickListener);
       favButton.setOnClickListener(favButtonOnClickListener);
       recButton.setOnClickListener(recButtonOnClickListener);
       focButton.setOnClickListener(focButtonOnClickListener);
@@ -106,7 +108,17 @@ public class CosyDVR extends Activity{
   }
 
 
-  Button.OnClickListener favButtonOnClickListener
+  Button.OnClickListener zomButtonOnClickListener
+  = new Button.OnClickListener(){
+  @Override
+  public void onClick(View v) {
+   // TODO Auto-generated method stub
+	  if(mBound) {
+		  mService.toggleZoom();
+	  }
+ }};
+
+ Button.OnClickListener favButtonOnClickListener
   = new Button.OnClickListener(){
   @Override
   public void onClick(View v) {
