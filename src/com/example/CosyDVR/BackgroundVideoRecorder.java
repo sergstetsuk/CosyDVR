@@ -17,8 +17,6 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
-import android.location.GpsSatellite;
-import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -38,7 +36,6 @@ import android.os.Bundle;
 import java.util.Date;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.io.File;
@@ -144,9 +141,8 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 
 		    double lat=-1,lon=-1,alt=-1;
 		    float spd=0,acc=-1;
-		    int sat=0, fix=0;
-			//boolean fixed = false;
-		    long tim=0;
+		    int sat=0;
+			long tim=0;
 
             if (mLocation != null) {
 	            lat = mLocation.getLatitude();
@@ -158,7 +154,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 		        sat = mLocation.getExtras().getInt("satellites");
             }
 	        
-            srt = srt + String.format("lat:%1.6f,lon:%1.6f,alt:%1.0f,spd:%1.1fkm/h,acc:%01.1fm,sat:%d,tim:%d\n\n", lat, lon, alt, spd, acc, sat, tim);
+            srt = srt + String.format("lat:%1.6f,lon:%1.6f,alt:%1.0f,spd:%1.1fkm/h\nacc:%01.1fm,sat:%d,tim:%d\n\n", lat, lon, alt, spd, acc, sat, tim);
             gpx = gpx + String.format("<trkpt lon=\"%1.8f\" lat=\"%1.8f\">\n", lon, lat).replace(",",".");
             gpx = gpx + String.format("<ele>%1.0f</ele>\n", alt);
             gpx = gpx + "<time>" + DateFormat.format("yyyy-MM-dd", datetime.getTime()).toString() + "T" + DateFormat.format("kk:mm:ss", datetime.getTime()).toString() + "Z</time>\n";
@@ -266,6 +262,16 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
         mHandler = new HandlerExtension();
 
         startGps();
+
+        //create temp and fav folders
+		File mFolder = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/");
+		if(!mFolder.exists()){
+			mFolder.mkdir();
+		}
+		mFolder = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/fav/");
+		if(!mFolder.exists()){
+			mFolder.mkdir();
+		}
     }
     
     // Method called right after Surface created (initializing and starting MediaRecorder)
@@ -347,7 +353,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     	} else {
     		parameters.setSceneMode(Parameters.SCENE_MODE_NIGHT);
     	}
-
+		
 		camera.setParameters(parameters);
 		mSrtCounter = 0;
 		mSrtFile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile + SRT_FILE_EXT);
