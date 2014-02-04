@@ -17,6 +17,8 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
+import android.location.GpsSatellite;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -36,6 +38,7 @@ import android.os.Bundle;
 import java.util.Date;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.io.File;
@@ -56,9 +59,9 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	public long MAX_TEMP_FOLDER_SIZE = 10000000;
 	public long MIN_FREE_SPACE = 1000000;
 	public int MAX_VIDEO_DURATION = 600000;
-	public int VIDEO_WIDTH = 1280;
-	public int VIDEO_HEIGHT= 720;
-	public int MAX_VIDEO_BIT_RATE = 5000000; //=for DVR;
+	public int VIDEO_WIDTH = 1920;
+	public int VIDEO_HEIGHT= 1080;
+	public int MAX_VIDEO_BIT_RATE = 5000000;
 	//public int MAX_VIDEO_BIT_RATE = 256000; //=for streaming;
 	public int REFRESH_TIME = 1000;
 	public String VIDEO_FILE_EXT = ".mp4";
@@ -155,7 +158,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 		        sat = mLocation.getExtras().getInt("satellites");
             }
 	        
-            srt = srt + String.format("lat:%1.6f,lon:%1.6f,alt:%1.0f\nspd:%1.1fkm/h,acc:%01.1fm,sat:%d,tim:%d\n\n", lat, lon, alt, spd, acc, sat, tim);
+            srt = srt + String.format("lat:%1.6f,lon:%1.6f,alt:%1.0f,spd:%1.1fkm/h,acc:%01.1fm,sat:%d,tim:%d\n\n", lat, lon, alt, spd, acc, sat, tim);
             gpx = gpx + String.format("<trkpt lon=\"%1.8f\" lat=\"%1.8f\">\n", lon, lat).replace(",",".");
             gpx = gpx + String.format("<ele>%1.0f</ele>\n", alt);
             gpx = gpx + "<time>" + DateFormat.format("yyyy-MM-dd", datetime.getTime()).toString() + "T" + DateFormat.format("kk:mm:ss", datetime.getTime()).toString() + "Z</time>\n";
@@ -321,7 +324,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	    	isrecording = false;
     	}
     }
-    public void Restartrecording() {
+    public void RestartRecording() {
     	AudioManager manager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
     	manager.setStreamSolo(AudioManager.STREAM_SYSTEM,true);
     	manager.setStreamMute(AudioManager.STREAM_SYSTEM,true);
@@ -587,7 +590,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     @Override
     public void onInfo(MediaRecorder mr, int what, int extra) {                     
         if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
-            this.Restartrecording();
+            this.RestartRecording();
         }          
     }
 

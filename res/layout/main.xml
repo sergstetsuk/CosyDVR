@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@drawable/green_button"
-        android:text="@string/rec"
+        android:text="@string/restart"
         android:textSize="12sp" />
 
     <Button

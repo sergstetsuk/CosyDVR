@@ -11,7 +11,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.Toast;
+//import android.widget.Toast;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.graphics.Point;
@@ -26,7 +26,7 @@ public class CosyDVR extends Activity{
     boolean mBound = false;
     boolean recording;
     private int mWidth=1,mHeight=1;
-    private long ExitPressTime = 0;
+    long ExitPressTime = 0;
 
   /** Called when the activity is first created. */
   @Override
@@ -138,12 +138,14 @@ public class CosyDVR extends Activity{
 @Override
 public void onClick(View v) {
  // TODO Auto-generated method stub
- if(mService.isRecording()){
+/* if(mService.isRecording()){
 	 recButton.setText(getString(R.string.rec));
  }else{
      recButton.setText(getString(R.string.stop));
  }
- mService.toggleRecording();
+ 	 mService.toggleRecording();
+*/
+	 mService.RestartRecording(); //stop
 }};
 
 Button.OnClickListener focButtonOnClickListener
@@ -182,8 +184,8 @@ Button.OnClickListener exiButtonOnClickListener
 @Override
 public void onClick(View v) {
 // TODO Auto-generated method stub
-	if(ExitPressOnce && ExitPressTime > SystemClock.elapsedRealtime()+1000
-					 && ExitPressTime < SystemClock.elapsedRealtime()+2000) { 
+	if(SystemClock.elapsedRealtime() > (ExitPressTime + 1000)
+	   && SystemClock.elapsedRealtime() < (ExitPressTime + 2000)) { 
 		if(mBound) {
 			unbindService(CosyDVR.this.mConnection);
 			CosyDVR.this.mBound = false;
@@ -193,7 +195,7 @@ public void onClick(View v) {
 		//System.exit(0);
 	} else {
 		ExitPressTime = SystemClock.elapsedRealtime();
-		Toast.makeText(CosyDVR.this, R.string.exit_again, Toast.LENGTH_LONG).show();
+		//Toast.makeText(CosyDVR.this, R.string.exit_again, Toast.LENGTH_LONG).show();
 	}
 }};
 
@@ -207,12 +209,12 @@ private ServiceConnection mConnection = new ServiceConnection() {
         BackgroundVideoRecorder.LocalBinder binder = (BackgroundVideoRecorder.LocalBinder) service;
         mService = binder.getService();
         mBound = true;
-        if(!mService.isRecording()){
+        /*if(!mService.isRecording()){
        	 	//stopService(new Intent(CosyDVR.this, BackgroundVideoRecorder.class));
        	 	recButton.setText(getString(R.string.rec));
         }else{
             recButton.setText(getString(R.string.stop));
-        }
+        }*/
         mService.ChangeSurface(mWidth, mHeight);
      }
 
