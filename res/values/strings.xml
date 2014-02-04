@@ -8,7 +8,7 @@
     <string name="exit">EXIT</string>
     <string name="focus">FOCUS</string>
     <string name="night">NIGHT</string>
-    <string name="gps_disabled">GPS is disabled!</string>
-    <string name="exit_again">Press Exit again!</string>
+    <string name="gps_off">GPS OFF</string>
     <string name="zom">ZOOM</string>
+    <string name="exit_again">Press Exit again!</string>
 </resources>
