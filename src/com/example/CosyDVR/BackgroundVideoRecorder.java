@@ -12,7 +12,7 @@ import android.view.WindowManager.LayoutParams;
 import android.view.Gravity;
 import android.view.SurfaceView;
 import android.widget.TextView;
-//import android.widget.Toast;
+import android.widget.Toast;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
@@ -97,6 +97,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     private long mNewFileBegin = 0;
 
     private LocationManager mLocationManager = null;
+    private Location mLocation;
     private long mPrevTim = 0;
     
     private String[] mFocusModes = {Parameters.FOCUS_MODE_INFINITY,
@@ -132,31 +133,28 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 		    //Criteria criteria = new Criteria();
 		    //String bestProvider = mLocationManager.getBestProvider(criteria, false);
 		    //Location location = mLocationManager.getLastKnownLocation(bestProvider);
-		    Location location = null;
 		    try {
-		    	location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		    } catch (Exception e) {};
+		    	mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		    } catch (Exception e) {
+		    	mLocation = null;
+		    };
 
-//		    Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		    
 		    double lat=-1,lon=-1,alt=-1;
 		    float spd=0,acc=-1;
-		    int sat=0;
+		    int sat=0, fix=0;
+			//boolean fixed = false;
 		    long tim=0;
 
-            try {
-            lat = location.getLatitude();
-            lon = location.getLongitude();
-            tim = location.getTime()/1000; //millisec to sec
-	        alt = location.getAltitude();
-	        acc = location.getAccuracy();
-	        spd = location.getSpeed() * 3.6f;
-	        sat = location.getExtras().getInt("satellites");
-                
-            } catch (NullPointerException e) {
-            	tim = 0;
+            if (mLocation != null) {
+	            lat = mLocation.getLatitude();
+	            lon = mLocation.getLongitude();
+	            tim = mLocation.getTime()/1000; //millisec to sec
+		        alt = mLocation.getAltitude();
+		        acc = mLocation.getAccuracy();
+		        spd = mLocation.getSpeed() * 3.6f;
+		        sat = mLocation.getExtras().getInt("satellites");
             }
-
+	        
             srt = srt + String.format("lat:%1.6f,lon:%1.6f,alt:%1.0f\nspd:%1.1fkm/h,acc:%01.1fm,sat:%d,tim:%d\n\n", lat, lon, alt, spd, acc, sat, tim);
             gpx = gpx + String.format("<trkpt lon=\"%1.8f\" lat=\"%1.8f\">\n", lon, lat).replace(",",".");
             gpx = gpx + String.format("<ele>%1.0f</ele>\n", alt);
@@ -166,9 +164,11 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 				mPrevTim = tim;
 			}
 	   	    try {
-	   	    	mSrtWriter.write(srt);
-	   	    	if(tim != mPrevTim && lat>0) {
-	   	    		mGpxWriter.write(gpx);		   	    		
+	   	    	if(isrecording){
+		   	    	mSrtWriter.write(srt);
+		   	    	if(tim != mPrevTim && lat>0) {
+		   	    		mGpxWriter.write(gpx);		   	    		
+		   	    	}
 	   	    	}
 	   	    } catch(IOException e){};
 	   	    mTextView.setText(srt);
@@ -610,13 +610,13 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
       	    Log.e("CosyDVR", "exception: " + e.getMessage());             
       	    Log.e("CosyDVR", "exception: " + e.toString());
       	}
-             
       }       
   }
 
   private void stopGps() {
-      if (mLocationManager != null)
-          mLocationManager.removeUpdates((LocationListener) this);
+	  if (mLocationManager != null){
+		  mLocationManager.removeUpdates((LocationListener) this);
+	  }
       mLocationManager = null;
   }
 }

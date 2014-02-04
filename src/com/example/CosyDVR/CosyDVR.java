@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.graphics.Point;
@@ -24,6 +26,7 @@ public class CosyDVR extends Activity{
     boolean mBound = false;
     boolean recording;
     private int mWidth=1,mHeight=1;
+    private long ExitPressTime = 0;
 
   /** Called when the activity is first created. */
   @Override
@@ -179,13 +182,19 @@ Button.OnClickListener exiButtonOnClickListener
 @Override
 public void onClick(View v) {
 // TODO Auto-generated method stub
-	if(mBound) {
-		unbindService(CosyDVR.this.mConnection);
-        CosyDVR.this.mBound = false;
+	if(ExitPressOnce && ExitPressTime > SystemClock.elapsedRealtime()+1000
+					 && ExitPressTime < SystemClock.elapsedRealtime()+2000) { 
+		if(mBound) {
+			unbindService(CosyDVR.this.mConnection);
+			CosyDVR.this.mBound = false;
+		}
+		stopService(new Intent(CosyDVR.this, BackgroundVideoRecorder.class));
+		CosyDVR.this.finish();
+		//System.exit(0);
+	} else {
+		ExitPressTime = SystemClock.elapsedRealtime();
+		Toast.makeText(CosyDVR.this, R.string.exit_again, Toast.LENGTH_LONG).show();
 	}
-	stopService(new Intent(CosyDVR.this, BackgroundVideoRecorder.class));
-    CosyDVR.this.finish();
-    //System.exit(0);
 }};
 
 /** Defines callbacks for service binding, passed to bindService() */
