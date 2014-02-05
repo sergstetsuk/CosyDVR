@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.SystemClock;
+//import android.os.SystemClock;
 import android.view.Display;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 //import android.widget.Toast;
 import android.content.ComponentName;
@@ -22,13 +25,31 @@ import java.io.File;
 public class CosyDVR extends Activity{
 
     BackgroundVideoRecorder mService;
-    Button zomButton,favButton,recButton,flsButton,exiButton,focButton,nigButton;
+    Button favButton,recButton,flsButton,exiButton,focButton,nigButton;
+    View mainView;
     boolean mBound = false;
     boolean recording;
     private int mWidth=1,mHeight=1;
     long ExitPressTime = 0;
+    private float mScaleFactor = 1.0f;
 
-  /** Called when the activity is first created. */
+    private final class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            mScaleFactor *= detector.getScaleFactor();
+
+            // Don't let the object get too small or too large.
+            mScaleFactor = Math.max(1.0f, Math.min(mScaleFactor, 11.0f));
+	      	if(mBound) {
+	      		mService.setZoom(mScaleFactor);
+	    	}
+            return true;
+        }
+
+    }
+
+    /** Called when the activity is first created. */
   @Override
   public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -42,23 +63,32 @@ public class CosyDVR extends Activity{
       tmpdir.mkdirs();
       favdir.mkdirs();
 
-      zomButton = (Button)findViewById(R.id.zom_button);
       favButton = (Button)findViewById(R.id.fav_button);
       recButton = (Button)findViewById(R.id.rec_button);
       focButton = (Button)findViewById(R.id.foc_button);
       nigButton = (Button)findViewById(R.id.nig_button);
       flsButton = (Button)findViewById(R.id.fls_button);
       exiButton = (Button)findViewById(R.id.exi_button);
+      mainView = (View)findViewById(R.id.mainview);
       
-      zomButton.setOnClickListener(zomButtonOnClickListener);
       favButton.setOnClickListener(favButtonOnClickListener);
       recButton.setOnClickListener(recButtonOnClickListener);
       focButton.setOnClickListener(focButtonOnClickListener);
       nigButton.setOnClickListener(nigButtonOnClickListener);
       flsButton.setOnClickListener(flsButtonOnClickListener);
-      exiButton.setOnClickListener(exiButtonOnClickListener);
+      exiButton.setOnLongClickListener(exiButtonOnLongClickListener);
 
       getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+      final ScaleGestureDetector mScaleDetector = new ScaleGestureDetector(this, new ScaleListener());
+      mainView.setOnTouchListener(new OnTouchListener() {
+          @Override
+          public boolean onTouch(View v, MotionEvent event) {
+         	 mScaleDetector.onTouchEvent(event);
+             return true;
+          }
+
+      });
+
      
   }
 
@@ -110,16 +140,6 @@ public class CosyDVR extends Activity{
 	  super.onResume();
   }
 
-
-  Button.OnClickListener zomButtonOnClickListener
-  = new Button.OnClickListener(){
-  @Override
-  public void onClick(View v) {
-   // TODO Auto-generated method stub
-	  if(mBound) {
-		  mService.toggleZoom();
-	  }
- }};
 
  Button.OnClickListener favButtonOnClickListener
   = new Button.OnClickListener(){
@@ -179,12 +199,12 @@ public void onClick(View v) {
 	  }
 }};
 
-Button.OnClickListener exiButtonOnClickListener
-= new Button.OnClickListener(){
+Button.OnLongClickListener exiButtonOnLongClickListener
+= new Button.OnLongClickListener(){
 @Override
-public void onClick(View v) {
+public boolean onLongClick(View v) {
 // TODO Auto-generated method stub
-	if(SystemClock.elapsedRealtime() > (ExitPressTime + 1000)
+/*	if(SystemClock.elapsedRealtime() > (ExitPressTime + 1000)
 	   && SystemClock.elapsedRealtime() < (ExitPressTime + 2000)) { 
 		if(mBound) {
 			unbindService(CosyDVR.this.mConnection);
@@ -196,7 +216,14 @@ public void onClick(View v) {
 	} else {
 		ExitPressTime = SystemClock.elapsedRealtime();
 		//Toast.makeText(CosyDVR.this, R.string.exit_again, Toast.LENGTH_LONG).show();
+	}*/
+	if(mBound) {
+		unbindService(CosyDVR.this.mConnection);
+		CosyDVR.this.mBound = false;
 	}
+	stopService(new Intent(CosyDVR.this, BackgroundVideoRecorder.class));
+	CosyDVR.this.finish();
+	return true;
 }};
 
 /** Defines callbacks for service binding, passed to bindService() */

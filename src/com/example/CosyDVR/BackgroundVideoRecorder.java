@@ -1,5 +1,6 @@
 package com.example.CosyDVR;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.app.Notification;
 //import android.support.v4.app.NotificationCompat;
@@ -12,7 +13,7 @@ import android.view.WindowManager.LayoutParams;
 import android.view.Gravity;
 import android.view.SurfaceView;
 import android.widget.TextView;
-import android.widget.Toast;
+//import android.widget.Toast;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
@@ -106,7 +107,8 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     							 //Parameters.FOCUS_MODE_EDOF,
     							 Parameters.FOCUS_MODE_MACRO};
     
-    private final class HandlerExtension extends Handler {
+    @SuppressLint("HandlerLeak")
+	private final class HandlerExtension extends Handler {
 		public void handleMessage(Message msg) {
 			if (!isrecording) {
 				return;
@@ -126,7 +128,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 			min =  (int)((now - mNewFileBegin)%(1000*60*60)/(1000*60));
 			sec =  (int)((now - mNewFileBegin)%(1000*60)/(1000));
 			mil =  (int)((now - mNewFileBegin)%(1000));
-		    srt = srt + String.format("%02d:%02d:%02d,%03d\n", hour, min, sec, mil);
+		    srt = srt + String.format("%02d:%02d:%02dfocus,%03d\n", hour, min, sec, mil);
 		    srt = srt + DateFormat.format("yyyy-MM-dd_kk-mm-ss", datetime.getTime()).toString() + "\n";
 
 		    // Get the location manager
@@ -507,11 +509,11 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     	}
     }
 
-	public void toggleZoom() {
+	public void setZoom(float mval) {
 		if(camera != null){
 			Parameters parameters = camera.getParameters();
 			if(parameters.isZoomSupported()) {
-				parameters.setZoom((parameters.getZoom()+1)%(parameters.getMaxZoom()+1));
+				parameters.setZoom((int)(parameters.getMaxZoom()*(mval-1)/10.0));
 				camera.setParameters(parameters);
 			}
 		}
