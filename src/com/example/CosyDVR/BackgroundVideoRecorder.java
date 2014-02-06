@@ -107,7 +107,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     							 //Parameters.FOCUS_MODE_EDOF,
     							 Parameters.FOCUS_MODE_MACRO};
     
-    @SuppressLint("HandlerLeak")
+    //@SuppressLint("HandlerLeak")
 	private final class HandlerExtension extends Handler {
 		public void handleMessage(Message msg) {
 			if (!isrecording) {
@@ -128,7 +128,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 			min =  (int)((now - mNewFileBegin)%(1000*60*60)/(1000*60));
 			sec =  (int)((now - mNewFileBegin)%(1000*60)/(1000));
 			mil =  (int)((now - mNewFileBegin)%(1000));
-		    srt = srt + String.format("%02d:%02d:%02dfocus,%03d\n", hour, min, sec, mil);
+		    srt = srt + String.format("%02d:%02d:%02d,%03d\n", hour, min, sec, mil);
 		    srt = srt + DateFormat.format("yyyy-MM-dd_kk-mm-ss", datetime.getTime()).toString() + "\n";
 
 		    // Get the location manager
@@ -513,7 +513,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 		if(camera != null){
 			Parameters parameters = camera.getParameters();
 			if(parameters.isZoomSupported()) {
-				parameters.setZoom((int)(parameters.getMaxZoom()*(mval-1)/10.0));
+				parameters.setZoom((int)(parameters.getMaxZoom()*(mval-2)/10.0));
 				camera.setParameters(parameters);
 			}
 		}
