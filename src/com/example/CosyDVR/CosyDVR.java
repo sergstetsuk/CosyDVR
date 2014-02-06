@@ -31,7 +31,12 @@ public class CosyDVR extends Activity{
     boolean recording;
     private int mWidth=1,mHeight=1;
     long ExitPressTime = 0;
-    private float mScaleFactor = 2.0f;
+    private float mScaleFactor = 4.0f;
+    private String[] mFocusNames = {"INF",
+			 "AUT",
+			 "VID",
+			 //"EDF",
+			 "MAC"};
 
     private final class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
 
@@ -40,7 +45,7 @@ public class CosyDVR extends Activity{
             mScaleFactor *= detector.getScaleFactor();
 
             // Don't let the object get too small or too large.
-            mScaleFactor = Math.max(2.0f, Math.min(mScaleFactor, 12.0f));
+            mScaleFactor = Math.max(4.0f, Math.min(mScaleFactor, 14.0f));
 	      	if(mBound) {
 	      		mService.setZoom(mScaleFactor);
 	    	}
@@ -175,7 +180,7 @@ public void onClick(View v) {
 // TODO Auto-generated method stub
 	  if(mBound) {
 		  mService.toggleFocus();
-		  focButton.setText(getString(R.string.focus) + " [" + mService.getFocusMode() + "]");
+		  focButton.setText(getString(R.string.focus) + " [" + mFocusNames[mService.getFocusMode()] + "]");
 	  }
 }};
 

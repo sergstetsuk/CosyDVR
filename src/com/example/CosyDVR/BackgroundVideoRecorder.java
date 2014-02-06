@@ -102,12 +102,12 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     private long mPrevTim = 0;
     
     private String[] mFocusModes = {Parameters.FOCUS_MODE_INFINITY,
-    							 Parameters.FOCUS_MODE_CONTINUOUS_VIDEO,
-    							 //Parameters.FOCUS_MODE_FIXED,
-    							 //Parameters.FOCUS_MODE_EDOF,
+			 					 Parameters.FOCUS_MODE_AUTO,
+			 					 Parameters.FOCUS_MODE_CONTINUOUS_VIDEO,
+			 					 //not working Parameters.FOCUS_MODE_EDOF,
     							 Parameters.FOCUS_MODE_MACRO};
     
-    //@SuppressLint("HandlerLeak")
+    @SuppressLint("HandlerLeak")
 	private final class HandlerExtension extends Handler {
 		public void handleMessage(Message msg) {
 			if (!isrecording) {
@@ -513,7 +513,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 		if(camera != null){
 			Parameters parameters = camera.getParameters();
 			if(parameters.isZoomSupported()) {
-				parameters.setZoom((int)(parameters.getMaxZoom()*(mval-2)/10.0));
+				parameters.setZoom((int)(parameters.getMaxZoom()*(mval-4)/10.0));
 				camera.setParameters(parameters);
 			}
 		}
