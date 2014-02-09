@@ -1,6 +1,6 @@
 package com.example.CosyDVR;
 
-import android.annotation.SuppressLint;
+//import android.annotation.SuppressLint;
 import android.app.Service;
 import android.app.Notification;
 //import android.support.v4.app.NotificationCompat;
@@ -57,8 +57,8 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	public long MAX_TEMP_FOLDER_SIZE = 10000000;
 	public long MIN_FREE_SPACE = 1000000;
 	public int MAX_VIDEO_DURATION = 600000;
-	public int VIDEO_WIDTH = 1920;
-	public int VIDEO_HEIGHT= 1080;
+	public int VIDEO_WIDTH = 1280;//1920;
+	public int VIDEO_HEIGHT= 720;//1080;
 	public int MAX_VIDEO_BIT_RATE = 5000000;
 	//public int MAX_VIDEO_BIT_RATE = 256000; //=for streaming;
 	public int REFRESH_TIME = 1000;
@@ -107,7 +107,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 			 					 //not working Parameters.FOCUS_MODE_EDOF,
     							 Parameters.FOCUS_MODE_MACRO};
     
-    @SuppressLint("HandlerLeak")
+    //some troubles with video files @SuppressLint("HandlerLeak")
 	private final class HandlerExtension extends Handler {
 		public void handleMessage(Message msg) {
 			if (!isrecording) {
