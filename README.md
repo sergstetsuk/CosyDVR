@@ -21,6 +21,9 @@ Features:
 - Exit function is protected with long click to avoid accedental click
 
 
+Supported devices:
+- Fly IQ451
+- Prestigio PAP4055
 
 Features todo:
 
