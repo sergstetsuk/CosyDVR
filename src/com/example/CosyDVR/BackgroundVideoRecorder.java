@@ -98,14 +98,16 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     private long mNewFileBegin = 0;
 
     private LocationManager mLocationManager = null;
-    private Location mLocation;
+    private Location mLocation, mPrevLocation;
     private long mPrevTim = 0;
     
+    //private List<String> mFocusModes;
     private String[] mFocusModes = {Parameters.FOCUS_MODE_INFINITY,
-			 					 Parameters.FOCUS_MODE_AUTO,
 			 					 Parameters.FOCUS_MODE_CONTINUOUS_VIDEO,
-			 					 //not working Parameters.FOCUS_MODE_EDOF,
-    							 Parameters.FOCUS_MODE_MACRO};
+			 					 Parameters.FOCUS_MODE_AUTO,
+			 					 Parameters.FOCUS_MODE_MACRO,
+			 					 Parameters.FOCUS_MODE_EDOF,
+			 					 };
     
     //some troubles with video files @SuppressLint("HandlerLeak")
 	private final class HandlerExtension extends Handler {
@@ -152,8 +154,12 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	            tim = mLocation.getTime()/1000; //millisec to sec
 		        alt = mLocation.getAltitude();
 		        acc = mLocation.getAccuracy();
-		        spd = mLocation.getSpeed() * 3.6f;
+		        //spd = mLocation.getSpeed() * 3.6f;	//by GPS
+		        //if((mLocation.getTime()-3000) < mPrevLocation.getTime()){
+		        spd = 3.6f * 1000 * mLocation.distanceTo(mPrevLocation) / (mLocation.getTime() - mPrevLocation.getTime());
+		        //}
 		        sat = mLocation.getExtras().getInt("satellites");
+		        mPrevLocation = mLocation;
             }
 	        
             srt = srt + String.format("lat:%1.6f,lon:%1.6f,alt:%1.0f,spd:%1.1fkm/h\nacc:%01.1fm,sat:%d,tim:%d\n\n", lat, lon, alt, spd, acc, sat, tim);
@@ -487,9 +493,18 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 //		}
 	}
 
+	public void autoFocus() {
+		if (mFocusModes[focusmode] == Parameters.FOCUS_MODE_AUTO
+		 || mFocusModes[focusmode] == Parameters.FOCUS_MODE_MACRO) {
+			camera.autoFocus(null);
+		}
+    }
+
 	public void toggleFocus() {
-    	focusmode = (focusmode + 1) % mFocusModes.length;
 		Parameters parameters = camera.getParameters();
+		do {
+			focusmode = (focusmode + 1) % mFocusModes.length;
+		} while (!parameters.getSupportedFocusModes().contains(mFocusModes[focusmode]));	//SKIP unsupported modes
     	parameters.setFocusMode(mFocusModes[focusmode]);
     	camera.setParameters(parameters);
     }

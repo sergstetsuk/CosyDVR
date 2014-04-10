@@ -33,10 +33,11 @@ public class CosyDVR extends Activity{
     long ExitPressTime = 0;
     private float mScaleFactor = 4.0f;
     private String[] mFocusNames = {"INF",
-			 "AUT",
 			 "VID",
-			 //"EDF",
-			 "MAC"};
+			 "AUT",
+			 "MAC",
+			 "EDF",
+			 };
 
     private final class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
 
@@ -82,6 +83,7 @@ public class CosyDVR extends Activity{
       nigButton.setOnClickListener(nigButtonOnClickListener);
       flsButton.setOnClickListener(flsButtonOnClickListener);
       exiButton.setOnLongClickListener(exiButtonOnLongClickListener);
+      focButton.setOnLongClickListener(focButtonOnLongClickListener);
 
       getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
       final ScaleGestureDetector mScaleDetector = new ScaleGestureDetector(this, new ScaleListener());
@@ -183,6 +185,16 @@ public void onClick(View v) {
 		  focButton.setText(getString(R.string.focus) + " [" + mFocusNames[mService.getFocusMode()] + "]");
 	  }
 }};
+
+Button.OnLongClickListener focButtonOnLongClickListener
+= new Button.OnLongClickListener(){
+	  @Override
+	  public boolean onLongClick(View v) {
+		  if(mBound) {
+			  mService.autoFocus();
+		  }
+		  return true;
+	 }};
 
 Button.OnClickListener nigButtonOnClickListener
 = new Button.OnClickListener(){
