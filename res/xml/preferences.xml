@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:title="Preferences">
+    <EditTextPreference 
+        android:key="mac_temp_folder_size"
+        android:title="Temp Folder Size"
+        android:summary="Enter temp folder size" />
+    
+
+</PreferenceScreen>

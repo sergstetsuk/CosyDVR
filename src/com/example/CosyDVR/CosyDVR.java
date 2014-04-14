@@ -1,5 +1,6 @@
 package com.example.CosyDVR;
 import com.example.CosyDVR.BackgroundVideoRecorder;
+import com.example.CosyDVR.CosyDVRPreferenceActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -172,7 +173,10 @@ public void onClick(View v) {
  }
  	 mService.toggleRecording();
 */
-	 mService.RestartRecording(); //stop
+	  mService.ChangeSurface(1, 1);
+	startActivity(new Intent(CosyDVR.this, CosyDVRPreferenceActivity.class));
+	  mService.ChangeSurface(mWidth, mHeight);
+	 //mService.RestartRecording(); //stop
 }};
 
 Button.OnClickListener focButtonOnClickListener
