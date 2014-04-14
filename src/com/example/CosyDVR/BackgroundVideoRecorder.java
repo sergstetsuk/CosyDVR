@@ -149,15 +149,19 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 			long tim=0;
 
             if (mLocation != null) {
+            	if (mPrevLocation == null) {
+            		mPrevLocation = mLocation;	//for null to not occur during operation
+            	}
 	            lat = mLocation.getLatitude();
 	            lon = mLocation.getLongitude();
 	            tim = mLocation.getTime()/1000; //millisec to sec
 		        alt = mLocation.getAltitude();
 		        acc = mLocation.getAccuracy();
 		        //spd = mLocation.getSpeed() * 3.6f;	//by GPS
-		        //if((mLocation.getTime()-3000) < mPrevLocation.getTime()){
-		        spd = 3.6f * 1000 * mLocation.distanceTo(mPrevLocation) / (mLocation.getTime() - mPrevLocation.getTime());
-		        //}
+		        if(mLocation.getTime() != mPrevLocation.getTime()
+		        	&& (mLocation.getTime()-3000) < mPrevLocation.getTime()){
+		        	spd = 3.6f * 1000 * mLocation.distanceTo(mPrevLocation) / (mLocation.getTime() - mPrevLocation.getTime());
+		        }
 		        sat = mLocation.getExtras().getInt("satellites");
 		        mPrevLocation = mLocation;
             }
