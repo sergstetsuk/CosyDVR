@@ -29,7 +29,8 @@ public class CosyDVR extends Activity{
     Button favButton,recButton,flsButton,exiButton,focButton,nigButton;
     View mainView;
     boolean mBound = false;
-    boolean recording;
+    boolean recording = false;
+    boolean mayclick = false;
     private int mWidth=1,mHeight=1;
     long ExitPressTime = 0;
     private float mScaleFactor = 4.0f;
@@ -83,7 +84,6 @@ public class CosyDVR extends Activity{
       nigButton.setOnClickListener(nigButtonOnClickListener);
       flsButton.setOnClickListener(flsButtonOnClickListener);
       exiButton.setOnLongClickListener(exiButtonOnLongClickListener);
-      focButton.setOnLongClickListener(focButtonOnLongClickListener);
       mainView.setOnClickListener(mainViewOnClickListener);
 
       getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -92,6 +92,26 @@ public class CosyDVR extends Activity{
           @Override
           public boolean onTouch(View v, MotionEvent event) {
          	 mScaleDetector.onTouchEvent(event);
+         	 //Extra analysis for single tap detection. Swipes are detected as autofocus too for now
+         	 int action = event.getAction() & MotionEvent.ACTION_MASK;
+         	 switch(action) {
+         	 	case MotionEvent.ACTION_DOWN : {
+         	 		mayclick = true;	//first finger touch is like click 
+         	 		break;
+         	 	}
+         	 	case MotionEvent.ACTION_POINTER_DOWN : {
+         	 		mayclick = false;	//second finger is not click
+         	 		break;
+         	 	}
+         	 	case MotionEvent.ACTION_UP : {
+         	 		if(mayclick) {		//first finger up. check if it was single one
+         	 			if(mBound) {
+         	 				mService.autoFocus();
+         	 			}
+         	 		}
+     	 			mayclick = false;
+         	 	}  
+         	 }
          	 return true;
           }
 
@@ -197,16 +217,6 @@ View.OnClickListener mainViewOnClickListener
 		  if(mBound) {
 			  mService.autoFocus();
 		  }
-	 }};
-
-Button.OnLongClickListener focButtonOnLongClickListener
-= new Button.OnLongClickListener(){
-	  @Override
-	  public boolean onLongClick(View v) {
-		  if(mBound) {
-			  mService.autoFocus();
-		  }
-		  return true;
 	 }};
 
 Button.OnClickListener nigButtonOnClickListener
