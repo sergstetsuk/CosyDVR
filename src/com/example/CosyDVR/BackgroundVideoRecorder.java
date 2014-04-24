@@ -98,7 +98,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     private long mNewFileBegin = 0;
 
     private LocationManager mLocationManager = null;
-    private Location mLocation, mPrevLocation;
+    private Location mLocation;//, mPrevLocation;
     private long mPrevTim = 0;
     
     //private List<String> mFocusModes;
@@ -150,21 +150,21 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 			long tim=0;
 
             if (mLocation != null) {
-            	if (mPrevLocation == null) {
+/*            	if (mPrevLocation == null) {
             		mPrevLocation = mLocation;	//for null to not occur during operation
-            	}
+            	}*/
 	            lat = mLocation.getLatitude();
 	            lon = mLocation.getLongitude();
 	            tim = mLocation.getTime()/1000; //millisec to sec
 		        alt = mLocation.getAltitude();
 		        acc = mLocation.getAccuracy();
-		        //spd = mLocation.getSpeed() * 3.6f;	//by GPS
-		        if(mLocation.getTime() != mPrevLocation.getTime()
+		        spd = mLocation.getSpeed() * 3.6f;	//by GPS
+		        /*if(mLocation.getTime() != mPrevLocation.getTime()
 		        	&& (mLocation.getTime()-3000) < mPrevLocation.getTime()){
 		        	spd = 3.6f * 1000 * mLocation.distanceTo(mPrevLocation) / (mLocation.getTime() - mPrevLocation.getTime());
-		        }
+		        }*/
 		        sat = mLocation.getExtras().getInt("satellites");
-		        mPrevLocation = mLocation;
+		        //mPrevLocation = mLocation;
             }
 	        
             srt = srt + String.format("lat:%1.6f,lon:%1.6f,alt:%1.0f,spd:%1.1fkm/h\nacc:%01.1fm,sat:%d,tim:%d\n\n", lat, lon, alt, spd, acc, sat, tim);
