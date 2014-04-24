@@ -53,7 +53,6 @@ public class CosyDVR extends Activity{
 	    	}
             return true;
         }
-
     }
 
     /** Called when the activity is first created. */
@@ -85,6 +84,7 @@ public class CosyDVR extends Activity{
       flsButton.setOnClickListener(flsButtonOnClickListener);
       exiButton.setOnLongClickListener(exiButtonOnLongClickListener);
       focButton.setOnLongClickListener(focButtonOnLongClickListener);
+      mainView.setOnClickListener(mainViewOnClickListener);
 
       getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
       final ScaleGestureDetector mScaleDetector = new ScaleGestureDetector(this, new ScaleListener());
@@ -92,7 +92,7 @@ public class CosyDVR extends Activity{
           @Override
           public boolean onTouch(View v, MotionEvent event) {
          	 mScaleDetector.onTouchEvent(event);
-             return true;
+         	 return true;
           }
 
       });
@@ -189,6 +189,15 @@ public void onClick(View v) {
 		  focButton.setText(getString(R.string.focus) + " [" + mFocusNames[mService.getFocusMode()] + "]");
 	  }
 }};
+
+View.OnClickListener mainViewOnClickListener
+= new View.OnClickListener(){
+	  @Override
+	  public void onClick(View v) {
+		  if(mBound) {
+			  mService.autoFocus();
+		  }
+	 }};
 
 Button.OnLongClickListener focButtonOnLongClickListener
 = new Button.OnLongClickListener(){

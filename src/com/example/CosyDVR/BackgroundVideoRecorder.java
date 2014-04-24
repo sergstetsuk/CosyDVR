@@ -118,18 +118,19 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 			String srt = new String();
 			String gpx = new String();
 			Date datetime = new Date();
-			long now = mSrtBegin;
-			int hour = (int)((now - mNewFileBegin)/(1000*60*60));
-			int min =  (int)((now - mNewFileBegin)%(1000*60*60)/(1000*60));
-			int sec =  (int)((now - mNewFileBegin)%(1000*60)/(1000));
-			int mil =  (int)((now - mNewFileBegin)%(1000));
+			long tick = mSrtBegin - mNewFileBegin; //relative srt text begin/ i.e. prev tick time
+			int hour = (int)(tick/(1000*60*60));
+			int min =  (int)(tick%(1000*60*60)/(1000*60));
+			int sec =  (int)(tick%(1000*60)/(1000));
+			int mil =  (int)(tick%(1000));
 		    srt = srt + String.format("%d\n%02d:%02d:%02d,%03d --> ", mSrtCounter, hour, min, sec, mil);
 
-			now = SystemClock.elapsedRealtime();
-			hour = (int)((now - mNewFileBegin)/(1000*60*60));
-			min =  (int)((now - mNewFileBegin)%(1000*60*60)/(1000*60));
-			sec =  (int)((now - mNewFileBegin)%(1000*60)/(1000));
-			mil =  (int)((now - mNewFileBegin)%(1000));
+	   	    mSrtBegin = SystemClock.elapsedRealtime();
+	   	    tick = mSrtBegin - mNewFileBegin; //relative srt text end. i.e. this tick time
+			hour = (int)(tick/(1000*60*60));
+			min =  (int)(tick%(1000*60*60)/(1000*60));
+			sec =  (int)(tick%(1000*60)/(1000));
+			mil =  (int)(tick%(1000));
 		    srt = srt + String.format("%02d:%02d:%02d,%03d\n", hour, min, sec, mil);
 		    srt = srt + DateFormat.format("yyyy-MM-dd_kk-mm-ss", datetime.getTime()).toString() + "\n";
 
@@ -202,7 +203,6 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	   	    } else {
 	   	    	mSpeedView.setTextColor(Color.parseColor("#0b9800")); //green
 	   	    }
-	   	    mSrtBegin = now;
 		}
 	}
 
@@ -633,7 +633,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
           mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
       if (mLocationManager != null) {
       	try {
-              mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 1, (LocationListener) this);   //mintime,mindistance
+              mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 250 /*ms*/, 0 /*m*/, (LocationListener) this);   //mintime,mindistance
               //if ( !mLocationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) )
             	//  Toast.makeText(getApplicationContext(), getString(R.string.gps_disabled), Toast.LENGTH_LONG).show(); 
       	} catch (Exception e) {
