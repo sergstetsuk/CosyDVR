@@ -7,6 +7,7 @@ import android.app.Notification;
 //import android.support.v4.app.NotificationCompat;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
@@ -50,6 +51,7 @@ import java.lang.String;
 //import java.net.UnknownHostException;
 
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 
 
 
@@ -220,6 +222,9 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
  
     @Override
     public void onCreate() {
+    	SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+    	MAX_VIDEO_BIT_RATE = Integer.parseInt(sharedPref.getString("video_bitrate", "5000000"));
+    	
         // Start foreground service to avoid unexpected kill
         Intent myIntent = new Intent(this, CosyDVR.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(

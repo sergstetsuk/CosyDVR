@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:title="Preferences">
     <EditTextPreference 
-        android:key="mac_temp_folder_size"
+        android:key="max_temp_folder_size"
         android:title="Temp Folder Size"
-        android:summary="Enter temp folder size" />
-    
-
+        android:summary="Enter temp folder size in bytes"
+        android:numeric="integer"  
+        android:defaultValue="10000000" />
+    <EditTextPreference 
+        android:key="min_free_space"
+        android:title="Min Free Space"
+        android:summary="Enter minimum free space in bytes"
+        android:numeric="integer"  
+        android:defaultValue="1000000" />
+    <EditTextPreference 
+        android:key="video_duration"
+        android:title="Split File Duration"
+        android:summary="Enter video file duration in ms"
+        android:numeric="integer"  
+        android:defaultValue="600000" />
+    <EditTextPreference 
+        android:key="video_width"
+        android:title="Video Width"
+        android:summary="Enter video width in px"
+        android:numeric="integer"  
+        android:defaultValue="1280" />
+    <EditTextPreference 
+        android:key="video_height"
+        android:title="Video Height"
+        android:summary="Enter video height in px"
+        android:numeric="integer"  
+        android:defaultValue="720" />
+    <EditTextPreference 
+        android:key="video_bitrate"
+        android:title="Video Bitrate"
+        android:summary="Enter video bitrate in bps"
+        android:numeric="integer"  
+        android:defaultValue="5000000" />
 </PreferenceScreen>

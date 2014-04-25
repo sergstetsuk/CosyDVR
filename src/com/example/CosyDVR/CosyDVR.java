@@ -84,7 +84,7 @@ public class CosyDVR extends Activity{
       nigButton.setOnClickListener(nigButtonOnClickListener);
       flsButton.setOnClickListener(flsButtonOnClickListener);
       exiButton.setOnLongClickListener(exiButtonOnLongClickListener);
-      mainView.setOnClickListener(mainViewOnClickListener);
+      recButton.setOnLongClickListener(recButtonOnLongClickListener);
 
       getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
       final ScaleGestureDetector mScaleDetector = new ScaleGestureDetector(this, new ScaleListener());
@@ -136,7 +136,7 @@ public class CosyDVR extends Activity{
 //        	  mHeight = display.getHeight();
 //          }
 
-          Intent intent = new Intent(CosyDVR.this, BackgroundVideoRecorder.class);
+          Intent intent = new Intent(/*CosyDVR.this*/getApplicationContext(), BackgroundVideoRecorder.class);
           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
           startService(intent);
           bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
@@ -193,10 +193,7 @@ public void onClick(View v) {
  }
  	 mService.toggleRecording();
 */
-	  mService.ChangeSurface(1, 1);
-	startActivity(new Intent(CosyDVR.this, CosyDVRPreferenceActivity.class));
-	  mService.ChangeSurface(mWidth, mHeight);
-	 //mService.RestartRecording(); //stop
+	 mService.RestartRecording(); //stop
 }};
 
 Button.OnClickListener focButtonOnClickListener
@@ -210,14 +207,6 @@ public void onClick(View v) {
 	  }
 }};
 
-View.OnClickListener mainViewOnClickListener
-= new View.OnClickListener(){
-	  @Override
-	  public void onClick(View v) {
-		  if(mBound) {
-			  mService.autoFocus();
-		  }
-	 }};
 
 Button.OnClickListener nigButtonOnClickListener
 = new Button.OnClickListener(){
@@ -237,6 +226,18 @@ public void onClick(View v) {
 	  if(mBound) {
 		  mService.toggleFlash();
 	  }
+}};
+
+Button.OnLongClickListener recButtonOnLongClickListener
+= new Button.OnLongClickListener(){
+@Override
+public boolean onLongClick(View v) {
+// TODO Auto-generated method stub
+	  mService.ChangeSurface(1, 1);
+      Intent myIntent = new Intent(getApplicationContext(), CosyDVRPreferenceActivity.class);
+      startActivity(myIntent);
+	  //mService.ChangeSurface(mWidth, mHeight);	//size will be returned with app focus
+	return true;
 }};
 
 Button.OnLongClickListener exiButtonOnLongClickListener
