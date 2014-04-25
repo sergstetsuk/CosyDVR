@@ -1,6 +1,7 @@
 package com.example.CosyDVR;
 
 //import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.app.Notification;
 //import android.support.v4.app.NotificationCompat;
@@ -220,10 +221,18 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     @Override
     public void onCreate() {
         // Start foreground service to avoid unexpected kill
-	        Notification notification = new Notification.Builder(this)
+        Intent myIntent = new Intent(this, CosyDVR.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+               this, 
+               0, 
+               myIntent, 
+               Intent.FLAG_ACTIVITY_NEW_TASK);
+        
+        Notification notification = new Notification.Builder(this)
 	            .setContentTitle("CosyDVR Background Recorder Service")
 	            .setContentText("")
 	            .setSmallIcon(R.drawable.cosydvricon)
+	            .setContentIntent(pendingIntent)
 	            .build();
 	        startForeground(1, notification);
 
