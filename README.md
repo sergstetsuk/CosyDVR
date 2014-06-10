@@ -27,7 +27,7 @@ Features:
 Supported devices:
 - Fly IQ451
 - Prestigio PAP4055
-- ASUS
+- ASUS ME173X
 
 Not yet supported devices:
 

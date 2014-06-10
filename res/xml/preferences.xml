@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:title="Preferences">
     <EditTextPreference 
+        android:key="sd_card_path"
+        android:title="External Storage Path"
+        android:summary="Enter external storage path"
+        android:defaultValue="/storage/sdcard0" />
+    <EditTextPreference 
         android:key="max_temp_folder_size"
         android:title="Temp Folder Size"
         android:summary="Enter temp folder size in bytes"

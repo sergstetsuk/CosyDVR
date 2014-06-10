@@ -34,11 +34,11 @@ public class CosyDVR extends Activity{
     private int mWidth=1,mHeight=1;
     long ExitPressTime = 0;
     private float mScaleFactor = 4.0f;
-    private String[] mFocusNames = {"INF",
-			 "VID",
-			 "AUT",
-			 "MAC",
-			 "EDF",
+    private String[] mFocusNames = {"I",
+			 "V",
+			 "A",
+			 "M",
+			 "E",
 			 };
 
     private final class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {

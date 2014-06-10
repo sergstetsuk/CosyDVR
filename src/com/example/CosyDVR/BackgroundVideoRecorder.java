@@ -69,6 +69,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	public String SRT_FILE_EXT = ".srt";
 	public String GPX_FILE_EXT = ".gpx";
 	//public int AUDIO_SOURCE = CAMERA;
+	public String SD_CARD_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
 	
     // Binder given to clients
     private final IBinder mBinder = new LocalBinder();
@@ -287,11 +288,11 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
         startGps();
 
         //create temp and fav folders
-		File mFolder = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/");
+		File mFolder = new File(SD_CARD_PATH + "/CosyDVR/temp/");
 		if(!mFolder.exists()){
 			mFolder.mkdir();
 		}
-		mFolder = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/fav/");
+		mFolder = new File(SD_CARD_PATH + "/CosyDVR/fav/");
 		if(!mFolder.exists()){
 			mFolder.mkdir();
 		}
@@ -337,14 +338,14 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	    	} catch(IOException e) {};
 	
 	    	if(currentfile != null && isfavorite != 0) {
-	    		File tmpfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile + VIDEO_FILE_EXT);
-	    		File favfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/fav/" + currentfile + VIDEO_FILE_EXT);
+	    		File tmpfile = new File(SD_CARD_PATH + "/CosyDVR/temp/" + currentfile + VIDEO_FILE_EXT);
+	    		File favfile = new File(SD_CARD_PATH + "/CosyDVR/fav/" + currentfile + VIDEO_FILE_EXT);
 	    		tmpfile.renameTo(favfile);
-	    		tmpfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile + SRT_FILE_EXT);
-	    		favfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/fav/" + currentfile + SRT_FILE_EXT);
+	    		tmpfile = new File(SD_CARD_PATH + "/CosyDVR/temp/" + currentfile + SRT_FILE_EXT);
+	    		favfile = new File(SD_CARD_PATH + "/CosyDVR/fav/" + currentfile + SRT_FILE_EXT);
 	    		tmpfile.renameTo(favfile);
-	    		tmpfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile + GPX_FILE_EXT);
-	    		favfile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/fav/" + currentfile + GPX_FILE_EXT);
+	    		tmpfile = new File(SD_CARD_PATH + "/CosyDVR/temp/" + currentfile + GPX_FILE_EXT);
+	    		favfile = new File(SD_CARD_PATH + "/CosyDVR/fav/" + currentfile + GPX_FILE_EXT);
 	    		tmpfile.renameTo(favfile);
 				if(isfavorite == 2) {
 					isfavorite = 0;
@@ -373,6 +374,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     	MAX_VIDEO_DURATION = Integer.parseInt(sharedPref.getString("video_duration", "600000"));
     	MAX_TEMP_FOLDER_SIZE = Integer.parseInt(sharedPref.getString("max_temp_folder_size", "600000"));
     	MIN_FREE_SPACE = Integer.parseInt(sharedPref.getString("min_free_space", "600000"));
+    	SD_CARD_PATH = sharedPref.getString("sd_card_path", Environment.getExternalStorageDirectory().getAbsolutePath());
 
 		/*start*/
 		OpenUnlockPrepareStart();
@@ -389,9 +391,9 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 		
 		camera.setParameters(parameters);
 		mSrtCounter = 0;
-		mSrtFile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile + SRT_FILE_EXT);
+		mSrtFile = new File(SD_CARD_PATH + "/CosyDVR/temp/" + currentfile + SRT_FILE_EXT);
 		mSrtFile.setWritable(true);
-		mGpxFile = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile + GPX_FILE_EXT);
+		mGpxFile = new File(SD_CARD_PATH + "/CosyDVR/temp/" + currentfile + GPX_FILE_EXT);
 		mGpxFile.setWritable(true);
 		try {
 			mSrtWriter = new FileWriter(mSrtFile);
@@ -455,7 +457,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 		
 		    currentfile = DateFormat.format("yyyy-MM-dd_kk-mm-ss", new Date().getTime()).toString();
 		    // if we write to file
-		    mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/" + currentfile + VIDEO_FILE_EXT);
+		    mediaRecorder.setOutputFile(SD_CARD_PATH + "/CosyDVR/temp/" + currentfile + VIDEO_FILE_EXT);
 		    //if we stream
 		    /*String hostname = "rtmp://a.rtmp.youtube.com/stetsuk.80gq-20ea-tet3-2hfb";
 		    int port = 1234;
@@ -489,7 +491,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	}
 	
 	public void freeSpace() {
-		File dir = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/");
+		File dir = new File(SD_CARD_PATH + "/CosyDVR/temp/");
 		File[] filelist = dir.listFiles();
 		Arrays.sort(filelist, new Comparator<File>() {
             public int compare(File f1, File f2) {
