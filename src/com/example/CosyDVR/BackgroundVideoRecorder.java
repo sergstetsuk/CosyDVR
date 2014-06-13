@@ -70,6 +70,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	public String GPX_FILE_EXT = ".gpx";
 	//public int AUDIO_SOURCE = CAMERA;
 	public String SD_CARD_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
+	public boolean AUTOSTART = false;
 	
     // Binder given to clients
     private final IBinder mBinder = new LocalBinder();
@@ -302,8 +303,9 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
     	mSurfaceHolder = surfaceHolder;
-        //if autostart
-        StartRecording();
+        if (AUTOSTART) {
+        	StartRecording();
+        }
     }
 
     public int getFocusMode(){
@@ -375,6 +377,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     	MAX_TEMP_FOLDER_SIZE = Integer.parseInt(sharedPref.getString("max_temp_folder_size", "600000"));
     	MIN_FREE_SPACE = Integer.parseInt(sharedPref.getString("min_free_space", "600000"));
     	SD_CARD_PATH = sharedPref.getString("sd_card_path", Environment.getExternalStorageDirectory().getAbsolutePath());
+    	AUTOSTART = Boolean.parseBoolean(sharedPref.getString("autostart_recording", "false"));
 
 		/*start*/
 		OpenUnlockPrepareStart();

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:title="Preferences">
+    <CheckBpxPreference 
+        android:key="autostart_recording"
+        android:title="Autostart Recording"
+        android:summary="Check for auto start recording"
+        android:defaultValue="false" />
     <EditTextPreference 
         android:key="sd_card_path"
         android:title="External Storage Path"
