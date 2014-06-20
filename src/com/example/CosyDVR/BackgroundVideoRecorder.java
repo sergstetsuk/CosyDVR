@@ -224,6 +224,19 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
  
     @Override
     public void onCreate() {
+    		//read first time shared preferences
+    	SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+    	AUTOSTART = sharedPref.getBoolean("autostart_recording", false);
+/*
+ *     	MAX_VIDEO_BIT_RATE = Integer.parseInt(sharedPref.getString("video_bitrate", "5000000"));
+    	VIDEO_WIDTH = Integer.parseInt(sharedPref.getString("video_width", "1280"));
+    	VIDEO_HEIGHT = Integer.parseInt(sharedPref.getString("video_heigth", "720"));
+    	MAX_VIDEO_DURATION = Integer.parseInt(sharedPref.getString("video_duration", "600000"));
+    	MAX_TEMP_FOLDER_SIZE = Integer.parseInt(sharedPref.getString("max_temp_folder_size", "600000"));
+    	MIN_FREE_SPACE = Integer.parseInt(sharedPref.getString("min_free_space", "600000"));
+*/
+    	SD_CARD_PATH = sharedPref.getString("sd_card_path", Environment.getExternalStorageDirectory().getAbsolutePath());
+
         // Start foreground service to avoid unexpected kill
         Intent myIntent = new Intent(this, CosyDVR.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(
@@ -368,7 +381,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     }
     
 	public void StartRecording() {
-		/*reading preferences*/
+		/*Rereading preferences*/
     	SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
     	MAX_VIDEO_BIT_RATE = Integer.parseInt(sharedPref.getString("video_bitrate", "5000000"));
     	VIDEO_WIDTH = Integer.parseInt(sharedPref.getString("video_width", "1280"));
@@ -377,7 +390,6 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     	MAX_TEMP_FOLDER_SIZE = Integer.parseInt(sharedPref.getString("max_temp_folder_size", "600000"));
     	MIN_FREE_SPACE = Integer.parseInt(sharedPref.getString("min_free_space", "600000"));
     	SD_CARD_PATH = sharedPref.getString("sd_card_path", Environment.getExternalStorageDirectory().getAbsolutePath());
-    	AUTOSTART = Boolean.parseBoolean(sharedPref.getString("autostart_recording", "false"));
 
 		/*start*/
 		OpenUnlockPrepareStart();
