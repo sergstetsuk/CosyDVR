@@ -1,4 +1,13 @@
-### v.1.0.1 (2014-06-13)
+### v.1.0.4 (2014.06.23 15:12)
+
+  * Fixed "Video Height" property
+
+### v.1.0.3 (2014.06.20 17:25)
+
+  * Fixed "Autostart Recording" property
+  * Fixed "SD_Card_Path" property usage after program start
+
+### v.1.0.2 (2014-06-13)
 
   * Added "Autostart Recording" property
 

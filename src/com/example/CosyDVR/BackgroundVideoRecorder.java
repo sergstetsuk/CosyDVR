@@ -230,7 +230,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 /*
  *     	MAX_VIDEO_BIT_RATE = Integer.parseInt(sharedPref.getString("video_bitrate", "5000000"));
     	VIDEO_WIDTH = Integer.parseInt(sharedPref.getString("video_width", "1280"));
-    	VIDEO_HEIGHT = Integer.parseInt(sharedPref.getString("video_heigth", "720"));
+    	VIDEO_HEIGHT = Integer.parseInt(sharedPref.getString("video_height", "720"));
     	MAX_VIDEO_DURATION = Integer.parseInt(sharedPref.getString("video_duration", "600000"));
     	MAX_TEMP_FOLDER_SIZE = Integer.parseInt(sharedPref.getString("max_temp_folder_size", "600000"));
     	MIN_FREE_SPACE = Integer.parseInt(sharedPref.getString("min_free_space", "600000"));
@@ -385,7 +385,7 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     	SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
     	MAX_VIDEO_BIT_RATE = Integer.parseInt(sharedPref.getString("video_bitrate", "5000000"));
     	VIDEO_WIDTH = Integer.parseInt(sharedPref.getString("video_width", "1280"));
-    	VIDEO_HEIGHT = Integer.parseInt(sharedPref.getString("video_heigth", "720"));
+    	VIDEO_HEIGHT = Integer.parseInt(sharedPref.getString("video_height", "720"));
     	MAX_VIDEO_DURATION = Integer.parseInt(sharedPref.getString("video_duration", "600000"));
     	MAX_TEMP_FOLDER_SIZE = Integer.parseInt(sharedPref.getString("max_temp_folder_size", "600000"));
     	MIN_FREE_SPACE = Integer.parseInt(sharedPref.getString("min_free_space", "600000"));

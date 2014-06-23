@@ -7,7 +7,7 @@ Features:
 - Free and open source project forever
 - Works in background as a service
 - Works even when the keyboard is locked
-- Autostart recording after program launch
+- Autostart recording option after program launch
 - Autoremove old files
 - Simple placing files to favorite folder (one file or all files after current)
 - FLASH button for night recordings (if device supports)
@@ -22,6 +22,7 @@ Features:
 - Exit function is protected with long click to avoid accedental click
 - Configurable options (video size, bitrate, maxtemp and minfree space, fragment time etc.)
 - Notification area clickable icon for bringing app to front
+- Custom SD_Card_Path option
 
 
 Supported devices:
@@ -45,11 +46,12 @@ FAV - preserve current fragment from deletion (add to favorites).
         2 - only this fragment. Next will be temp
 Restart - break fragments. Start new one
 Restart (long click) - options menu
-Focus - switch between focus modes
-        inf - infinity
-        vid - continuous video
-        aut - automatic with manual autofocus
-        mac - macro with manual autofocus
+Focus - switch between focus modes (visible only supported by device)
+        i - infinity
+        v - continuous video
+        a - automatic with manual autofocus
+        m - macro with manual autofocus
+        e - extended depth of field
 FLASH - toggle flash on/off
 Night - toggle night mode on/off
 Exit - exit application (exit on long click for eliminate accidental press)
