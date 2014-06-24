@@ -6,11 +6,10 @@
         android:summary="Check for auto start recording"
         android:defaultValue="false"
         android:enabled="true" />
-    <EditTextPreference 
-        android:key="sd_card_path"
-        android:title="External Storage Path"
-        android:summary="Enter external storage path"
-        android:defaultValue="/storage/sdcard0" />
+    <ListPreference
+	    android:key="sd_card_path"
+	    android:title="External Storage Path"
+	    android:summary="Choose external storage path" />
     <EditTextPreference 
         android:key="max_temp_folder_size"
         android:title="Temp Folder Size"

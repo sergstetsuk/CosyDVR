@@ -1,3 +1,11 @@
+### v.1.0.5 (2014.06.24 11:50 )
+
+  * External SD_Card property now is list of available devices
+  * Fixed camera initialization for Samsung SM-GT310
+  * Fixed CosyDVR dir creation for Samsung SM-GT310
+  * Added checking focus modes after start
+  * Added checking supported scene modes (night/auto)
+
 ### v.1.0.4 (2014.06.23 15:12)
 
   * Fixed "Video Height" property

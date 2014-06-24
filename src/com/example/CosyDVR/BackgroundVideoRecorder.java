@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
+import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.location.Location;
 import android.location.LocationListener;
@@ -301,15 +302,6 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 
         startGps();
 
-        //create temp and fav folders
-		File mFolder = new File(SD_CARD_PATH + "/CosyDVR/temp/");
-		if(!mFolder.exists()){
-			mFolder.mkdir();
-		}
-		mFolder = new File(SD_CARD_PATH + "/CosyDVR/fav/");
-		if(!mFolder.exists()){
-			mFolder.mkdir();
-		}
     }
     
     // Method called right after Surface created (initializing and starting MediaRecorder)
@@ -335,7 +327,8 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 
     public void StopRecording() {
     	if (isrecording){
-	    	StopResetReleaseLock();
+	    	Stop();
+	    	ResetReleaseLock();
 	    	mTimer.cancel();
 	    	mTimer.purge();
 	    	mTimer = null;
@@ -391,17 +384,35 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
     	MIN_FREE_SPACE = Integer.parseInt(sharedPref.getString("min_free_space", "600000"));
     	SD_CARD_PATH = sharedPref.getString("sd_card_path", Environment.getExternalStorageDirectory().getAbsolutePath());
 
+        //create temp and fav folders
+		File mFolder = new File(SD_CARD_PATH + "/CosyDVR/temp/");
+		if(!mFolder.exists()){
+			mFolder.mkdirs();
+		}
+		mFolder = new File(SD_CARD_PATH + "/CosyDVR/fav/");
+		if(!mFolder.exists()){
+			mFolder.mkdirs();
+		}
+
 		/*start*/
 		OpenUnlockPrepareStart();
 		Parameters parameters = camera.getParameters();
 		//parameters.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
-		parameters.setFocusMode(Parameters.FOCUS_MODE_INFINITY);
+		if (parameters.getSupportedFocusModes().contains(Parameters.FOCUS_MODE_INFINITY)) {
+			parameters.setFocusMode(Parameters.FOCUS_MODE_INFINITY);
+		}
 
 		//parameters.setFocusMode(Parameters.FOCUS_MODE_FIXED); 
 		if(!isnight){
-    		parameters.setSceneMode(Parameters.SCENE_MODE_AUTO);
+			if(parameters.getSupportedSceneModes() != null 
+					&& parameters.getSupportedSceneModes().contains(Camera.Parameters.SCENE_MODE_AUTO)) {
+				parameters.setSceneMode(Parameters.SCENE_MODE_AUTO);
+			}
     	} else {
-    		parameters.setSceneMode(Parameters.SCENE_MODE_NIGHT);
+			if(parameters.getSupportedSceneModes() != null 
+					&& parameters.getSupportedSceneModes().contains(Camera.Parameters.SCENE_MODE_NIGHT)) {
+				parameters.setSceneMode(Parameters.SCENE_MODE_NIGHT);
+			}
     	}
 		
 		camera.setParameters(parameters);
@@ -431,12 +442,16 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
         	}
         };
         mTimer.scheduleAtFixedRate(mTimerTask, 0, REFRESH_TIME);
-    	isrecording = true;
 	}
 
-	private void StopResetReleaseLock() {
+	private void Stop() {
 		if(isrecording) {
 			mediaRecorder.stop();
+		}
+	}
+	
+	private void ResetReleaseLock() {
+		if(isrecording) {
 		    mediaRecorder.reset();
 		    mediaRecorder.release();
 		
@@ -449,59 +464,68 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	private void OpenUnlockPrepareStart() {
 		if(!isrecording) {
 			mWakeLock.acquire();
-		    camera = Camera.open();
-		    mediaRecorder = new MediaRecorder();
-		    camera.unlock();
-		
-		    mediaRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());
-		    mediaRecorder.setCamera(camera);
-	
-		    mediaRecorder.setMaxDuration(this.MAX_VIDEO_DURATION);
-		    mediaRecorder.setMaxFileSize(0); // 0 - no limit
-		  //mediaRecorder.setOnErrorListener
-		    mediaRecorder.setOnInfoListener(this);
-	
-	
-		    mediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-		    mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-		
-		    mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-		
-		    mediaRecorder.setAudioEncoder(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioCodec);//MediaRecorder.AudioEncoder.HE_AAC
-		    mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-		
-		    currentfile = DateFormat.format("yyyy-MM-dd_kk-mm-ss", new Date().getTime()).toString();
-		    // if we write to file
-		    mediaRecorder.setOutputFile(SD_CARD_PATH + "/CosyDVR/temp/" + currentfile + VIDEO_FILE_EXT);
-		    //if we stream
-		    /*String hostname = "rtmp://a.rtmp.youtube.com/stetsuk.80gq-20ea-tet3-2hfb";
-		    int port = 1234;
-		    Socket socket;
-			try {
-				socket = new Socket(InetAddress.getByName(hostname), port);
-				ParcelFileDescriptor pfd = ParcelFileDescriptor.fromSocket(socket);
-				mediaRecorder.setOutputFile(pfd.getFileDescriptor());
-		    } catch (UnknownHostException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}*/
-
-		    mediaRecorder.setAudioChannels(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioChannels);
-		    mediaRecorder.setAudioSamplingRate(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioSampleRate);
-		    mediaRecorder.setAudioEncodingBitRate(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioBitRate);
-		
-		    mediaRecorder.setVideoEncodingBitRate(this.MAX_VIDEO_BIT_RATE);
-		    mediaRecorder.setVideoSize(this.VIDEO_WIDTH,this.VIDEO_HEIGHT);// 640x480,800x480
-		    mediaRecorder.setVideoFrameRate(30);
-		
-		    
 		    try { 
+			    camera = Camera.open(/*CameraInfo.CAMERA_FACING_BACK*/);
+			    mediaRecorder = new MediaRecorder();
+			    camera.unlock();
+			
+			    //mediaRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());
+			    mediaRecorder.setCamera(camera);
+		
+			      // Step 2: Set sources
+			    mediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+			    mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+			
+		        // Step 3: Set a CamcorderProfile (requires API Level 8 or higher)
+			   // mediaRecorder.setProfile(CamcorderProfile
+		       //         .get(CamcorderProfile.QUALITY_HIGH));
+			    mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+			    mediaRecorder.setAudioEncoder(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioCodec);//MediaRecorder.AudioEncoder.HE_AAC
+			    mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+
+			    mediaRecorder.setVideoEncodingBitRate(this.MAX_VIDEO_BIT_RATE);
+			    mediaRecorder.setVideoSize(this.VIDEO_WIDTH,this.VIDEO_HEIGHT);// 640x480,800x480
+			    mediaRecorder.setVideoFrameRate(30);
+
+
+		        currentfile = DateFormat.format("yyyy-MM-dd_kk-mm-ss", new Date().getTime()).toString();
+			    // if we write to file
+			    mediaRecorder.setOutputFile(SD_CARD_PATH + "/CosyDVR/temp/" + currentfile + VIDEO_FILE_EXT);
+			    //if we stream
+			    /*String hostname = "rtmp://a.rtmp.youtube.com/stetsuk.80gq-20ea-tet3-2hfb";
+			    int port = 1234;
+			    Socket socket;
+				try {
+					socket = new Socket(InetAddress.getByName(hostname), port);
+					ParcelFileDescriptor pfd = ParcelFileDescriptor.fromSocket(socket);
+					mediaRecorder.setOutputFile(pfd.getFileDescriptor());
+			    } catch (UnknownHostException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}*/
+		        	
+			   /* mediaRecorder.setAudioChannels(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioChannels);
+			    mediaRecorder.setAudioSamplingRate(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioSampleRate);
+			    mediaRecorder.setAudioEncodingBitRate(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).audioBitRate);
+			    */
+			
+			    // Step 5: Set the preview output
+			    mediaRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());
+			    // Step 6: Duration and listener
+				mediaRecorder.setMaxDuration(this.MAX_VIDEO_DURATION);
+			    mediaRecorder.setMaxFileSize(0); // 0 - no limit
+				mediaRecorder.setOnInfoListener(this);
+		        
 		    	mediaRecorder.prepare();
-		    } catch (Exception e) {}
-		    mediaRecorder.start();
+		    	mediaRecorder.start();
+		    	isrecording = true;
+		    } catch (Exception e) {
+		    	isrecording = true;
+		    	ResetReleaseLock();
+		    }
 		}
 	}
 	
@@ -554,13 +578,19 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
 	public void toggleNight() {
     	if(camera != null){
     		Parameters parameters = camera.getParameters();
-        	parameters.setFocusMode(mFocusModes[focusmode]);	//restore chosen focus mode
+        	//parameters.setFocusMode(mFocusModes[focusmode]);	//restore chosen focus mode
 	    	if(isnight){
-	    		parameters.setSceneMode(Parameters.SCENE_MODE_AUTO);
-	    		isnight = false;
+    			if(parameters.getSupportedSceneModes() != null 
+    					&& parameters.getSupportedSceneModes().contains(Camera.Parameters.SCENE_MODE_AUTO)) {
+    				parameters.setSceneMode(Parameters.SCENE_MODE_AUTO);
+    				isnight = false;
+    			}
 	    	} else {
-	    		parameters.setSceneMode(Parameters.SCENE_MODE_NIGHT);
-	            isnight = true;
+    			if(parameters.getSupportedSceneModes() != null 
+    					&& parameters.getSupportedSceneModes().contains(Camera.Parameters.SCENE_MODE_NIGHT)) {
+    				parameters.setSceneMode(Parameters.SCENE_MODE_NIGHT);
+    	            isnight = true;
+    			}
 	    	}
 	    	camera.setParameters(parameters);
     	}
