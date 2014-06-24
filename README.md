@@ -29,6 +29,7 @@ Supported devices:
 - Fly IQ451
 - Prestigio PAP4055
 - ASUS ME173X
+- Samsung SM-GT310
 
 Not yet supported devices:
 
