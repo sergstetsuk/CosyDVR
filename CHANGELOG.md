@@ -1,4 +1,8 @@
-### v.1.0.5 (2014.06.24 11:50 )
+### v.1.0.6 (2014.06.25 16:17)
+
+  * Added update FAV button during fragment split (to see if fav mode is on)
+
+### v.1.0.5 (2014.06.24 11:50)
 
   * External SD_Card property now is list of available devices
   * Fixed camera initialization for Samsung SM-GT310

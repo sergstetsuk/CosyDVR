@@ -7,22 +7,11 @@ import java.util.Scanner;
 //import android.content.Context;
 
 public class SDList {
-	//public static String[] labels;
-	//public static String[] paths;
-	//public static int count = 0;
-
-	//private static Context sContext;
 	public ArrayList<String> sVold = new ArrayList<String>();
 
 	public void determineStorageOptions(/*Context context*/) {
-		//sContext = context.getApplicationContext();
-
 		readVoldFile();
-
 		testAndCleanList();
-
-		//setProperties();
-		//return (String[]) sVold.toArray();
 
 	}
 

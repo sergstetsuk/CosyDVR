@@ -25,7 +25,6 @@ public class CosyDVRPreferenceActivity extends PreferenceActivity
             SDList sd = new SDList();
             ListPreference LP = (ListPreference) findPreference("sd_card_path");
             sd.determineStorageOptions();
-            //CharSequence[] entries = {"/storage/sdcard0","/storage/sdcard1"};
             CharSequence[] entries = new CharSequence[sd.sVold.size()];
             for (int i = 0; i < sd.sVold.size(); i++) {
             	entries[i] = sd.sVold.get(i);

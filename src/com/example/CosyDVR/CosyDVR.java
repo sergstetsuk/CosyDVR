@@ -3,8 +3,10 @@ import com.example.CosyDVR.BackgroundVideoRecorder;
 import com.example.CosyDVR.CosyDVRPreferenceActivity;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Environment;
 //import android.os.SystemClock;
@@ -158,17 +160,24 @@ public class CosyDVR extends Activity{
 		  mService.ChangeSurface(1, 1);
 	  }
 	  super.onPause();
+	  this.unregisterReceiver(receiver);
   }
-  
+
   @Override
   public void onResume(){
 	  if(mBound) {
 		  mService.ChangeSurface(mWidth, mHeight);
 	  }
 	  super.onResume();
+	  this.registerReceiver(receiver,filter);
   }
 
-
+  public void updateinterface(){
+	  if(mBound) {
+		  favButton.setText(getString(R.string.fav) + " [" + mService.isFavorite() + "]");	    
+	  }
+	}
+  
  Button.OnClickListener favButtonOnClickListener
   = new Button.OnClickListener(){
   @Override
@@ -291,5 +300,15 @@ private ServiceConnection mConnection = new ServiceConnection() {
         mBound = false;
     }
     
+};
+
+private IntentFilter filter = new IntentFilter("com.example.CosyDVR.updateinterface");
+
+private BroadcastReceiver receiver = new BroadcastReceiver(){
+    
+    @Override
+    public void onReceive(Context c, Intent i) {
+    	updateinterface();
+    }
 };
 }

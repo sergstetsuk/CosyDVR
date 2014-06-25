@@ -43,8 +43,8 @@ Operation manual:
 Buttons:
 FAV - preserve current fragment from deletion (add to favorites).
         0 - this is temp fragment
-        1 - this and all next fragments
-        2 - only this fragment. Next will be temp
+        1 - this and all next fragments are preserved
+        2 - only this fragment is preserved. Next will be temp
 Restart - break fragments. Start new one
 Restart (long click) - options menu
 Focus - switch between focus modes (visible only supported by device)
