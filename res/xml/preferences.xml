@@ -88,12 +88,12 @@
                         <Preference
                         android:key="instruction_punch"
                         android:selectable="false"
-                        android:title="pinch on screen"
+                        android:title="PINCH ON SCREEN"
                         android:summary="Zoom in/Zoom out" />
                         <Preference
                         android:key="instruction_tap"
                         android:selectable="false"
-                        android:title="tap on screen"
+                        android:title="TAP ON SCREEN"
                         android:summary="Manual refocus in A and M modes only" />
                 </PreferenceScreen>
         </PreferenceCategory>
