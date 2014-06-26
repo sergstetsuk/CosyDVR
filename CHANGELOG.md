@@ -1,3 +1,7 @@
+### v.1.0.7 (2014.06.26 11:26)
+
+  * Removed unnecessary permissions and features from AndroidManifest.xml
+
 ### v.1.0.6 (2014.06.25 16:17)
 
   * Added update FAV button during fragment split (to see if fav mode is on)
