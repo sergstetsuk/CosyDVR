@@ -15,7 +15,7 @@
                 android:summary="Виберіть шлях до карти пам'яті" />
                 <EditTextPreference 
                 android:key="max_temp_folder_size"
-                android:title="Розмір тимчасових каталогу"
+                android:title="Розмір тимчасового каталогу"
                 android:summary="Вкажіть допустимий сумарний розмір файлів в тимчасовому каталозі"
                 android:numeric="integer"  
                 android:defaultValue="10000000" />
@@ -65,42 +65,42 @@
                         android:key="instruction_fav"
                         android:selectable="false"
                         android:title="@string/fav"
-                        android:summary="Защита от стирания\n 0 - стирать разрешено\n 1 - не стирать все\n 2 - не стирать только текущий фрагмент" />
+                        android:summary="Захист від стирання\n 0 - стирати\n 1 - не стирати всі\n 2 - не стирати лише поточний фрагмент" />
                         <Preference
                         android:key="instruction_restart"
                         android:selectable="false"
                         android:title="@string/restart"
-                        android:summary="Запуск/Перезапуск записи видео.\n Длинное нажатие = НАСТРОЙКИ." />
+                        android:summary="Запуск/Перезапуск запису відео.\n Довгий клік = НАЛАШТУВАННЯ." />
                         <Preference
                         android:key="instruction_focus"
                         android:selectable="false"
                         android:title="@string/focus"
-                        android:summary="Изменение режима фокусування.\n I - бесконечность\n V - следящая фокусировка\n A - авто\n M - макро\n E - EDF" />
+                        android:summary="Зміна режиму фокусування.\n I - безмежність\n V - слідкувати\n A - авто\n M - макро\n E - EDF" />
                         <Preference
                         android:key="instruction_night"
                         android:selectable="false"
                         android:title="@string/night"
-                        android:summary="Дневной/Ночной режимы" />
+                        android:summary="Денний/Нічний режими" />
                         <Preference
                         android:key="instruction_flash"
                         android:selectable="false"
                         android:title="@string/flash"
-                        android:summary="Включить/Выключить вспышку" />
+                        android:summary="Включити/Виключити спалах" />
                         <Preference
                         android:key="instruction_exit"
                         android:selectable="false"
                         android:title="@string/exit"
-                        android:summary="Длинное нажатие ВЫХОД ИЗ ПРОГРАММЫ" />
+                        android:summary="Довгий клік ВИХІД З ПРОГРАМИ" />
                         <Preference
                         android:key="instruction_punch"
                         android:selectable="false"
-                        android:title="ЩИПОК ПО ЭКРАНУ"
-                        android:summary="Приближение/Отдаление" />
+                        android:title="ЩИПОК ПО ЕКРАНУ"
+                        android:summary="Наближення/Віддалення" />
                         <Preference
                         android:key="instruction_tap"
                         android:selectable="false"
-                        android:title="КЛИК ПО ЭКРАНУ"
-                        android:summary="Повторная фокусировка в режимах A i M" />
+                        android:title="КЛІК ПО ЕКРАНУ"
+                        android:summary="Повторне фокусування в режимах A i M" />
                 </PreferenceScreen>
         </PreferenceCategory>
 </PreferenceScreen>
