@@ -1,49 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:title="Preferences">
-    <CheckBoxPreference 
+        <PreferenceCategory
+        android:title="Налаштування">
+        <CheckBoxPreference 
         android:key="autostart_recording"
         android:title="Autostart Recording"
         android:summary="Check for auto start recording"
         android:defaultValue="false"
         android:enabled="true" />
-    <ListPreference
-	    android:key="sd_card_path"
-	    android:title="External Storage Path"
-	    android:summary="Choose external storage path" />
-    <EditTextPreference 
+        <ListPreference
+            android:key="sd_card_path"
+            android:title="External Storage Path"
+            android:summary="Choose external storage path" />
+        <EditTextPreference 
         android:key="max_temp_folder_size"
         android:title="Temp Folder Size"
         android:summary="Enter temp folder size in bytes"
         android:numeric="integer"  
         android:defaultValue="10000000" />
-    <EditTextPreference 
+        <EditTextPreference 
         android:key="min_free_space"
         android:title="Min Free Space"
         android:summary="Enter minimum free space in bytes"
         android:numeric="integer"  
         android:defaultValue="1000000" />
-    <EditTextPreference 
+        <EditTextPreference 
         android:key="video_duration"
         android:title="Split File Duration"
         android:summary="Enter video file duration in ms"
         android:numeric="integer"  
         android:defaultValue="600000" />
-    <EditTextPreference 
+        <EditTextPreference 
         android:key="video_width"
         android:title="Video Width"
         android:summary="Enter video width in px"
         android:numeric="integer"  
         android:defaultValue="1280" />
-    <EditTextPreference 
+        <EditTextPreference 
         android:key="video_height"
         android:title="Video Height"
         android:summary="Enter video height in px"
         android:numeric="integer"  
         android:defaultValue="720" />
-    <EditTextPreference 
+        <EditTextPreference 
         android:key="video_bitrate"
         android:title="Video Bitrate"
         android:summary="Enter video bitrate in bps"
         android:numeric="integer"  
         android:defaultValue="5000000" />
+                </PreferenceCategory>
+        <PreferenceCategory
+        android:title="Допомога">
+                <Preference
+                android:key="instruction_about"
+                android:selectable="false"
+                android:title="About"
+                android:summary="Web site: cosydvr.esy.es\ne-mail: serg_stetsuk@ukr.net\nLicence: GPLv3" />
+                <PreferenceScreen
+                android:key="screen_instructions"
+                android:title="Instruction"
+                android:summary="Program usage help">
+                        <Preference
+                        android:key="instruction_fav"
+                        android:selectable="false"
+                        android:title="@string/fav"
+                        android:summary="Захист від стирання\n 0 - стирати\n 1 - не стирати всі\n 2 - не стирати один" />
+                        <Preference
+                        android:key="instruction_restart"
+                        android:selectable="false"
+                        android:title="@string/restart"
+                        android:summary="Запуск/Перезапуск запису.\n Довгий клік = НАЛАШТУВАННЯ." />
+                        <Preference
+                        android:key="instruction_focus"
+                        android:selectable="false"
+                        android:title="@string/focus"
+                        android:summary="міна режиму фокусування.\n I - безмежність\n V - слідкувати\n A - авто\n M - макро\n E - EDF" />
+                        <Preference
+                        android:key="instruction_night"
+                        android:selectable="false"
+                        android:title="@string/night"
+                        android:summary="Денний/Нічний режими" />
+                        <Preference
+                        android:key="instruction_exit"
+                        android:selectable="false"
+                        android:title="@string/exit"
+                        android:summary="Довгий клік ВИХІД З ПРОГРАМИ" />
+                        <Preference
+                        android:key="instruction_punch"
+                        android:selectable="false"
+                        android:title="pinch on screen"
+                        android:summary="Наближення/віддалення" />
+                        <Preference
+                        android:key="instruction_tap"
+                        android:selectable="false"
+                        android:title="tap on screen"
+                        android:summary="повторне фокусування в режимах A i M" />
+                </PreferenceScreen>
+        </PreferenceCategory>
 </PreferenceScreen>

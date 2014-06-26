@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CosyDVR</string>
-    <string name="restart">RESTART</string>
     <string name="fav">FAV</string>
-    <string name="flash">FLASH</string>
-    <string name="exit">EXIT</string>
+    <string name="restart">RESTART</string>
     <string name="focus">FOCUS</string>
+    <string name="flash">FLASH</string>
     <string name="night">NIGHT</string>
+    <string name="exit">EXIT</string>
     <string name="gps_off">GPS OFF</string>
 </resources>

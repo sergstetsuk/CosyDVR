@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" 
+        android:title="Preferences">
+        <PreferenceCategory
+        android:title="Налаштування">
+                <CheckBoxPreference 
+                android:key="autostart_recording"
+                android:title="Автостарт записи"
+                android:summary="Начинать запись видео при запуске CosyDVR"
+                android:defaultValue="false"
+                android:enabled="true" />
+                <ListPreference
+                android:key="sd_card_path"
+                android:title="Путь к SD карте"
+                android:summary="Укажите путь к карте памяти" />
+                <EditTextPreference 
+                android:key="max_temp_folder_size"
+                android:title="Размер временного каталога"
+                android:summary="Укажите допустимый суммарный розмер файлов во временном каталоге"
+                android:numeric="integer"  
+                android:defaultValue="10000000" />
+                <EditTextPreference 
+                android:key="min_free_space"
+                android:title="Розмер свободного места"
+                android:summary="Укажите минимальный размер свободного места на карте памяти"
+                android:numeric="integer"  
+                android:defaultValue="1000000" />
+                <EditTextPreference 
+                android:key="video_duration"
+                android:title="Продолжительность видеофрагмента"
+                android:summary="Укажите продолжительность видеофрагмента в мс"
+                android:numeric="integer"  
+                android:defaultValue="600000" />
+                <EditTextPreference 
+                android:key="video_width"
+                android:title="Ширина видео"
+                android:summary="Укажите ширину видео в px"
+                android:numeric="integer"  
+                android:defaultValue="1280" />
+                <EditTextPreference 
+                android:key="video_height"
+                android:title="Высота видео"
+                android:summary="Укажите высоту видео в px"
+                android:numeric="integer"  
+                android:defaultValue="720" />
+                <EditTextPreference 
+                android:key="video_bitrate"
+                android:title="Скорость видеопотока"
+                android:summary="Укажите скорость видеопотока в bps"
+                android:numeric="integer"  
+                android:defaultValue="5000000" />
+                </PreferenceCategory>
+        <PreferenceCategory
+        android:title="Помощь">
+                <Preference
+                android:key="instruction_about"
+                android:selectable="false"
+                android:title="О программе"
+                android:summary="Слава Украине!\nВеб сайт: cosydvr.esy.es\ne-mail: serg_stetsuk@ukr.net\nЛицензия: GPLv3" />
+                <PreferenceScreen
+                android:key="screen_instructions"
+                android:title="Инструкция"
+                android:summary="Помощь по использованию программы">
+                        <Preference
+                        android:key="instruction_fav"
+                        android:selectable="false"
+                        android:title="@string/fav"
+                        android:summary="Захист від стирання\n 0 - стирати\n 1 - не стирати всі\n 2 - не стирати лише поточний фрагмент" />
+                        <Preference
+                        android:key="instruction_restart"
+                        android:selectable="false"
+                        android:title="@string/restart"
+                        android:summary="Запуск/Перезапуск запису відео.\n Довгий клік = НАЛАШТУВАННЯ." />
+                        <Preference
+                        android:key="instruction_focus"
+                        android:selectable="false"
+                        android:title="@string/focus"
+                        android:summary="Зміна режиму фокусування.\n I - безмежність\n V - слідкувати\n A - авто\n M - макро\n E - EDF" />
+                        <Preference
+                        android:key="instruction_night"
+                        android:selectable="false"
+                        android:title="@string/night"
+                        android:summary="Денний/Нічний режими" />
+                        <Preference
+                        android:key="instruction_flash"
+                        android:selectable="false"
+                        android:title="@string/flash"
+                        android:summary="Включити/Виключити спалах" />
+                        <Preference
+                        android:key="instruction_exit"
+                        android:selectable="false"
+                        android:title="@string/exit"
+                        android:summary="Довгий клік ВИХІД З ПРОГРАМИ" />
+                        <Preference
+                        android:key="instruction_punch"
+                        android:selectable="false"
+                        android:title="ЩИПОК ПО ЕКРАНУ"
+                        android:summary="Наближення/Віддалення" />
+                        <Preference
+                        android:key="instruction_tap"
+                        android:selectable="false"
+                        android:title="КЛІК ПО ЕКРАНУ"
+                        android:summary="Повторне фокусування в режимах A i M" />
+                </PreferenceScreen>
+        </PreferenceCategory>
+</PreferenceScreen>
