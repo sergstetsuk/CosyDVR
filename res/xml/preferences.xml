@@ -64,37 +64,37 @@
                         android:key="instruction_fav"
                         android:selectable="false"
                         android:title="@string/fav"
-                        android:summary="Захист від стирання\n 0 - стирати\n 1 - не стирати всі\n 2 - не стирати один" />
+                        android:summary="Prevent deleting\n 0 - may be deleted\n 1 - prevent all from deletion\n 2 - ptevent only current fragment" />
                         <Preference
                         android:key="instruction_restart"
                         android:selectable="false"
                         android:title="@string/restart"
-                        android:summary="Запуск/Перезапуск запису.\n Довгий клік = НАЛАШТУВАННЯ." />
+                        android:summary="Start/Restart video recording.\nLong click = PREFERENCES." />
                         <Preference
                         android:key="instruction_focus"
                         android:selectable="false"
                         android:title="@string/focus"
-                        android:summary="міна режиму фокусування.\n I - безмежність\n V - слідкувати\n A - авто\n M - макро\n E - EDF" />
+                        android:summary="Switch focus mode.\n I - infinity\n V - continuous video\n A - auto\n M - macro\n E - EDF" />
                         <Preference
                         android:key="instruction_night"
                         android:selectable="false"
                         android:title="@string/night"
-                        android:summary="Денний/Нічний режими" />
+                        android:summary="Day/Night mode" />
                         <Preference
                         android:key="instruction_exit"
                         android:selectable="false"
                         android:title="@string/exit"
-                        android:summary="Довгий клік ВИХІД З ПРОГРАМИ" />
+                        android:summary="Long click = EXIT" />
                         <Preference
                         android:key="instruction_punch"
                         android:selectable="false"
                         android:title="pinch on screen"
-                        android:summary="Наближення/віддалення" />
+                        android:summary="Zoom in/Zoom out" />
                         <Preference
                         android:key="instruction_tap"
                         android:selectable="false"
                         android:title="tap on screen"
-                        android:summary="повторне фокусування в режимах A i M" />
+                        android:summary="Manual refocus in A and M modes only" />
                 </PreferenceScreen>
         </PreferenceCategory>
 </PreferenceScreen>

@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" 
         android:title="Preferences">
         <PreferenceCategory
-        android:title="Налаштування">
+        android:title="Настройки">
                 <CheckBoxPreference 
                 android:key="autostart_recording"
                 android:title="Автостарт записи"
@@ -70,7 +70,7 @@
                         android:key="instruction_restart"
                         android:selectable="false"
                         android:title="@string/restart"
-                        android:summary="Запуск/Перезапуск записи видео.\n Длинное нажатие = НАСТРОЙКИ." />
+                        android:summary="Запуск/Перезапуск записи видео.\nДлинное нажатие = НАСТРОЙКИ." />
                         <Preference
                         android:key="instruction_focus"
                         android:selectable="false"
@@ -90,7 +90,7 @@
                         android:key="instruction_exit"
                         android:selectable="false"
                         android:title="@string/exit"
-                        android:summary="Длинное нажатие ВЫХОД ИЗ ПРОГРАММЫ" />
+                        android:summary="Длинное нажатие = ВЫХОД ИЗ ПРОГРАММЫ" />
                         <Preference
                         android:key="instruction_punch"
                         android:selectable="false"

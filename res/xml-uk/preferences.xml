@@ -70,7 +70,7 @@
                         android:key="instruction_restart"
                         android:selectable="false"
                         android:title="@string/restart"
-                        android:summary="Запуск/Перезапуск запису відео.\n Довгий клік = НАЛАШТУВАННЯ." />
+                        android:summary="Запуск/Перезапуск запису відео.\nДовгий клік = НАЛАШТУВАННЯ." />
                         <Preference
                         android:key="instruction_focus"
                         android:selectable="false"
@@ -90,7 +90,7 @@
                         android:key="instruction_exit"
                         android:selectable="false"
                         android:title="@string/exit"
-                        android:summary="Довгий клік ВИХІД З ПРОГРАМИ" />
+                        android:summary="Довгий клік = ВИХІД З ПРОГРАМИ" />
                         <Preference
                         android:key="instruction_punch"
                         android:selectable="false"
