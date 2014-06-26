@@ -13,7 +13,7 @@
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-permission android:name="android.permission.INTERNET"/>
   <application android:icon="@drawable/cosydvricon" android:label="@string/app_name" android:allowBackup="false">
-      <activity android:name=".CosyDVR"
+      <activity android:name="com.example.CosyDVR.CosyDVR"
                 android:label="@string/app_name"
                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
                 android:screenOrientation="landscape"
@@ -23,7 +23,7 @@
               <category android:name="android.intent.category.LAUNCHER" />
           </intent-filter>
       </activity>
-      <activity android:name=".CosyDVRPreferenceActivity" />
-      <service  android:name=".BackgroundVideoRecorder" />
+      <activity android:name="com.example.CosyDVR.CosyDVRPreferenceActivity" />
+      <service  android:name="com.example.CosyDVR.BackgroundVideoRecorder" />
   </application>
 </manifest>
