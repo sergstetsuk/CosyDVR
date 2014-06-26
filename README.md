@@ -23,7 +23,7 @@ Features:
 - Configurable options (video size, bitrate, maxtemp and minfree space, fragment time etc.)
 - Notification area clickable icon for bringing app to front
 - Custom SD_Card_Path option
-
+- Ukrainian Russian English interfaces
 
 Supported devices:
 - Fly IQ451
@@ -35,8 +35,6 @@ Not yet supported devices:
 
 Features todo:
 Add to favorites previous file if it is finished less than minute ago.
-Add Ukrainian interface
-Add Russian interface
 Add auto call answer ability (maybe not needed any more)
 
 Operation manual:

@@ -1,6 +1,9 @@
-### v.1.0.7 (2014.06.26 11:26)
+### v.1.1 (2014.06.26 16:08)
 
   * Removed unnecessary permissions and features from AndroidManifest.xml
+  * Added Help and About in preferences
+  * Added Ukrainian interface
+  * Added Russian interface
 
 ### v.1.0.6 (2014.06.25 16:17)
 
