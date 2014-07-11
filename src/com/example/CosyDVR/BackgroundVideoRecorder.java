@@ -5,6 +5,7 @@ import android.app.Service;
 import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -25,6 +26,7 @@ import android.media.MediaRecorder;
 import android.media.AudioManager;
 import android.os.Environment;
 import android.text.format.DateFormat;
+import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Binder;
@@ -88,6 +90,7 @@ public class BackgroundVideoRecorder extends Service implements
 
 	public TextView mTextView = null;
 	public TextView mSpeedView = null;
+	public TextView mBatteryView = null;
 	public long mSrtCounter = 0;
 	public Handler mHandler = null;
 
@@ -162,7 +165,7 @@ public class BackgroundVideoRecorder extends Service implements
 
 			double lat = -1, lon = -1, alt = -1;
 			float spd = 0, acc = -1;
-			int sat = 0;
+			int sat = 0, bat = 0;
 			long tim = 0;
 
 			if (mLocation != null) {
@@ -224,7 +227,7 @@ public class BackgroundVideoRecorder extends Service implements
 						.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 					mSpeedView.setText(getString(R.string.gps_off));
 				} else {
-					mSpeedView.setText(String.format("---"));
+					mSpeedView.setText("---");
 				}
 			}
 			if (sat < 3) {
@@ -235,6 +238,12 @@ public class BackgroundVideoRecorder extends Service implements
 				mSpeedView.setTextColor(Color.parseColor("#FFC800")); // yellow
 			} else {
 				mSpeedView.setTextColor(Color.parseColor("#0b9800")); // green
+			}
+			bat = getBatteryLevel(getApplicationContext());
+			if(bat>=0){
+				mBatteryView.setText(String.format("%d%%",bat));
+			} else {
+				mBatteryView.setText("");
 			}
 		}
 	}
@@ -325,6 +334,20 @@ public class BackgroundVideoRecorder extends Service implements
 		mSpeedView.setShadowLayer(5, 0, 0, Color.parseColor("#000000"));
 		mSpeedView.setTextSize(56);
 		mSpeedView.setText("---");
+
+		mBatteryView = new TextView(this);
+		layoutParams = new WindowManager.LayoutParams(
+				WindowManager.LayoutParams.WRAP_CONTENT,
+				WindowManager.LayoutParams.WRAP_CONTENT,
+				WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+				WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+				PixelFormat.TRANSLUCENT);
+		layoutParams.gravity = Gravity.CENTER;
+		windowManager.addView(mBatteryView, layoutParams);
+		mBatteryView.setTextColor(Color.parseColor("#FFFFFF"));
+		mBatteryView.setShadowLayer(5, 0, 0, Color.parseColor("#000000"));
+		mBatteryView.setTextSize(80);
+		mBatteryView.setText("");
 
 		surfaceView.getHolder().addCallback(this);
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -723,9 +746,11 @@ public class BackgroundVideoRecorder extends Service implements
 		if (width > 1) {
 			mTextView.setVisibility(TextView.VISIBLE);
 			mSpeedView.setVisibility(TextView.VISIBLE);
+			mBatteryView.setVisibility(TextView.VISIBLE);
 		} else {
 			mTextView.setVisibility(TextView.INVISIBLE);
 			mSpeedView.setVisibility(TextView.INVISIBLE);
+			mBatteryView.setVisibility(TextView.INVISIBLE);
 		}
 	}
 
@@ -738,6 +763,7 @@ public class BackgroundVideoRecorder extends Service implements
 		windowManager.removeView(surfaceView);
 		windowManager.removeView(mTextView);
 		windowManager.removeView(mSpeedView);
+		windowManager.removeView(mBatteryView);
 	}
 
 	@Override
@@ -798,5 +824,32 @@ public class BackgroundVideoRecorder extends Service implements
 			mLocationManager.removeUpdates((LocationListener) this);
 		}
 		mLocationManager = null;
+	}
+
+	private int getBatteryLevel(Context context) {
+		int batteryLevel = 0;
+	    try {
+	        IntentFilter ifilter = new IntentFilter(
+	                Intent.ACTION_BATTERY_CHANGED);
+	        Intent batteryStatus = context.registerReceiver(null, ifilter);
+	        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+	        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+	        int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+	        if (status == BatteryManager.BATTERY_STATUS_CHARGING
+	        		|| status == BatteryManager.BATTERY_STATUS_FULL) {
+	        	return -1;
+	        }
+
+	        batteryLevel = (int) (100 * level / (float) scale);
+
+	        if (batteryLevel < 0) {
+	            batteryLevel = 0;
+
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return batteryLevel;
 	}
 }

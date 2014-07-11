@@ -1,6 +1,7 @@
-### v.1.2 (2014.07.11 11:08 )
+### v.1.2 (2014.07.11 11:08)
 
   * Fixed autoclean temp folder
+  * Added battery level indicator when device is not charging
 
 ### v.1.1 (2014.06.26 16:08)
 

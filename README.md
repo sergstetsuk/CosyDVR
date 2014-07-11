@@ -24,6 +24,7 @@ Features:
 - Notification area clickable icon for bringing app to front
 - Custom SD_Card_Path option
 - Ukrainian Russian English interfaces
+- Show battery level when device is not charging
 
 Supported devices:
 - Fly IQ451
@@ -37,7 +38,6 @@ Features todo:
 Add to favorites previous file if it is finished less than minute ago.
 Add auto call answer ability (maybe not needed any more)
 Add auto night mode on option
-Add "not charging" indicator
 
 Operation manual:
 Buttons:

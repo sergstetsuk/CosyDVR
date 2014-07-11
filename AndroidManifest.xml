@@ -12,6 +12,7 @@
   <uses-permission android:name="android.permission.WAKE_LOCK" />
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.BATTERY_STATS"/>
   <application android:icon="@drawable/cosydvricon" android:label="@string/app_name" android:allowBackup="false">
       <activity android:name="com.example.CosyDVR.CosyDVR"
                 android:label="@string/app_name"
