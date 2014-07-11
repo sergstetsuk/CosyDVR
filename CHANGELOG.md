@@ -1,3 +1,7 @@
+### v.1.2 (2014.07.11 11:08 )
+
+  * Fixed autoclean temp folder
+
 ### v.1.1 (2014.06.26 16:08)
 
   * Removed unnecessary permissions and features from AndroidManifest.xml

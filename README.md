@@ -36,6 +36,8 @@ Not yet supported devices:
 Features todo:
 Add to favorites previous file if it is finished less than minute ago.
 Add auto call answer ability (maybe not needed any more)
+Add auto night mode on option
+Add "not charging" indicator
 
 Operation manual:
 Buttons:

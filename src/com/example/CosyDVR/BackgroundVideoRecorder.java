@@ -413,7 +413,6 @@ public class BackgroundVideoRecorder extends Service implements
 		manager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
 		StopRecording();
 		StartRecording();
-		freeSpace();
 		manager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
 		manager.setStreamSolo(AudioManager.STREAM_SYSTEM, false);
 	}
@@ -446,6 +445,9 @@ public class BackgroundVideoRecorder extends Service implements
 		if (!mFolder.exists()) {
 			mFolder.mkdirs();
 		}
+
+		//first of all make sure we have enough free space
+		freeSpace();
 
 		/* start */
 		OpenUnlockPrepareStart();
@@ -608,8 +610,8 @@ public class BackgroundVideoRecorder extends Service implements
 		i = filelist.length - 1;
 		// if(Build.VERSION.SDK_INT >= 11) {
 		while (i > 0
-				&& totalSize > this.MAX_TEMP_FOLDER_SIZE
-				&& dir.getFreeSpace() < this.MIN_FREE_SPACE) {
+				&& (totalSize > this.MAX_TEMP_FOLDER_SIZE
+				|| dir.getFreeSpace() < this.MIN_FREE_SPACE)) {
 			totalSize -= filelist[i].length() / 1024;
 			filelist[i].delete();
 			i--;
