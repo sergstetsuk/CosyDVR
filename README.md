@@ -32,36 +32,49 @@ Supported devices:
 - ASUS ME173X
 - Samsung SM-GT310
 
-Not yet supported devices:
-
-Features todo:
-Add to favorites previous file if it is finished less than minute ago.
-Add auto call answer ability (maybe not needed any more)
-Add auto night mode on option
-
 Operation manual:
-Buttons:
+---
+
+**Buttons:**
+
 FAV - preserve current fragment from deletion (add to favorites).
+
         0 - this is temp fragment
+        
         1 - this and all next fragments are preserved
+        
         2 - only this fragment is preserved. Next will be temp
+        
 Restart - break fragments. Start new one
+
 Restart (long click) - options menu
+
 Focus - switch between focus modes (visible only supported by device)
+
         i - infinity
+        
         v - continuous video
+        
         a - automatic with manual autofocus
+        
         m - macro with manual autofocus
+        
         e - extended depth of field
+        
 FLASH - toggle flash on/off
+
 Night - toggle night mode on/off
+
 Exit - exit application (exit on long click for eliminate accidental press)
 
-Gestures:
+**Gestures:**
+
 Tap on screen - autofocus in "aut" and "mac" modes
+
 Pinch screen - zoom in/out
 
 License:
+---
         This program is Free Software: You can use, study share and improve it at your will. 
         Specifically you can redistribute and/or modify it under the terms of the 
         GNU General Public License as published by the Free Software Foundation, 
