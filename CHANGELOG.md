@@ -1,3 +1,7 @@
+### v.1.3 (2014.11.13 20:11)
+
+  * Fixed propagation of night mode, flash status and focus mode between fragments
+
 ### v.1.2 (2014.07.11 11:08)
 
   * Fixed autoclean temp folder

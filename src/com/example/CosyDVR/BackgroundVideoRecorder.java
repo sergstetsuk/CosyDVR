@@ -77,10 +77,10 @@ public class BackgroundVideoRecorder extends Service implements
 	private Camera camera = null;
 	private MediaRecorder mediaRecorder = null;
 	private boolean isrecording = false;
-	private boolean isflashon = false;
-	private boolean isnight = false;
 	private int isfavorite = 0; // 0-no 1=permanentfav 2=favonce
 	private int focusmode = 0;
+	private int scenemode = 0;
+	private int flashmode = 0;
 	private String currentfile = null;
 
 	private SurfaceHolder mSurfaceHolder = null;
@@ -109,6 +109,13 @@ public class BackgroundVideoRecorder extends Service implements
 	private String[] mFocusModes = { Parameters.FOCUS_MODE_INFINITY,
 			Parameters.FOCUS_MODE_CONTINUOUS_VIDEO, Parameters.FOCUS_MODE_AUTO,
 			Parameters.FOCUS_MODE_MACRO, Parameters.FOCUS_MODE_EDOF, };
+
+	private String[] mSceneModes = { Parameters.SCENE_MODE_AUTO,
+			Parameters.SCENE_MODE_NIGHT, };
+
+
+	private String[] mFlashModes = { Parameters.FLASH_MODE_OFF,
+			Parameters.FLASH_MODE_TORCH, };
 
 	// some troubles with video files @SuppressLint("HandlerLeak")
 	private final class HandlerExtension extends Handler {
@@ -474,6 +481,7 @@ public class BackgroundVideoRecorder extends Service implements
 
 		/* start */
 		OpenUnlockPrepareStart();
+		applyCameraParameters();
 		/*
 		 * debug Parameters parameters = camera.getParameters();
 		 * //parameters.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_VIDEO); if
@@ -654,36 +662,58 @@ public class BackgroundVideoRecorder extends Service implements
 			camera.autoFocus(null);
 		}
 	}
+	
+	public void applyCameraParameters() {
+		if (camera != null) {
+			Parameters parameters = camera.getParameters();
+			if(parameters.getSupportedFocusModes().contains(mFocusModes[focusmode])) {
+				parameters.setFocusMode(mFocusModes[focusmode]);
+			}
+			if(parameters.getSupportedSceneModes().contains(mSceneModes[scenemode])) {
+				parameters.setSceneMode(mSceneModes[scenemode]);
+			}
+			if(parameters.getSupportedFlashModes().contains(mFlashModes[flashmode])) {
+				parameters.setFlashMode(mFlashModes[flashmode]);
+			}
+	//			if (parameters.isZoomSupported()) {
+	//				parameters
+	//						.setZoom((int) (parameters.getMaxZoom() * (mval - 4) / 10.0));
+	//				camera.setParameters(parameters);
+	//			}
+			camera.setParameters(parameters);
+		}
+	}
 
 	public void toggleFocus() {
-		Parameters parameters = camera.getParameters();
-		do {
-			focusmode = (focusmode + 1) % mFocusModes.length;
-		} while (!parameters.getSupportedFocusModes().contains(
-				mFocusModes[focusmode])); // SKIP unsupported modes
-		parameters.setFocusMode(mFocusModes[focusmode]);
-		camera.setParameters(parameters);
+		if (camera != null) {
+			Parameters parameters = camera.getParameters();
+			do {
+				focusmode = (focusmode + 1) % mFocusModes.length;
+			} while (!parameters.getSupportedFocusModes().contains(
+					mFocusModes[focusmode])); // SKIP unsupported modes
+			applyCameraParameters();
+		}
 	}
 
 	public void toggleNight() {
 		if (camera != null) {
 			Parameters parameters = camera.getParameters();
-			if (isnight) {
-				if (parameters.getSupportedSceneModes() != null
-						&& parameters.getSupportedSceneModes().contains(
-								Camera.Parameters.SCENE_MODE_AUTO)) {
-					parameters.setSceneMode(Parameters.SCENE_MODE_AUTO);
-					isnight = false;
-				}
-			} else {
-				if (parameters.getSupportedSceneModes() != null
-						&& parameters.getSupportedSceneModes().contains(
-								Camera.Parameters.SCENE_MODE_NIGHT)) {
-					parameters.setSceneMode(Parameters.SCENE_MODE_NIGHT);
-					isnight = true;
-				}
-			}
-			camera.setParameters(parameters);
+			do {
+				scenemode = (scenemode + 1) % mSceneModes.length;
+			} while (!parameters.getSupportedSceneModes().contains(
+					mSceneModes[scenemode])); // SKIP unsupported modes
+			applyCameraParameters();
+		}
+	}
+
+	public void toggleFlash() {
+		if (camera != null) {
+			Parameters parameters = camera.getParameters();
+			do {
+				flashmode = (flashmode + 1) % mFlashModes.length;
+			} while (!parameters.getSupportedFlashModes().contains(
+					mFlashModes[flashmode])); // SKIP unsupported modes
+			applyCameraParameters();
 		}
 	}
 
@@ -708,20 +738,6 @@ public class BackgroundVideoRecorder extends Service implements
 			StopRecording();
 		} else {
 			StartRecording();
-		}
-	}
-
-	public void toggleFlash() {
-		if (camera != null) {
-			Parameters parameters = camera.getParameters();
-			if (isflashon) {
-				parameters.setFlashMode(Parameters.FLASH_MODE_OFF);
-				isflashon = false;
-			} else {
-				parameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
-				isflashon = true;
-			}
-			camera.setParameters(parameters);
 		}
 	}
 
