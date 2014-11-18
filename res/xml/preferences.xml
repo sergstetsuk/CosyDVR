@@ -1,65 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:title="Preferences">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+        android:title="Preferences">
         <PreferenceCategory
-        android:title="Налаштування">
-        <CheckBoxPreference 
-        android:key="autostart_recording"
-        android:title="Autostart Recording"
-        android:summary="Check for auto start recording"
-        android:defaultValue="false"
-        android:enabled="true" />
-        <ListPreference
-            android:key="sd_card_path"
-            android:title="External Storage Path"
-            android:summary="Choose external storage path" />
-        <EditTextPreference 
-        android:key="max_temp_folder_size"
-        android:title="Temp Folder Size"
-        android:summary="Enter temp folder size in bytes"
-        android:numeric="integer"  
-        android:defaultValue="10000000" />
-        <EditTextPreference 
-        android:key="min_free_space"
-        android:title="Min Free Space"
-        android:summary="Enter minimum free space in bytes"
-        android:numeric="integer"  
-        android:defaultValue="1000000" />
-        <EditTextPreference 
-        android:key="video_duration"
-        android:title="Split File Duration"
-        android:summary="Enter video file duration in ms"
-        android:numeric="integer"  
-        android:defaultValue="600000" />
-        <EditTextPreference 
-        android:key="video_width"
-        android:title="Video Width"
-        android:summary="Enter video width in px"
-        android:numeric="integer"  
-        android:defaultValue="1280" />
-        <EditTextPreference 
-        android:key="video_height"
-        android:title="Video Height"
-        android:summary="Enter video height in px"
-        android:numeric="integer"  
-        android:defaultValue="720" />
-        <EditTextPreference 
-        android:key="video_bitrate"
-        android:title="Video Bitrate"
-        android:summary="Enter video bitrate in bps"
-        android:numeric="integer"  
-        android:defaultValue="5000000" />
+        android:title="Preferences">
+		<CheckBoxPreference 
+		android:key="autostart_recording"
+		android:title="Autostart Recording"
+		android:summary="Check for auto start recording"
+		android:defaultValue="false"
+		android:enabled="true" />
+		<ListPreference
+		    android:key="sd_card_path"
+		    android:title="External Storage Path"
+		    android:summary="Choose external storage path" />
+		<EditTextPreference 
+		android:key="max_temp_folder_size"
+		android:title="Temp Folder Size"
+		android:summary="Enter temp folder size in bytes"
+		android:dialogTitle="Temp folder size in bytes"
+		android:numeric="integer"  
+		android:defaultValue="10000000" />
+		<EditTextPreference 
+		android:key="min_free_space"
+		android:title="Min Free Space"
+		android:summary="Enter minimum free space in bytes"
+		android:dialogTitle="Min free space in bytes"
+		android:numeric="integer"  
+		android:defaultValue="1000000" />
+		<EditTextPreference 
+		android:key="video_duration"
+		android:title="Split File Duration"
+		android:summary="Enter video file duration in ms"
+		android:dialogTitle="Duration of one fragment in ms"
+		android:numeric="integer"  
+		android:defaultValue="600000" />
+		<EditTextPreference 
+		android:key="video_width"
+		android:title="Video Width"
+		android:summary="Enter video width in px"
+		android:dialogTitle="Video width in px"
+		android:numeric="integer"  
+		android:defaultValue="1280" />
+		<EditTextPreference 
+		android:key="video_height"
+		android:title="Video Height"
+		android:summary="Enter video height in px"
+		android:dialogTitle="Video height in px"
+		android:numeric="integer"  
+		android:defaultValue="720" />
+		<EditTextPreference 
+		android:key="video_bitrate"
+		android:title="Video Bitrate"
+		android:summary="Enter video bitrate in bps"
+		android:dialogTitle="Video bitrate in bps"
+		android:numeric="integer"  
+		android:defaultValue="5000000" />
                 </PreferenceCategory>
         <PreferenceCategory
         android:title="Help">
-                <Preference
-                android:key="instruction_about"
-                android:selectable="false"
-                android:title="About"
-                android:summary="Glory of Ukraine!\nWeb site: cosydvr.esy.es\ne-mail: serg_stetsuk@ukr.net\nLicence: GPLv3" />
                 <PreferenceScreen
                 android:key="screen_instructions"
                 android:title="Instruction"
-                android:summary="Program usage help">
+                android:summary="Click to view help">
                         <Preference
                         android:key="instruction_fav"
                         android:selectable="false"
@@ -96,5 +98,10 @@
                         android:title="TAP ON SCREEN"
                         android:summary="Manual refocus in A and M modes only" />
                 </PreferenceScreen>
+                <Preference
+                android:key="instruction_about"
+                android:selectable="false"
+                android:title="About"
+                android:summary="Glory to Ukraine!\nWeb site: cosydvr.esy.es\ne-mail: serg_stetsuk@ukr.net\nLicence: GPLv3" />
         </PreferenceCategory>
 </PreferenceScreen>

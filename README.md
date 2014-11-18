@@ -23,7 +23,7 @@ Features:
 - Configurable options (video size, bitrate, maxtemp and minfree space, fragment time etc.)
 - Notification area clickable icon for bringing app to front
 - Custom SD_Card_Path option
-- Ukrainian Russian English interfaces
+- Ukrainian, Russian, English interfaces
 - Show battery level when device is not charging
 
 Supported devices:

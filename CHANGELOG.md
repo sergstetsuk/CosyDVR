@@ -1,3 +1,8 @@
+### v.1.4 (2014.11.18 11:15)
+
+  * Fixed preferences english texts, added units in pref. dialogs on video parameters and so on
+  * merged push request on README.md from asd-and-Rizzo
+
 ### v.1.3 (2014.11.13 20:11)
 
   * Fixed propagation of night mode, flash status and focus mode between fragments

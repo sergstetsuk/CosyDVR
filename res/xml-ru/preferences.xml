@@ -17,50 +17,51 @@
                 android:key="max_temp_folder_size"
                 android:title="Размер временного каталога"
                 android:summary="Укажите допустимый суммарный розмер файлов во временном каталоге"
+		android:dialogTitle="Размер временного каталога в байтах"
                 android:numeric="integer"  
                 android:defaultValue="10000000" />
                 <EditTextPreference 
                 android:key="min_free_space"
                 android:title="Розмер свободного места"
                 android:summary="Укажите минимальный размер свободного места на карте памяти"
+		android:dialogTitle="Размер свободного места в байтах"
                 android:numeric="integer"  
                 android:defaultValue="1000000" />
                 <EditTextPreference 
                 android:key="video_duration"
                 android:title="Продолжительность видеофрагмента"
                 android:summary="Укажите продолжительность видеофрагмента в мс"
+		android:dialogTitle="Продолжительность видеофрагмента в мс"
                 android:numeric="integer"  
                 android:defaultValue="600000" />
                 <EditTextPreference 
                 android:key="video_width"
                 android:title="Ширина видео"
                 android:summary="Укажите ширину видео в px"
+		android:dialogTitle="Ширина видео в px"
                 android:numeric="integer"  
                 android:defaultValue="1280" />
                 <EditTextPreference 
                 android:key="video_height"
                 android:title="Высота видео"
                 android:summary="Укажите высоту видео в px"
+		android:dialogTitle="Высота видео в px"
                 android:numeric="integer"  
                 android:defaultValue="720" />
                 <EditTextPreference 
                 android:key="video_bitrate"
                 android:title="Скорость видеопотока"
                 android:summary="Укажите скорость видеопотока в bps"
+		android:dialogTitle="Скорость видеопотока в bps"
                 android:numeric="integer"  
                 android:defaultValue="5000000" />
                 </PreferenceCategory>
         <PreferenceCategory
         android:title="Помощь">
-                <Preference
-                android:key="instruction_about"
-                android:selectable="false"
-                android:title="О программе"
-                android:summary="Слава Украине!\nВеб сайт: cosydvr.esy.es\ne-mail: serg_stetsuk@ukr.net\nЛицензия: GPLv3" />
                 <PreferenceScreen
                 android:key="screen_instructions"
                 android:title="Инструкция"
-                android:summary="Помощь по использованию программы">
+                android:summary="Кликните для просмотра инструкции">
                         <Preference
                         android:key="instruction_fav"
                         android:selectable="false"
@@ -102,5 +103,10 @@
                         android:title="КЛИК ПО ЭКРАНУ"
                         android:summary="Повторная фокусировка в режимах A i M" />
                 </PreferenceScreen>
+                <Preference
+                android:key="instruction_about"
+                android:selectable="false"
+                android:title="О программе"
+                android:summary="Слава Украине!\nВеб сайт: cosydvr.esy.es\ne-mail: serg_stetsuk@ukr.net\nЛицензия: GPLv3" />
         </PreferenceCategory>
 </PreferenceScreen>

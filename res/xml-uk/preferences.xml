@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" 
-        android:title="Preferences">
+        android:title="Налаштування">
         <PreferenceCategory
         android:title="Налаштування">
                 <CheckBoxPreference 
@@ -17,50 +17,51 @@
                 android:key="max_temp_folder_size"
                 android:title="Розмір тимчасового каталогу"
                 android:summary="Вкажіть допустимий сумарний розмір файлів в тимчасовому каталозі"
-                android:numeric="integer"  
+                android:dialogTitle="Розмір тимчасового каталогу в байтах"
+                android:numeric="integer"
                 android:defaultValue="10000000" />
                 <EditTextPreference 
                 android:key="min_free_space"
                 android:title="Розмір вільного місця"
                 android:summary="Вкажіть мінімальний розмір вільного місця на карті"
+                android:dialogTitle="Розмір вільного місця в байтах"
                 android:numeric="integer"  
                 android:defaultValue="1000000" />
                 <EditTextPreference 
                 android:key="video_duration"
                 android:title="Тривалість відеофрагмента"
                 android:summary="Вкажіть тривалість відеофрагмента в мс"
+                android:dialogTitle="Тривалість відеофрагмента в мс"
                 android:numeric="integer"  
                 android:defaultValue="600000" />
                 <EditTextPreference 
                 android:key="video_width"
                 android:title="Ширина відео"
                 android:summary="Вкажіть ширину відео в px"
+                android:dialogTitle="Ширина відео в px"
                 android:numeric="integer"  
                 android:defaultValue="1280" />
                 <EditTextPreference 
                 android:key="video_height"
                 android:title="Висота відео"
                 android:summary="Вкажіть висоту відео в px"
+                android:dialogTitle="Висота відео в px"
                 android:numeric="integer"  
                 android:defaultValue="720" />
                 <EditTextPreference 
                 android:key="video_bitrate"
                 android:title="Швидкість відеопотоку"
                 android:summary="Вкажіть швидкість відеопотоку в bps"
+                android:dialogTitle="Швидкість відеопотоку в bps"
                 android:numeric="integer"  
                 android:defaultValue="5000000" />
                 </PreferenceCategory>
         <PreferenceCategory
         android:title="Допомога">
-                <Preference
-                android:key="instruction_about"
-                android:selectable="false"
-                android:title="Про програму"
-                android:summary="Слава Україні!\nВеб сайт: cosydvr.esy.es\ne-mail: serg_stetsuk@ukr.net\nЛіцензія: GPLv3" />
                 <PreferenceScreen
                 android:key="screen_instructions"
                 android:title="Інструкція"
-                android:summary="допомога з використання програми">
+                android:summary="Клікніть для перегляду інструкції">
                         <Preference
                         android:key="instruction_fav"
                         android:selectable="false"
@@ -102,5 +103,10 @@
                         android:title="КЛІК ПО ЕКРАНУ"
                         android:summary="Повторне фокусування в режимах A i M" />
                 </PreferenceScreen>
+                <Preference
+                android:key="instruction_about"
+                android:selectable="false"
+                android:title="Про програму"
+                android:summary="Слава Україні!\nВеб сайт: cosydvr.esy.es\ne-mail: serg_stetsuk@ukr.net\nЛіцензія: GPLv3" />
         </PreferenceCategory>
 </PreferenceScreen>
