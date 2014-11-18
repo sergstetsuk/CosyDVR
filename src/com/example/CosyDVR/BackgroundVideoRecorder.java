@@ -68,6 +68,10 @@ public class BackgroundVideoRecorder extends Service implements
 	// public int AUDIO_SOURCE = CAMERA;
 	public String SD_CARD_PATH = Environment.getExternalStorageDirectory()
 			.getAbsolutePath();
+/*for KitKat we can use something like:
+* final File[] dirs = context.getExternalFilesDirs(null); //null means default type
+* //find a dir that has most of the space and save using StatFs
+*/
 	public boolean AUTOSTART = false;
 
 	// Binder given to clients

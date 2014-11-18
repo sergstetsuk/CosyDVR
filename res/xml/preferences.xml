@@ -50,12 +50,12 @@
         android:defaultValue="5000000" />
                 </PreferenceCategory>
         <PreferenceCategory
-        android:title="Допомога">
+        android:title="Help">
                 <Preference
                 android:key="instruction_about"
                 android:selectable="false"
                 android:title="About"
-                android:summary="Web site: cosydvr.esy.es\ne-mail: serg_stetsuk@ukr.net\nLicence: GPLv3" />
+                android:summary="Glory of Ukraine!\nWeb site: cosydvr.esy.es\ne-mail: serg_stetsuk@ukr.net\nLicence: GPLv3" />
                 <PreferenceScreen
                 android:key="screen_instructions"
                 android:title="Instruction"
