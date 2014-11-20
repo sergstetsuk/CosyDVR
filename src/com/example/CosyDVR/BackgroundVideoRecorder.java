@@ -73,6 +73,7 @@ public class BackgroundVideoRecorder extends Service implements
 * //find a dir that has most of the space and save using StatFs
 */
 	public boolean AUTOSTART = false;
+	public boolean USEGPS = true;
 
 	// Binder given to clients
 	private final IBinder mBinder = new LocalBinder();
@@ -106,7 +107,7 @@ public class BackgroundVideoRecorder extends Service implements
 	private long mNewFileBegin = 0;
 
 	private LocationManager mLocationManager = null;
-	private Location mLocation;// , mPrevLocation;
+	private Location mLocation = null;
 	private long mPrevTim = 0;
 
 	// private List<String> mFocusModes;
@@ -160,26 +161,27 @@ public class BackgroundVideoRecorder extends Service implements
 					+ DateFormat.format("yyyy-MM-dd_kk-mm-ss",
 							datetime.getTime()).toString() + "\n";
 
-			// Get the location manager
-			// Criteria criteria = new Criteria();
-			// String bestProvider = mLocationManager.getBestProvider(criteria,
-			// false);
-			// Location location =
-			// mLocationManager.getLastKnownLocation(bestProvider);
-			try {
-				mLocation = mLocationManager
+                        if (USEGPS) {
+                                // Get the location manager
+			        // Criteria criteria = new Criteria();
+			        // String bestProvider = mLocationManager.getBestProvider(criteria,
+		        	// false);
+		        	// Location location =
+		        	// mLocationManager.getLastKnownLocation(bestProvider);
+			        try {
+			                mLocation = mLocationManager
 						.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			} catch (Exception e) {
-				mLocation = null;
-			}
-			;
+			        } catch (Exception e) {
+			        	mLocation = null;
+			        }
+                        }
 
 			double lat = -1, lon = -1, alt = -1;
 			float spd = 0, acc = -1;
 			int sat = 0, bat = 0;
 			long tim = 0;
 
-			if (mLocation != null) {
+			if (USEGPS && mLocation != null) {
 				/*
 				 * if (mPrevLocation == null) { mPrevLocation = mLocation; //for
 				 * null to not occur during operation }
@@ -228,13 +230,12 @@ public class BackgroundVideoRecorder extends Service implements
 				}
 			} catch (IOException e) {
 			}
-			;
 			mTextView.setText(srt);
 			if (tim != mPrevTim) {
 				mSpeedView.setText(String.format("%1.1f", spd));
 				mPrevTim = tim;
 			} else {
-				if (!mLocationManager
+                                if (USEGPS && mLocationManager != null && !mLocationManager
 						.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 					mSpeedView.setText(getString(R.string.gps_off));
 				} else {
@@ -277,6 +278,7 @@ public class BackgroundVideoRecorder extends Service implements
 		SharedPreferences sharedPref = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		AUTOSTART = sharedPref.getBoolean("autostart_recording", false);
+		USEGPS = sharedPref.getBoolean("use_gps", true);
 		/*
 		 * MAX_VIDEO_BIT_RATE =
 		 * Integer.parseInt(sharedPref.getString("video_bitrate", "5000000"));
@@ -821,6 +823,7 @@ public class BackgroundVideoRecorder extends Service implements
 	}
 
 	private void startGps() {
+                if (!USEGPS) return;
 		if (mLocationManager == null)
 			mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		if (mLocationManager != null) {

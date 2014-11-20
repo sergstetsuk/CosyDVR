@@ -3,16 +3,22 @@
         android:title="Налаштування">
         <PreferenceCategory
         android:title="Налаштування">
-                <CheckBoxPreference 
+                <CheckBoxPreference
                 android:key="autostart_recording"
                 android:title="Автостарт запису"
                 android:summary="Починати запис відео при запуску програми"
                 android:defaultValue="false"
                 android:enabled="true" />
+                <CheckBoxPreference
+                android:key="use_gps"
+                android:title="Використовувати GPS"
+                android:summary="Визначати позицію і швидкість по GPS"
+                android:defaultValue="true"
+                android:enabled="true" />
                 <ListPreference
-                android:key="sd_card_path"
-                android:title="Шлях до SD карти"
-                android:summary="Виберіть шлях до карти пам'яті" />
+                    android:key="sd_card_path"
+                    android:title="Шлях до SD карти"
+                    android:summary="Виберіть шлях до карти пам'яті" />
                 <EditTextPreference 
                 android:key="max_temp_folder_size"
                 android:title="Розмір тимчасового каталогу"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" 
-        android:title="Preferences">
+        android:title="Настройки">
         <PreferenceCategory
         android:title="Настройки">
                 <CheckBoxPreference 
@@ -9,10 +9,16 @@
                 android:summary="Начинать запись видео при запуске CosyDVR"
                 android:defaultValue="false"
                 android:enabled="true" />
+                <CheckBoxPreference
+                android:key="use_gps"
+                android:title="Использовать GPS"
+                android:summary="Определять позицию і скорость по GPS"
+                android:defaultValue="true"
+                android:enabled="true" />
                 <ListPreference
-                android:key="sd_card_path"
-                android:title="Путь к SD карте"
-                android:summary="Укажите путь к карте памяти" />
+                    android:key="sd_card_path"
+                    android:title="Путь к SD карте"
+                    android:summary="Укажите путь к карте памяти" />
                 <EditTextPreference 
                 android:key="max_temp_folder_size"
                 android:title="Размер временного каталога"
