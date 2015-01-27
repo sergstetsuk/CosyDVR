@@ -12,7 +12,7 @@
                 <CheckBoxPreference
                 android:key="use_gps"
                 android:title="Использовать GPS"
-                android:summary="Определять позицию і скорость по GPS"
+                android:summary="Определять позицию и скорость по GPS"
                 android:defaultValue="true"
                 android:enabled="true" />
                 <ListPreference
@@ -107,7 +107,7 @@
                         android:key="instruction_tap"
                         android:selectable="false"
                         android:title="КЛИК ПО ЭКРАНУ"
-                        android:summary="Повторная фокусировка в режимах A i M" />
+                        android:summary="Повторная фокусировка в режимах A и M" />
                 </PreferenceScreen>
                 <Preference
                 android:key="instruction_about"
