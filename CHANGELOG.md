@@ -1,3 +1,11 @@
+### v.1.3.4 (2015.04.21 16:29)
+
+  * Added propagation of zoomfactor through fragments (Juan Jose Zamorano issue)
+
+### v.1.3.3 ()
+
+  * Fixed russian translation in order to implement Dmitry Lahoda patch.
+  
 ### v.1.3.2 (2014.11.20 18:20)
 
   * Added preference to disable GPS usage

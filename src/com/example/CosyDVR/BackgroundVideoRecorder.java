@@ -86,6 +86,7 @@ public class BackgroundVideoRecorder extends Service implements
 	private int focusmode = 0;
 	private int scenemode = 0;
 	private int flashmode = 0;
+	private int zoomfactor = 0;
 	private String currentfile = null;
 
 	private SurfaceHolder mSurfaceHolder = null;
@@ -681,11 +682,10 @@ public class BackgroundVideoRecorder extends Service implements
 			if(parameters.getSupportedFlashModes().contains(mFlashModes[flashmode])) {
 				parameters.setFlashMode(mFlashModes[flashmode]);
 			}
-	//			if (parameters.isZoomSupported()) {
-	//				parameters
-	//						.setZoom((int) (parameters.getMaxZoom() * (mval - 4) / 10.0));
-	//				camera.setParameters(parameters);
-	//			}
+				if (parameters.isZoomSupported()) {
+					parameters.setZoom(zoomfactor);
+					camera.setParameters(parameters);
+				}
 			camera.setParameters(parameters);
 		}
 	}
@@ -727,8 +727,8 @@ public class BackgroundVideoRecorder extends Service implements
 		if (camera != null) {
 			Parameters parameters = camera.getParameters();
 			if (parameters.isZoomSupported()) {
-				parameters
-						.setZoom((int) (parameters.getMaxZoom() * (mval - 4) / 10.0));
+                zoomfactor = (int) (parameters.getMaxZoom() * (mval - 4) / 10.0);
+				parameters.setZoom(zoomfactor);
 				camera.setParameters(parameters);
 			}
 		}

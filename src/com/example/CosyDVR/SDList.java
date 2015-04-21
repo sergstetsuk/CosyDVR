@@ -51,6 +51,7 @@ public class SDList {
 							sVold.add(element);
 					}
 				}
+                scanner.close();
 			} catch (Exception e) {
 				// swallow - don't care
 				e.printStackTrace();
