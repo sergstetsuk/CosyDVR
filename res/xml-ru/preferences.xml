@@ -113,6 +113,6 @@
                 android:key="instruction_about"
                 android:selectable="false"
                 android:title="О программе"
-                android:summary="Слава Украине!\nВеб сайт: cosydvr.esy.es\ne-mail: serg_stetsuk@ukr.net\nЛицензия: GPLv3" />
+                android:summary="Сделано на Украине!\nВеб сайт: cosydvr.esy.es\ne-mail: serg_stetsuk@ukr.net\nЛицензия: GPLv3" />
         </PreferenceCategory>
 </PreferenceScreen>
