@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CosyDVR</string>
+    <string name="fav">FAV</string>
+    <string name="restart">RIAVVIA</string>
+    <string name="focus">FUOCO</string>
+    <string name="flash">FLASH</string>
+    <string name="night">NOTTE</string>
+    <string name="exit">CHIUDI</string>
+    <string name="gps_off">GPS OFF</string>
+</resources>

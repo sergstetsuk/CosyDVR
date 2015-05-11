@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+        android:title="Opzioni">
+        <PreferenceCategory
+        android:title="Opzioni">
+		<CheckBoxPreference
+		android:key="autostart_recording"
+		android:title="Avvio registrazione automatico"
+		android:summary="Seleziona per avviare automaticamente la registrazione del video"
+		android:defaultValue="false"
+		android:enabled="true" />
+                <CheckBoxPreference
+                android:key="use_gps"
+                android:title="Usa GPS"
+                android:summary="Determina posizione e velocità con il GPS"
+                android:defaultValue="true"
+                android:enabled="true" />
+		<ListPreference
+		    android:key="sd_card_path"
+		    android:title="Percorso archivio esterno"
+		    android:summary="Seleziona un percorso esterno di salvataggio" />
+		<EditTextPreference
+		android:key="max_temp_folder_size"
+		android:title="Dimensione cartella temporanea"
+		android:summary="Imposta la dimensione in byte della cartella temporanea"
+		android:dialogTitle="Dimensione in byte della cartella temporanea"
+		android:numeric="integer"
+		android:defaultValue="10000000" />
+		<EditTextPreference
+		android:key="min_free_space"
+		android:title="Minimo spazio libero"
+		android:summary="Imposta il minimo spazio libero in byte"
+		android:dialogTitle="Il minimo spazio libero in byte"
+		android:numeric="integer"
+		android:defaultValue="1000000" />
+		<EditTextPreference
+		android:key="video_duration"
+		android:title="Durata video"
+		android:summary="Imposta la durata del video in millisecondi"
+		android:dialogTitle="Durata del video di millisecondi"
+		android:numeric="integer"
+		android:defaultValue="600000" />
+		<EditTextPreference
+		android:key="video_width"
+		android:title="Larghezza video"
+		android:summary="Imposta la larghezza del video in pixel"
+		android:dialogTitle="Larghezza video in pixel"
+		android:numeric="integer"
+		android:defaultValue="1280" />
+		<EditTextPreference
+		android:key="video_height"
+		android:title="Altezza video"
+		android:summary="Imposta la altezza del video in pixel"
+		android:dialogTitle="Altezza video in pixel"
+		android:numeric="integer"
+		android:defaultValue="720" />
+		<EditTextPreference
+		android:key="video_bitrate"
+		android:title="Bitrate video"
+		android:summary="Imposta il bitrate in bps"
+		android:dialogTitle="Bitrate video in bps"
+		android:numeric="integer"
+		android:defaultValue="5000000" />
+        </PreferenceCategory>
+        <PreferenceCategory
+        android:title="Help">
+                <PreferenceScreen
+                android:key="screen_instructions"
+                android:title="Istruzioni"
+                android:summary="Clicca per visualizzare la guida">
+                        <Preference
+                        android:key="instruction_fav"
+                        android:selectable="false"
+                        android:title="@string/fav"
+                        android:summary="Previene la cancellazione\n 0 - questo spezzone sarà cancellato\n 1 - questo e i prossimi spezzoni saranno conservati\n 2 - solo questo spezzone è conservato, i prossimi saranno cancellati" />
+                        <Preference
+                        android:key="instruction_restart"
+                        android:selectable="false"
+                        android:title="@string/restart"
+                        android:summary="Avvia/Riavvia la registrazione.\nClick lungo per le opzioni." />
+                        <Preference
+                        android:key="instruction_focus"
+                        android:selectable="false"
+                        android:title="@string/focus"
+                        android:summary="Imposta la messa a fuoco.\n I - infinito\n V - video continuo.\n A - automatica con fuoco manuale.\n M - macro con fuoco manuale.\n E - profondità di campo estesa" />
+                        <Preference
+                        android:key="instruction_night"
+                        android:selectable="false"
+                        android:title="@string/night"
+                        android:summary="Modalità giorno/notte" />
+                        <Preference
+                        android:key="instruction_exit"
+                        android:selectable="false"
+                        android:title="@string/exit"
+                        android:summary="Click lungo - TERMINA" />
+                        <Preference
+                        android:key="instruction_punch"
+                        android:selectable="false"
+                        android:title="PINCH ON SCREEN"
+                        android:summary="Zoom in/out" />
+                        <Preference
+                        android:key="instruction_tap"
+                        android:selectable="false"
+                        android:title="TAP ON SCREEN"
+                        android:summary="Fuoco manuale in modalità A o M" />
+                </PreferenceScreen>
+                <Preference
+                android:key="instruction_about"
+                android:selectable="false"
+                android:title="Informazioni su"
+                android:summary="Gloria all' Ukraina!\nSito web: cosydvr.esy.es\ne-mail: serg_stetsuk@ukr.net\nLicenza: GPLv3" />
+        </PreferenceCategory>
+</PreferenceScreen>
