@@ -1,4 +1,4 @@
-package com.example.CosyDVR;
+package es.esy.CosyDVR;
 
 import android.app.PendingIntent;
 import android.app.Service;
@@ -131,7 +131,7 @@ public class BackgroundVideoRecorder extends Service implements
 			}
 			/* every second update for debug purposes only
 			 * Intent intent = new Intent();
-			 * intent.setAction("com.example.CosyDVR.updateinterface");
+			 * intent.setAction("es.esy.CosyDVR.updateinterface");
 			 * sendBroadcast(intent);
 			 */
 			
@@ -436,7 +436,7 @@ public class BackgroundVideoRecorder extends Service implements
 				if (isfavorite == 2) {
 					isfavorite = 0;
 					Intent intent = new Intent();
-					intent.setAction("com.example.CosyDVR.updateinterface");
+					intent.setAction("es.esy.CosyDVR.updateinterface");
 					sendBroadcast(intent); 
 				}
 			}

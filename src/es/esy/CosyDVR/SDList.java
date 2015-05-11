@@ -1,4 +1,4 @@
-package com.example.CosyDVR;
+package es.esy.CosyDVR;
 
 import java.io.File;
 import java.util.ArrayList;

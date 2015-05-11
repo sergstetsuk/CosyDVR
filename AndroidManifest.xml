@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.CosyDVR"
-    android:versionCode="11"
-    android:versionName="1.3.4">
+    package="es.esy.CosyDVR"
+    android:versionCode="12"
+    android:versionName="1.3.5">
   <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="17" />
   <uses-permission android:name="android.permission.CAMERA" />
   <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -14,7 +14,7 @@
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.BATTERY_STATS"/>
   <application android:icon="@drawable/cosydvricon" android:label="@string/app_name" android:allowBackup="false">
-      <activity android:name="com.example.CosyDVR.CosyDVR"
+      <activity android:name="es.esy.CosyDVR.CosyDVR"
                 android:label="@string/app_name"
                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
                 android:screenOrientation="landscape"
@@ -24,7 +24,7 @@
               <category android:name="android.intent.category.LAUNCHER" />
           </intent-filter>
       </activity>
-      <activity android:name="com.example.CosyDVR.CosyDVRPreferenceActivity" />
-      <service  android:name="com.example.CosyDVR.BackgroundVideoRecorder" />
+      <activity android:name="es.esy.CosyDVR.CosyDVRPreferenceActivity" />
+      <service  android:name="es.esy.CosyDVR.BackgroundVideoRecorder" />
   </application>
 </manifest>

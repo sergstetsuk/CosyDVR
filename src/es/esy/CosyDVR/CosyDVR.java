@@ -1,6 +1,6 @@
-package com.example.CosyDVR;
-import com.example.CosyDVR.BackgroundVideoRecorder;
-import com.example.CosyDVR.CosyDVRPreferenceActivity;
+package es.esy.CosyDVR;
+import es.esy.CosyDVR.BackgroundVideoRecorder;
+import es.esy.CosyDVR.CosyDVRPreferenceActivity;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -302,7 +302,7 @@ private ServiceConnection mConnection = new ServiceConnection() {
     
 };
 
-private IntentFilter filter = new IntentFilter("com.example.CosyDVR.updateinterface");
+private IntentFilter filter = new IntentFilter("es.esy.CosyDVR.updateinterface");
 
 private BroadcastReceiver receiver = new BroadcastReceiver(){
     

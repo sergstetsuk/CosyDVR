@@ -1,10 +1,10 @@
-package com.example.CosyDVR;
+package es.esy.CosyDVR;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import com.example.CosyDVR.SDList;
+import es.esy.CosyDVR.SDList;
 
 public class CosyDVRPreferenceActivity extends PreferenceActivity
 {
