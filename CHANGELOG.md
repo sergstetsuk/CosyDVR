@@ -1,3 +1,8 @@
+### v.1.3.5 (2015.05.11 20:04)
+
+  * Added Italian translation thanks to fvasco
+  * Renamed package to es.esy.CosyDVR
+
 ### v.1.3.4 (2015.04.21 16:29)
 
   * Added propagation of zoomfactor through fragments (Juan Jose Zamorano issue)

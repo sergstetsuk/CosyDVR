@@ -69,7 +69,7 @@ Exit - exit application (exit on long click for eliminate accidental press)
 
 **Gestures:**
 
-Tap on screen - autofocus in "aut" and "mac" modes
+Tap on screen - autofocus in "a" and "m" modes
 
 Pinch screen - zoom in/out
 
