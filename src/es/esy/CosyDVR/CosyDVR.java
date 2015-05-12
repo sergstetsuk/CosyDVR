@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Environment;
 //import android.os.SystemClock;
@@ -23,6 +24,8 @@ import android.content.ServiceConnection;
 import android.graphics.Point;
 import android.os.IBinder;
 import java.io.File;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 
 public class CosyDVR extends Activity{
@@ -64,6 +67,16 @@ public class CosyDVR extends Activity{
       super.onCreate(savedInstanceState);
 
       recording = false;
+      
+      SharedPreferences sharedPref = PreferenceManager
+                .getDefaultSharedPreferences(this);
+      boolean REVERSE_ORIENTATION = sharedPref.getBoolean("reverse_landscape", false);
+      if(REVERSE_ORIENTATION) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+      } else {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+      }
+
 
       setContentView(R.layout.main);
       

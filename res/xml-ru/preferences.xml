@@ -3,65 +3,71 @@
         android:title="Настройки">
         <PreferenceCategory
         android:title="Настройки">
-                <CheckBoxPreference 
-                android:key="autostart_recording"
-                android:title="Автостарт записи"
-                android:summary="Начинать запись видео при запуске CosyDVR"
-                android:defaultValue="false"
-                android:enabled="true" />
-                <CheckBoxPreference
-                android:key="use_gps"
-                android:title="Использовать GPS"
-                android:summary="Определять позицию и скорость по GPS"
-                android:defaultValue="true"
-                android:enabled="true" />
-                <ListPreference
-                    android:key="sd_card_path"
-                    android:title="Путь к SD карте"
-                    android:summary="Укажите путь к карте памяти" />
-                <EditTextPreference 
-                android:key="max_temp_folder_size"
-                android:title="Размер временного каталога"
-                android:summary="Укажите допустимый суммарный розмер файлов во временном каталоге"
+        <CheckBoxPreference 
+        android:key="autostart_recording"
+        android:title="Автостарт записи"
+        android:summary="Начинать запись видео при запуске CosyDVR"
+        android:defaultValue="false"
+        android:enabled="true" />
+        <CheckBoxPreference
+        android:key="use_gps"
+        android:title="Использовать GPS"
+        android:summary="Определять позицию и скорость по GPS"
+        android:defaultValue="true"
+        android:enabled="true" />
+        <CheckBoxPreference
+        android:key="reverse_landscape"
+        android:title="Перевернутое альбомное положение"
+        android:summary="Включить переворачивание"
+        android:defaultValue="false"
+        android:enabled="true" />
+        <ListPreference
+            android:key="sd_card_path"
+            android:title="Путь к SD карте"
+            android:summary="Укажите путь к карте памяти" />
+        <EditTextPreference 
+        android:key="max_temp_folder_size"
+        android:title="Размер временного каталога"
+        android:summary="Укажите допустимый суммарный розмер файлов во временном каталоге"
 		android:dialogTitle="Размер временного каталога в байтах"
-                android:numeric="integer"  
-                android:defaultValue="10000000" />
-                <EditTextPreference 
-                android:key="min_free_space"
-                android:title="Розмер свободного места"
-                android:summary="Укажите минимальный размер свободного места на карте памяти"
+        android:numeric="integer"  
+        android:defaultValue="10000000" />
+        <EditTextPreference 
+        android:key="min_free_space"
+        android:title="Розмер свободного места"
+        android:summary="Укажите минимальный размер свободного места на карте памяти"
 		android:dialogTitle="Размер свободного места в байтах"
-                android:numeric="integer"  
-                android:defaultValue="1000000" />
-                <EditTextPreference 
-                android:key="video_duration"
-                android:title="Продолжительность видеофрагмента"
-                android:summary="Укажите продолжительность видеофрагмента в мс"
+        android:numeric="integer"  
+        android:defaultValue="1000000" />
+        <EditTextPreference 
+        android:key="video_duration"
+        android:title="Продолжительность видеофрагмента"
+        android:summary="Укажите продолжительность видеофрагмента в мс"
 		android:dialogTitle="Продолжительность видеофрагмента в мс"
-                android:numeric="integer"  
-                android:defaultValue="600000" />
-                <EditTextPreference 
-                android:key="video_width"
-                android:title="Ширина видео"
-                android:summary="Укажите ширину видео в px"
+        android:numeric="integer"  
+        android:defaultValue="600000" />
+        <EditTextPreference 
+        android:key="video_width"
+        android:title="Ширина видео"
+        android:summary="Укажите ширину видео в px"
 		android:dialogTitle="Ширина видео в px"
-                android:numeric="integer"  
-                android:defaultValue="1280" />
-                <EditTextPreference 
-                android:key="video_height"
-                android:title="Высота видео"
-                android:summary="Укажите высоту видео в px"
+        android:numeric="integer"  
+        android:defaultValue="1280" />
+        <EditTextPreference 
+        android:key="video_height"
+        android:title="Высота видео"
+        android:summary="Укажите высоту видео в px"
 		android:dialogTitle="Высота видео в px"
-                android:numeric="integer"  
-                android:defaultValue="720" />
-                <EditTextPreference 
-                android:key="video_bitrate"
-                android:title="Скорость видеопотока"
-                android:summary="Укажите скорость видеопотока в bps"
+        android:numeric="integer"  
+        android:defaultValue="720" />
+        <EditTextPreference 
+        android:key="video_bitrate"
+        android:title="Скорость видеопотока"
+        android:summary="Укажите скорость видеопотока в bps"
 		android:dialogTitle="Скорость видеопотока в bps"
-                android:numeric="integer"  
-                android:defaultValue="5000000" />
-                </PreferenceCategory>
+        android:numeric="integer"  
+        android:defaultValue="5000000" />
+        </PreferenceCategory>
         <PreferenceCategory
         android:title="Помощь">
                 <PreferenceScreen

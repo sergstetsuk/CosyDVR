@@ -1,3 +1,8 @@
+### v.1.3.6 (2015.05.12 20:04)
+
+  * Added reverse landscape orientation option in preferences (needs to reinstall app or clear defaults)
+    Reverse landscape mode is applied after application restart.
+
 ### v.1.3.5 (2015.05.11 20:04)
 
   * Added Italian translation thanks to fvasco

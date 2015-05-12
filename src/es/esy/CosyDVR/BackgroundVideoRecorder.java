@@ -74,6 +74,7 @@ public class BackgroundVideoRecorder extends Service implements
 */
 	public boolean AUTOSTART = false;
 	public boolean USEGPS = true;
+    public boolean REVERSE_ORIENTATION = false;
 
 	// Binder given to clients
 	private final IBinder mBinder = new LocalBinder();
@@ -280,6 +281,7 @@ public class BackgroundVideoRecorder extends Service implements
 				.getDefaultSharedPreferences(this);
 		AUTOSTART = sharedPref.getBoolean("autostart_recording", false);
 		USEGPS = sharedPref.getBoolean("use_gps", true);
+        REVERSE_ORIENTATION = sharedPref.getBoolean("reverse_landscape", true);
 		/*
 		 * MAX_VIDEO_BIT_RATE =
 		 * Integer.parseInt(sharedPref.getString("video_bitrate", "5000000"));
@@ -319,6 +321,7 @@ public class BackgroundVideoRecorder extends Service implements
 				1, 1, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
 				WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
 				PixelFormat.TRANSLUCENT);
+
 		layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
 		windowManager.addView(surfaceView, layoutParams);
 
@@ -562,8 +565,13 @@ public class BackgroundVideoRecorder extends Service implements
 			mWakeLock.acquire();
 			try {
 				camera = Camera.open(/* CameraInfo.CAMERA_FACING_BACK */);
+                if(REVERSE_ORIENTATION) {
+                    camera.setDisplayOrientation(180);
+                } else {
+                    camera.setDisplayOrientation(0);
+                }
 				mediaRecorder = new MediaRecorder();
-				camera.unlock();
+                camera.unlock();
 
 				// mediaRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());
 				mediaRecorder.setCamera(camera);
@@ -620,6 +628,11 @@ public class BackgroundVideoRecorder extends Service implements
 				mediaRecorder.setMaxDuration(this.MAX_VIDEO_DURATION);
 				mediaRecorder.setMaxFileSize(0); // 0 - no limit
 				mediaRecorder.setOnInfoListener(this);
+                if(REVERSE_ORIENTATION) {
+                    mediaRecorder.setOrientationHint(180);
+                } else {
+                    mediaRecorder.setOrientationHint(0);
+                }
 
 				mediaRecorder.prepare();
 				mediaRecorder.start();
@@ -682,10 +695,12 @@ public class BackgroundVideoRecorder extends Service implements
 			if(parameters.getSupportedFlashModes().contains(mFlashModes[flashmode])) {
 				parameters.setFlashMode(mFlashModes[flashmode]);
 			}
-				if (parameters.isZoomSupported()) {
-					parameters.setZoom(zoomfactor);
-					camera.setParameters(parameters);
-				}
+            if (parameters.isZoomSupported()) {
+                parameters.setZoom(zoomfactor);
+                camera.setParameters(parameters);
+            }
+            //~ parameters.setRotation(180);
+            //~ parameters.setRotation(0);
 			camera.setParameters(parameters);
 		}
 	}

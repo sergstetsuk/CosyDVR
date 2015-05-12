@@ -15,6 +15,12 @@
                 android:summary="Визначати позицію і швидкість по GPS"
                 android:defaultValue="true"
                 android:enabled="true" />
+                <CheckBoxPreference
+                android:key="reverse_landscape"
+                android:title="Перевернуте альбомне положення"
+                android:summary="Перевернути альбомне відображення"
+                android:defaultValue="false"
+                android:enabled="true" />
                 <ListPreference
                     android:key="sd_card_path"
                     android:title="Шлях до SD карти"

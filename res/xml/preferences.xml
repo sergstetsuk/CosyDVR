@@ -9,12 +9,18 @@
 		android:summary="Check for auto start recording"
 		android:defaultValue="false"
 		android:enabled="true" />
-                <CheckBoxPreference
-                android:key="use_gps"
-                android:title="Use GPS"
-                android:summary="Determine position and speed with GPS"
-                android:defaultValue="true"
-                android:enabled="true" />
+        <CheckBoxPreference
+        android:key="use_gps"
+        android:title="Use GPS"
+        android:summary="Determine position and speed with GPS"
+        android:defaultValue="true"
+        android:enabled="true" />
+        <CheckBoxPreference
+        android:key="reverse_landscape"
+        android:title="Reverse Landscape Orientation"
+        android:summary="Check for reverse Landscape Orientation"
+        android:defaultValue="false"
+        android:enabled="true" />
 		<ListPreference
 		    android:key="sd_card_path"
 		    android:title="External Storage Path"
