@@ -306,7 +306,7 @@ private ServiceConnection mConnection = new ServiceConnection() {
             recButton.setText(getString(R.string.stop));
         }*/
         mService.ChangeSurface(mWidth, mHeight);
-     }
+    }
 
     @Override
     public void onServiceDisconnected(ComponentName arg0) {

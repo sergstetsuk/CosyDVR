@@ -1,3 +1,7 @@
+### v.1.3.7 (2015.05.31 09:45)
+
+  * Fixed crash for devices without flash.
+
 ### v.1.3.6 (2015.05.12 20:04)
 
   * Added reverse landscape orientation option in preferences (needs to reinstall app or clear defaults)

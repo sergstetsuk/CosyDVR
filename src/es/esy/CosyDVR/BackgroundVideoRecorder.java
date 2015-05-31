@@ -526,8 +526,8 @@ public class BackgroundVideoRecorder extends Service implements
 							+ "<gpx xmlns=\"http://www.topografix.com/GPX/1/1\" version=\"1.1\" creator=\"CosyDVR\">\n"
 							+ "<trk>\n" + "<trkseg>\n"); // header
 		} catch (IOException e) {
-		}
-		;
+		};
+        
 		mNewFileBegin = SystemClock.elapsedRealtime();
 		mSrtBegin = mNewFileBegin;
 
@@ -689,18 +689,18 @@ public class BackgroundVideoRecorder extends Service implements
 			if(parameters.getSupportedFocusModes().contains(mFocusModes[focusmode])) {
 				parameters.setFocusMode(mFocusModes[focusmode]);
 			}
-			if(parameters.getSupportedSceneModes().contains(mSceneModes[scenemode])) {
+			if(parameters.getSupportedSceneModes() != null
+                && parameters.getSupportedSceneModes().contains(mSceneModes[scenemode])) {
 				parameters.setSceneMode(mSceneModes[scenemode]);
 			}
-			if(parameters.getSupportedFlashModes().contains(mFlashModes[flashmode])) {
+			if(parameters.getSupportedFlashModes() != null 
+                && parameters.getSupportedFlashModes().contains(mFlashModes[flashmode])) {
 				parameters.setFlashMode(mFlashModes[flashmode]);
 			}
             if (parameters.isZoomSupported()) {
                 parameters.setZoom(zoomfactor);
                 camera.setParameters(parameters);
             }
-            //~ parameters.setRotation(180);
-            //~ parameters.setRotation(0);
 			camera.setParameters(parameters);
 		}
 	}
@@ -766,7 +766,7 @@ public class BackgroundVideoRecorder extends Service implements
 		if (this.VIDEO_WIDTH / this.VIDEO_HEIGHT > width / height) {
 			height = (int) (width * this.VIDEO_HEIGHT / this.VIDEO_WIDTH);
 		} else {
-			width = (int) (height * this.VIDEO_WIDTH / this.VIDEO_HEIGHT);
+			width = (int) (height * this.VIDEO_WIDTH / this.VIDEO_HEIGHT); //debug
 		}
 		LayoutParams layoutParams = new WindowManager.LayoutParams(
 				// WindowManager.LayoutParams.WRAP_CONTENT,
