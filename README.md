@@ -9,18 +9,18 @@ Features:
 - Works even when the keyboard is locked
 - Autostart recording option after program launch
 - Autoremove old files
-- Simple placing files to favorite folder (one file or all files after current)
+- Simple placing files to favourite folder (one file or all files after current)
 - FLASH button for night recordings (if device supports)
 - Supports Android 4.1.2 (Fly IQ451 primarily tested)
-- GPS data is recorded into subtitle files *.srt
-- Separate *.gpx file for upload to the OpenStreetMap.org
-- GPS data is shown on the sceen
-- Night mode for better videon under low light condition (if device supports)
+- GPS data is recorded into subtitle files `*.srt`
+- Separate `*.gpx` file for upload to the OpenStreetMap.org
+- GPS data is shown on the screen
+- Night mode for better video under low light condition (if device supports)
 - Different focus modes (infinity, auto, continuous video, macro)
-- Zoooming in/out  with gestures
+- Zooming in/out  with gestures
 - Refocus on screen tap
-- Exit function is protected with long click to avoid accedental click
-- Configurable options (video size, bitrate, maxtemp and minfree space, fragment time etc.)
+- Exit function is protected with long click to avoid accidental click
+- Configurable options (video size, bitrate, maximal temporal and minimal free space, fragment time, etc.)
 - Notification area clickable icon for bringing app to front
 - Custom SD_Card_Path option
 - Ukrainian, Russian, English, Italian interfaces
@@ -37,7 +37,7 @@ Operation manual:
 
 **Buttons:**
 
-FAV - preserve current fragment from deletion (add to favorites).
+`FAV` - preserve current fragment from deletion (add to favorites).
 
         0 - this is temp fragment
         
@@ -45,11 +45,11 @@ FAV - preserve current fragment from deletion (add to favorites).
         
         2 - only this fragment is preserved. Next will be temp
         
-Restart - break fragments. Start new one
+`Restart` - break fragments. Start new one
 
-Restart (long click) - options menu
+`Restart (long click)` - options menu
 
-Focus - switch between focus modes (visible only supported by device)
+`Focus` - switch between focus modes (visible only supported by device)
 
         i - infinity
         
@@ -61,17 +61,17 @@ Focus - switch between focus modes (visible only supported by device)
         
         e - extended depth of field
         
-FLASH - toggle flash on/off
+`FLASH` - toggle flash on/off
 
-Night - toggle night mode on/off
+`Night` - toggle night mode on/off
 
-Exit - exit application (exit on long click for eliminate accidental press)
+`Exit` - exit application (exit on long click for eliminate accidental press)
 
 **Gestures:**
 
-Tap on screen - autofocus in "a" and "m" modes
+`Tap on screen` - autofocus in `a` and `m` modes
 
-Pinch screen - zoom in/out
+`Pinch screen` - zoom in/out
 
 License:
 ---
