@@ -1,3 +1,7 @@
+### v.1.3.8 (2015.06.10 19:30)
+
+  * Refactored scanning storage resources
+
 ### v.1.3.7 (2015.05.31 09:45)
 
   * Fixed crash for devices without flash.

@@ -14,13 +14,13 @@ Features:
 - Supports Android 4.1.2 (Fly IQ451 primarily tested)
 - GPS data is recorded into subtitle files *.srt
 - Separate *.gpx file for upload to the OpenStreetMap.org
-- GPS data is shown on the sceen
-- Night mode for better videon under low light condition (if device supports)
+- GPS data is shown on the screen
+- Night mode for better video under low light condition (if device supports)
 - Different focus modes (infinity, auto, continuous video, macro)
-- Zoooming in/out  with gestures
+- Zooming in/out  with gestures
 - Refocus on screen tap
 - Exit function is protected with long click to avoid accedental click
-- Configurable options (video size, bitrate, maxtemp and minfree space, fragment time etc.)
+- Configurable options (video size, bitrate, maximal temporary and minimal free space, fragment time etc.)
 - Notification area clickable icon for bringing app to front
 - Custom SD_Card_Path option
 - Ukrainian, Russian, English, Italian interfaces

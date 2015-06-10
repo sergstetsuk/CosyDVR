@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import es.esy.CosyDVR.SDList;
+import es.esy.CosyDVR.StorageUtils;
 
 public class CosyDVRPreferenceActivity extends PreferenceActivity
 {
@@ -22,14 +22,13 @@ public class CosyDVRPreferenceActivity extends PreferenceActivity
         {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
-            SDList sd = new SDList();
             ListPreference LP = (ListPreference) findPreference("sd_card_path");
-            sd.determineStorageOptions();
-            CharSequence[] entries = new CharSequence[sd.sVold.size()];
-            for (int i = 0; i < sd.sVold.size(); i++) {
-            	entries[i] = sd.sVold.get(i);
+            CharSequence[] entries = new CharSequence[StorageUtils.getStorageList().size()];
+            CharSequence[] entryValues = new CharSequence[StorageUtils.getStorageList().size()];
+            for (int i = 0; i < StorageUtils.getStorageList().size(); i++) {
+            	entries[i] = StorageUtils.getStorageList().get(i).getDisplayName();
+            	entryValues[i] = StorageUtils.getStorageList().get(i).path;
             }
-            CharSequence[] entryValues = entries;
             LP.setEntries(entries);
             LP.setEntryValues(entryValues);
             
