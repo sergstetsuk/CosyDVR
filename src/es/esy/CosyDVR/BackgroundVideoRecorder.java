@@ -68,13 +68,17 @@ public class BackgroundVideoRecorder extends Service implements
 	// public int AUDIO_SOURCE = CAMERA;
 	public String SD_CARD_PATH = Environment.getExternalStorageDirectory()
 			.getAbsolutePath();
+	//public String BASE_FOLDER = "/CosyDVR";
+	public String BASE_FOLDER = "/Android/data/es.esy.CosyDVR/files"; //possible fix for KitKat
+	public String FAV_FOLDER = "/fav/";
+	public String TEMP_FOLDER = "/temp/";
 /*for KitKat we can use something like:
 * final File[] dirs = context.getExternalFilesDirs(null); //null means default type
 * //find a dir that has most of the space and save using StatFs
 */
 	public boolean AUTOSTART = false;
 	public boolean USEGPS = true;
-    public boolean REVERSE_ORIENTATION = false;
+        public boolean REVERSE_ORIENTATION = false;
 
 	// Binder given to clients
 	private final IBinder mBinder = new LocalBinder();
@@ -281,7 +285,7 @@ public class BackgroundVideoRecorder extends Service implements
 				.getDefaultSharedPreferences(this);
 		AUTOSTART = sharedPref.getBoolean("autostart_recording", false);
 		USEGPS = sharedPref.getBoolean("use_gps", true);
-        REVERSE_ORIENTATION = sharedPref.getBoolean("reverse_landscape", true);
+                REVERSE_ORIENTATION = sharedPref.getBoolean("reverse_landscape", false);
 		/*
 		 * MAX_VIDEO_BIT_RATE =
 		 * Integer.parseInt(sharedPref.getString("video_bitrate", "5000000"));
@@ -421,20 +425,20 @@ public class BackgroundVideoRecorder extends Service implements
 			;
 
 			if (currentfile != null && isfavorite != 0) {
-				File tmpfile = new File(SD_CARD_PATH + "/CosyDVR/temp/"
+				File tmpfile = new File(SD_CARD_PATH + BASE_FOLDER + TEMP_FOLDER // "/CosyDVR/temp/"
 						+ currentfile + VIDEO_FILE_EXT);
-				File favfile = new File(SD_CARD_PATH + "/CosyDVR/fav/"
+				File favfile = new File(SD_CARD_PATH + BASE_FOLDER + FAV_FOLDER // "/CosyDVR/fav/"
 						+ currentfile + VIDEO_FILE_EXT);
 				tmpfile.renameTo(favfile);
-				tmpfile = new File(SD_CARD_PATH + "/CosyDVR/temp/"
+				tmpfile = new File(SD_CARD_PATH + BASE_FOLDER + TEMP_FOLDER // "/CosyDVR/temp/"
 						+ currentfile + SRT_FILE_EXT);
-				favfile = new File(SD_CARD_PATH + "/CosyDVR/fav/" + currentfile
-						+ SRT_FILE_EXT);
+				favfile = new File(SD_CARD_PATH + BASE_FOLDER + FAV_FOLDER // "/CosyDVR/fav/" 
+						+ currentfile + SRT_FILE_EXT);
 				tmpfile.renameTo(favfile);
-				tmpfile = new File(SD_CARD_PATH + "/CosyDVR/temp/"
+				tmpfile = new File(SD_CARD_PATH + BASE_FOLDER + TEMP_FOLDER // "/CosyDVR/temp/"
 						+ currentfile + GPX_FILE_EXT);
-				favfile = new File(SD_CARD_PATH + "/CosyDVR/fav/" + currentfile
-						+ GPX_FILE_EXT);
+				favfile = new File(SD_CARD_PATH + BASE_FOLDER + FAV_FOLDER // "/CosyDVR/fav/" 
+						+ currentfile + GPX_FILE_EXT);
 				tmpfile.renameTo(favfile);
 				if (isfavorite == 2) {
 					isfavorite = 0;
@@ -477,11 +481,11 @@ public class BackgroundVideoRecorder extends Service implements
 				.getExternalStorageDirectory().getAbsolutePath());
 
 		// create temp and fav folders
-		File mFolder = new File(SD_CARD_PATH + "/CosyDVR/temp/");
+		File mFolder = new File(SD_CARD_PATH + BASE_FOLDER + TEMP_FOLDER); //"/CosyDVR/temp/");
 		if (!mFolder.exists()) {
 			mFolder.mkdirs();
 		}
-		mFolder = new File(SD_CARD_PATH + "/CosyDVR/fav/");
+		mFolder = new File(SD_CARD_PATH + BASE_FOLDER + FAV_FOLDER); //"/CosyDVR/fav/");
 		if (!mFolder.exists()) {
 			mFolder.mkdirs();
 		}
@@ -512,11 +516,11 @@ public class BackgroundVideoRecorder extends Service implements
 		 * camera.setParameters(parameters);
 		 */
 		mSrtCounter = 0;
-		mSrtFile = new File(SD_CARD_PATH + "/CosyDVR/temp/" + currentfile
-				+ SRT_FILE_EXT);
+		mSrtFile = new File(SD_CARD_PATH + BASE_FOLDER + TEMP_FOLDER //"/CosyDVR/temp/"
+				 + currentfile + SRT_FILE_EXT);
 		mSrtFile.setWritable(true);
-		mGpxFile = new File(SD_CARD_PATH + "/CosyDVR/temp/" + currentfile
-				+ GPX_FILE_EXT);
+		mGpxFile = new File(SD_CARD_PATH + BASE_FOLDER + TEMP_FOLDER //"/CosyDVR/temp/" 
+				+ currentfile + GPX_FILE_EXT);
 		mGpxFile.setWritable(true);
 		try {
 			mSrtWriter = new FileWriter(mSrtFile);
@@ -595,7 +599,7 @@ public class BackgroundVideoRecorder extends Service implements
 				currentfile = DateFormat.format("yyyy-MM-dd_kk-mm-ss",
 						new Date().getTime()).toString();
 				// if we write to file
-				mediaRecorder.setOutputFile(SD_CARD_PATH + "/CosyDVR/temp/"
+				mediaRecorder.setOutputFile(SD_CARD_PATH + BASE_FOLDER + TEMP_FOLDER //"/CosyDVR/temp/"
 						+ currentfile + VIDEO_FILE_EXT);
 				// if we stream
 				/*
@@ -645,7 +649,7 @@ public class BackgroundVideoRecorder extends Service implements
 	}
 
 	public void freeSpace() {
-		File dir = new File(SD_CARD_PATH + "/CosyDVR/temp/");
+		File dir = new File(SD_CARD_PATH + BASE_FOLDER + TEMP_FOLDER); //"/CosyDVR/temp/");
 		File[] filelist = dir.listFiles();
 		Arrays.sort(filelist, new Comparator<File>() {
 			public int compare(File f1, File f2) {
