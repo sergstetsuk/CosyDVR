@@ -1,4 +1,4 @@
-### v.1.3.9 (2015.06.12 18:40)
+### v.1.3.9 (2015.06.12 22:12)
 
   * Trying to fix KitKat SDcard issue. Now video is saved to [SDcard]/Android/data/es.esy.CosyDVR/fav or temp
   * Fixed preview orientation when there are no user defined preferences at all.

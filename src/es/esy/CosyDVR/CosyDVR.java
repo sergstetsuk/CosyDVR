@@ -80,10 +80,10 @@ public class CosyDVR extends Activity{
 
       setContentView(R.layout.main);
       
-      File tmpdir = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/");
-      File favdir = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/fav/");
-      tmpdir.mkdirs();
-      favdir.mkdirs();
+      //~ File tmpdir = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/");
+      //~ File favdir = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/fav/");
+      //~ tmpdir.mkdirs();
+      //~ favdir.mkdirs();
 
       favButton = (Button)findViewById(R.id.fav_button);
       recButton = (Button)findViewById(R.id.rec_button);
