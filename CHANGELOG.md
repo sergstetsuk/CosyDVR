@@ -1,3 +1,7 @@
+### v.1.3.10 (2015.06.15 09:15)
+  
+  * Added German interface thanks to Andy Dee <andi_d_@web.de>
+
 ### v.1.3.9 (2015.06.12 22:12)
 
   * Trying to fix KitKat SDcard issue. Now video is saved to [SDcard]/Android/data/es.esy.CosyDVR/fav or temp

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+        android:title="Einstellungen">
+        <PreferenceCategory
+        android:title="Einstellungen">
+                <CheckBoxPreference
+                android:key="autostart_recording"
+                android:title="Autostart-Aufnahme"
+                android:summary="Wählen für automatische Aufnahme bei Programmstart."
+                android:defaultValue="false"
+                android:enabled="true" />
+                <CheckBoxPreference
+                android:key="use_gps"
+                android:title="GPS verwenden"
+                android:summary="Position und Geschwindigkeit mit GPS ermitteln."
+                android:defaultValue="true"
+                android:enabled="true" />
+                <CheckBoxPreference
+                android:key="reverse_landscape"
+                android:title="Umgekehrte horizontale Ausrichtung"
+                android:summary="Wählen für umgedrehte horizontale Ausrichtung."
+                android:defaultValue="false"
+                android:enabled="true" />
+                <ListPreference
+                    android:key="sd_card_path"
+                    android:title="Externer Speicherpfad"
+                    android:summary="Externen Speicherpfad auswählen." />
+                <EditTextPreference
+                android:key="max_temp_folder_size"
+                android:title="Größe des temporären Ordners"
+                android:summary="Größe des temporären Ordners in Bytes angeben."
+                android:dialogTitle="Größe des temp-Ordners in Bytes"
+                android:numeric="integer"
+                android:defaultValue="10000000" />
+                <EditTextPreference
+                android:key="min_free_space"
+                android:title="Minimaler freier Restbereich"
+                android:summary="Größe des freizuhaltenden Bereichs in Bytes angeben."
+                android:dialogTitle="Minimaler freier Restbereich in Bytes"
+                android:numeric="integer"
+                android:defaultValue="1000000" />
+                <EditTextPreference
+                android:key="video_duration"
+                android:title="Split File Duration"
+                android:summary="Videodauer in Millisekunden angeben."
+                android:dialogTitle="Dauer eines Fragments in ms"
+                android:numeric="integer"
+                android:defaultValue="600000" />
+                <EditTextPreference
+                android:key="video_width"
+                android:title="Videobreite"
+                android:summary="Videobreite in Bildpixel angeben."
+                android:dialogTitle="Videobreite in px"
+                android:numeric="integer"
+                android:defaultValue="1280" />
+                <EditTextPreference
+                android:key="video_height"
+                android:title="Videohöhe"
+                android:summary="Videohöhe in Bildpixel angeben."
+                android:dialogTitle="Videohöhe in px"
+                android:numeric="integer"
+                android:defaultValue="720" />
+                <EditTextPreference
+                android:key="video_bitrate"
+                android:title="Videobitrate"
+                android:summary="Videobitrate in Bits pro Sekunde angeben."
+                android:dialogTitle="Videobitrate in bps"
+                android:numeric="integer"
+                android:defaultValue="5000000" />
+        </PreferenceCategory>
+        <PreferenceCategory
+        android:title="Hilfe">
+                <PreferenceScreen
+                android:key="screen_instructions"
+                android:title="Instruktionen"
+                android:summary="Drücken, um HIlfe anzuschauen.">
+                        <Preference
+                        android:key="instruction_fav"
+                        android:selectable="false"
+                        android:title="@string/fav"
+                        android:summary="Aufnahmen löschen verhindern:\n 0 - momentane wird später überschrieben.\n 1 - alle weiteren werden gesichert.\n 2 - momentane wird gesichert. fragment" />
+                        <Preference
+                        android:key="instruction_restart"
+                        android:selectable="false"
+                        android:title="@string/restart"
+                        android:summary="Videoaufnahme-Start oder -Neustart.\nLanges Drücken = EINSTELLUNGEN." />
+                        <Preference
+                        android:key="instruction_focus"
+                        android:selectable="false"
+                        android:title="@string/focus"
+                        android:summary="Focusmodi wechseln:\n I - unendlich, Weitbereich (Infinity).\n V - kontinuierlich, Video folgend.\n A - Autofocus-Auswahl.\n M - Macrofocus-Auswahl.\n E - EDF (Extended Depth of Field), Schärfentiefeerweiterung." />
+                        <Preference
+                        android:key="instruction_night"
+                        android:selectable="false"
+                        android:title="@string/night"
+                        android:summary="Tag- oder Nachtmodus wählen." />
+                        <Preference
+                        android:key="instruction_flash"
+                        android:selectable="false"
+                        android:title="@string/flash"
+                        android:summary="Abbiegen/Beseitigen Flash" />
+                        <Preference
+                        android:key="instruction_exit"
+                        android:selectable="false"
+                        android:title="@string/exit"
+                        android:summary="ENDE lange Drücken, um App zu beenden." />
+                        <Preference
+                        android:key="instruction_punch"
+                        android:selectable="false"
+                        android:title="PINCH-GESTE auf Bildschirm"
+                        android:summary="Zwei Finger zusammen, auseinander - hinein-, hinauszoomen." />
+                        <Preference
+                        android:key="instruction_tap"
+                        android:selectable="false"
+                        android:title="TAP-GESTE auf Bildschirm"
+                        android:summary="Focusmodi [A]uto und [M]acro manuell aufrufen." />
+                </PreferenceScreen>
+                <Preference
+                android:key="instruction_about"
+                android:selectable="false"
+                android:title="Über CosyDVR"
+                android:summary="Frieden für die Ukraine!\nWebsite: cosydvr.esy.es\neMail: serg_stetsuk@ukr.net\nLizenz: GPLv3" />
+        </PreferenceCategory>
+</PreferenceScreen>

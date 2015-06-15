@@ -95,6 +95,11 @@
                         android:title="@string/night"
                         android:summary="Day/Night mode" />
                         <Preference
+                        android:key="instruction_flash"
+                        android:selectable="false"
+                        android:title="@string/flash"
+                        android:summary="Turn On/Off Flash" />
+                        <Preference
                         android:key="instruction_exit"
                         android:selectable="false"
                         android:title="@string/exit"
@@ -108,7 +113,7 @@
                         android:key="instruction_tap"
                         android:selectable="false"
                         android:title="TAP ON SCREEN"
-                        android:summary="Manual refocus in A and M modes only" />
+                        android:summary="Manual refocus in [A]uto and [M]acro modes only" />
                 </PreferenceScreen>
                 <Preference
                 android:key="instruction_about"
