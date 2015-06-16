@@ -78,7 +78,7 @@
                         android:key="instruction_fav"
                         android:selectable="false"
                         android:title="@string/fav"
-                        android:summary="Prevent deleting\n 0 - may be deleted\n 1 - prevent all from deletion\n 2 - ptevent only current fragment" />
+                        android:summary="Prevent deleting\n 0 - may be deleted\n 1 - prevent all from deletion\n 2 - prevent only current fragment" />
                         <Preference
                         android:key="instruction_restart"
                         android:selectable="false"
