@@ -78,7 +78,7 @@
                         android:key="instruction_fav"
                         android:selectable="false"
                         android:title="@string/fav"
-                        android:summary="Controls deletion of fragments\n 0 - current fragment may be deleted\n 1 - prevent deletion of new fragments\n 2 - prevent current fragment from deletion" />
+                        android:summary="Controls deletion of fragments\n 0 - current fragment may be deleted\n 1 - prevent deletion of current and all subsequent fragments\n 2 - prevent current fragment from deletion" />
                         <Preference
                         android:key="instruction_restart"
                         android:selectable="false"

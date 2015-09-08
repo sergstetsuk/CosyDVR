@@ -68,7 +68,7 @@ public class BackgroundVideoRecorder extends Service implements
 	// public int AUDIO_SOURCE = CAMERA;
 	public String SD_CARD_PATH = Environment.getExternalStorageDirectory()
 			.getAbsolutePath();
-	//public String BASE_FOLDER = "/CosyDVR";
+	//~ public String BASE_FOLDER = "/CosyDVR";
 	public String BASE_FOLDER = "/Android/data/es.esy.CosyDVR/files"; //possible fix for KitKat
 	public String FAV_FOLDER = "/fav/";
 	public String TEMP_FOLDER = "/temp/";
