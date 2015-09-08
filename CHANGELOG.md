@@ -1,3 +1,7 @@
+### v.1.3.11 (2015.09.08 14:55)
+
+  * Some minor fixes in English Preferences texts. Thanks to snelltheta
+
 ### v.1.3.10 (2015.06.15 09:15)
   
   * Added German interface thanks to Andy Dee <andi_d_@web.de>
