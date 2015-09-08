@@ -6,7 +6,7 @@
 		<CheckBoxPreference 
 		android:key="autostart_recording"
 		android:title="Autostart Recording"
-		android:summary="Check for auto start recording"
+		android:summary="Starts recording once program is opened"
 		android:defaultValue="false"
 		android:enabled="true" />
         <CheckBoxPreference
@@ -72,23 +72,23 @@
         android:title="Help">
                 <PreferenceScreen
                 android:key="screen_instructions"
-                android:title="Instruction"
+                android:title="Instructions"
                 android:summary="Click to view help">
                         <Preference
                         android:key="instruction_fav"
                         android:selectable="false"
                         android:title="@string/fav"
-                        android:summary="Prevent deleting\n 0 - may be deleted\n 1 - prevent all from deletion\n 2 - prevent only current fragment" />
+                        android:summary="Controls deletion of fragments\n 0 - current fragment may be deleted\n 1 - prevent deletion of new fragments\n 2 - prevent current fragment from deletion" />
                         <Preference
                         android:key="instruction_restart"
                         android:selectable="false"
                         android:title="@string/restart"
-                        android:summary="Start/Restart video recording.\nLong click = PREFERENCES." />
+                        android:summary="Starts/Restarts video recording\nLong press = PREFERENCES." />
                         <Preference
                         android:key="instruction_focus"
                         android:selectable="false"
                         android:title="@string/focus"
-                        android:summary="Switch focus mode.\n I - infinity\n V - continuous video\n A - auto\n M - macro\n E - EDF" />
+                        android:summary="Switches focus mode.\n I - Infinity Focus\n V - continuous video\n A - Auto (manual focus)\n M - Macro (manual focus)\n E - Extended Depth of Field" />
                         <Preference
                         android:key="instruction_night"
                         android:selectable="false"
