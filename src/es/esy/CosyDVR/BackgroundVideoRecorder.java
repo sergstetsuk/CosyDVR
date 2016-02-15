@@ -22,8 +22,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.CamcorderProfile;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.media.AudioManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Environment;
 import android.text.format.DateFormat;
 import android.os.BatteryManager;
@@ -452,13 +454,12 @@ public class BackgroundVideoRecorder extends Service implements
 	}
 
 	public void RestartRecording() {
-		AudioManager manager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-		manager.setStreamSolo(AudioManager.STREAM_SYSTEM, true);
-		manager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
+		Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+		MediaPlayer mp = MediaPlayer.create(getApplicationContext(), notification);
+		mp.start();
 		StopRecording();
 		StartRecording();
-		manager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
-		manager.setStreamSolo(AudioManager.STREAM_SYSTEM, false);
+		mp.stop();
 	}
 
 	public void StartRecording() {
