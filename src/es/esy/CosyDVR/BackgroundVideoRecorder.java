@@ -455,8 +455,11 @@ public class BackgroundVideoRecorder extends Service implements
 		AudioManager manager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		manager.setStreamSolo(AudioManager.STREAM_SYSTEM, true);
 		manager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
+		int savedRingerMode = manager.getRingerMode();
+		manager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 		StopRecording();
 		StartRecording();
+		manager.setRingerMode(savedRingerModer);
 		manager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
 		manager.setStreamSolo(AudioManager.STREAM_SYSTEM, false);
 	}
