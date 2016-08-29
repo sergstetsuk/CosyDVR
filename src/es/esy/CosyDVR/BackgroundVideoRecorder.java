@@ -59,6 +59,8 @@ public class BackgroundVideoRecorder extends Service implements
 	public int MAX_VIDEO_DURATION = 600000;
 	public int VIDEO_WIDTH = 1280;// 1920;
 	public int VIDEO_HEIGHT = 720;// 1080;
+	public int VIDEO_FRAME_RATE = 30;
+	public int TIME_LAPSE_FACTOR = 1;
 	public int MAX_VIDEO_BIT_RATE = 5000000;
 	// public int MAX_VIDEO_BIT_RATE = 256000; //=for streaming;
 	public int REFRESH_TIME = 1000;
@@ -91,6 +93,7 @@ public class BackgroundVideoRecorder extends Service implements
 	private int focusmode = 0;
 	private int scenemode = 0;
 	private int flashmode = 0;
+	private int timelapsemode = 0;
 	private int zoomfactor = 0;
 	private String currentfile = null;
 
@@ -143,7 +146,7 @@ public class BackgroundVideoRecorder extends Service implements
 			String srt = new String();
 			String gpx = new String();
 			Date datetime = new Date();
-			long tick = mSrtBegin - mNewFileBegin; // relative srt text begin/
+			long tick = (mSrtBegin - mNewFileBegin)/TIME_LAPSE_FACTOR; // relative srt text begin/
 													// i.e. prev tick time
 			int hour = (int) (tick / (1000 * 60 * 60));
 			int min = (int) (tick % (1000 * 60 * 60) / (1000 * 60));
@@ -154,7 +157,7 @@ public class BackgroundVideoRecorder extends Service implements
 							mSrtCounter, hour, min, sec, mil);
 
 			mSrtBegin = SystemClock.elapsedRealtime();
-			tick = mSrtBegin - mNewFileBegin; // relative srt text end. i.e.
+			tick = (mSrtBegin - mNewFileBegin)/TIME_LAPSE_FACTOR; // relative srt text end. i.e.
 												// this tick time
 			hour = (int) (tick / (1000 * 60 * 60));
 			min = (int) (tick % (1000 * 60 * 60) / (1000 * 60));
@@ -247,6 +250,9 @@ public class BackgroundVideoRecorder extends Service implements
 				} else {
 					mSpeedView.setText("---");
 				}
+			}
+			if(TIME_LAPSE_FACTOR > 1){
+				mSpeedView.append("("+TIME_LAPSE_FACTOR+"x)");
 			}
 			if (sat < 3) {
 				mSpeedView.setTextColor(Color.parseColor("#A0A0A0")); // gray
@@ -471,6 +477,10 @@ public class BackgroundVideoRecorder extends Service implements
 				"1280"));
 		VIDEO_HEIGHT = Integer.parseInt(sharedPref.getString("video_height",
 				"720"));
+		VIDEO_FRAME_RATE = Integer.parseInt(sharedPref.getString("video_frame_rate",
+				"30"));
+		TIME_LAPSE_FACTOR = (timelapsemode==0) ? 1: Integer.parseInt(sharedPref.getString("time_lapse_factor",
+				"1"));
 		MAX_VIDEO_DURATION = Integer.parseInt(sharedPref.getString(
 				"video_duration", "600000"));
 		MAX_TEMP_FOLDER_SIZE = Integer.parseInt(sharedPref.getString(
@@ -544,7 +554,7 @@ public class BackgroundVideoRecorder extends Service implements
 				mHandler.obtainMessage(1).sendToTarget();
 			}
 		};
-		mTimer.scheduleAtFixedRate(mTimerTask, 0, REFRESH_TIME);
+		mTimer.scheduleAtFixedRate(mTimerTask, 0, REFRESH_TIME * TIME_LAPSE_FACTOR);
 	}
 
 	private void Stop() {
@@ -594,7 +604,8 @@ public class BackgroundVideoRecorder extends Service implements
 
 				mediaRecorder.setVideoEncodingBitRate(this.MAX_VIDEO_BIT_RATE);
 				mediaRecorder.setVideoSize(this.VIDEO_WIDTH, this.VIDEO_HEIGHT);// 640x480,800x480
-				mediaRecorder.setVideoFrameRate(30);
+				mediaRecorder.setVideoFrameRate(this.VIDEO_FRAME_RATE);
+				mediaRecorder.setCaptureRate(1.0 * this.VIDEO_FRAME_RATE / this.TIME_LAPSE_FACTOR);
 
 				currentfile = DateFormat.format("yyyy-MM-dd_kk-mm-ss",
 						new Date().getTime()).toString();
@@ -739,6 +750,13 @@ public class BackgroundVideoRecorder extends Service implements
 			} while (!parameters.getSupportedFlashModes().contains(
 					mFlashModes[flashmode])); // SKIP unsupported modes
 			applyCameraParameters();
+		}
+	}
+
+	public void toggleTimeLapse() {
+		if (camera != null) {
+			timelapsemode = (timelapsemode+1)%2;
+			RestartRecording();
 		}
 	}
 

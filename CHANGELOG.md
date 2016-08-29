@@ -1,3 +1,9 @@
+### v.1.3.12 (2016.08.29 15:53)
+
+  * Added experimental time lapse function (i.e. Capture Frame Rate is lower CompressTimeFactor times)
+	TimeLapseMode is activated on nightButton LongClick. Video is restarted. Subtitles and GPX are
+	collected at slower rate too. Thus one can use such mode while car is on the parking for long time.
+
 ### v.1.3.11 (2015.09.08 14:55)
 
   * Some minor fixes in English Preferences texts. Thanks to snelltheta

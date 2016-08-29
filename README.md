@@ -25,6 +25,7 @@ Features:
 - Custom SD_Card_Path option
 - Ukrainian, Russian, English, Italian, German interfaces
 - Show battery level when device is not charging
+- Time Compression (Time Lapse) function
 
 Supported devices:
 - Fly IQ451
@@ -63,7 +64,8 @@ Focus - switch between focus modes (visible only supported by device)
         
 FLASH - toggle flash on/off
 
-Night - toggle night mode on/off
+Night - toggle night mode on/off. On long click - Time Compression Function On/Off. It uses
+	Time Compression Factor from preferences.
 
 Exit - exit application (exit on long click for eliminate accidental press)
 
@@ -73,9 +75,34 @@ Tap on screen - autofocus in "a" and "m" modes
 
 Pinch screen - zoom in/out
 
+
+Build Intructions under linux
+---
+  * Install toolchain
+
+  `sudo apt-get install ant openjdk-8-jre openjdk-8-jdk`
+  
+  * Download and update SDK
+  
+  `wget http://dl.google.com/android/android-sdk_r24.4.1-linux.tgz`
+  `tar -zxf ./android-sdk_r24.4.1-linux.tgz`
+  `cd linux-sdk-tools`
+  `tools/android update sdk --no-ui`
+  
+  * create project for ant
+  
+  `~/android-sdk-linux/tools/android update project -p . -t android-21 -n CosyDVR -s`
+  
+  * compile created project
+  
+  `ant debug`
+  
+  More info: http://developer.android.com/sdk/index.html#Other 
+
 License:
 ---
         This program is Free Software: You can use, study share and improve it at your will. 
         Specifically you can redistribute and/or modify it under the terms of the 
         GNU General Public License as published by the Free Software Foundation, 
         either version 3 of the License, or (at your option) any later version.
+

@@ -100,6 +100,7 @@ public class CosyDVR extends Activity{
       flsButton.setOnClickListener(flsButtonOnClickListener);
       exiButton.setOnLongClickListener(exiButtonOnLongClickListener);
       recButton.setOnLongClickListener(recButtonOnLongClickListener);
+      nigButton.setOnLongClickListener(nigButtonOnLongClickListener);
 
       getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
       final ScaleGestureDetector mScaleDetector = new ScaleGestureDetector(this, new ScaleListener());
@@ -260,6 +261,16 @@ public boolean onLongClick(View v) {
       startActivity(myIntent);
 	  //mService.ChangeSurface(mWidth, mHeight);	//size will be returned with app focus
 	return true;
+}};
+
+Button.OnLongClickListener nigButtonOnLongClickListener
+= new Button.OnLongClickListener(){
+@Override
+public boolean onLongClick(View v) {
+	  if(mBound) {
+		  mService.toggleTimeLapse();
+	  }
+	  return true;
 }};
 
 Button.OnLongClickListener exiButtonOnLongClickListener

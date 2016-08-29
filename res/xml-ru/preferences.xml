@@ -60,6 +60,20 @@
 		android:dialogTitle="Высота видео в px"
         android:numeric="integer"  
         android:defaultValue="720" />
+	<EditTextPreference 
+	android:key="video_frame_rate"
+	android:title="Частота кадров видео"
+	android:summary="Укажите частоту кадров в fps"
+	android:dialogTitle="Частота кадров в fps"
+               android:numeric="integer"
+	android:defaultValue="30" />
+	<EditTextPreference 
+	android:key="time_lapse_factor"
+	android:title="Коэффициент сжатия времени"
+	android:summary="Замедляет частоту захвата кадров"
+	android:dialogTitle="Коэффициент сжатия времени"
+	android:numeric="integer"
+	android:defaultValue="1" />
         <EditTextPreference 
         android:key="video_bitrate"
         android:title="Скорость видеопотока"
@@ -93,7 +107,7 @@
                         android:key="instruction_night"
                         android:selectable="false"
                         android:title="@string/night"
-                        android:summary="Дневной/Ночной режимы" />
+                        android:summary="Дневной/Ночной режимы.\nДлинное нажатие = Функция сжатия времени в соответствии с настройками коэффициента сжатия." />
                         <Preference
                         android:key="instruction_flash"
                         android:selectable="false"

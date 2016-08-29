@@ -60,6 +60,20 @@
 		android:dialogTitle="Altezza video in pixel"
 		android:numeric="integer"
 		android:defaultValue="720" />
+		<EditTextPreference 
+		android:key="video_frame_rate"
+		android:title="Video Frame Rate"
+		android:summary="Enter video frame rate fps"
+		android:dialogTitle="Video Frame Rate in fps"
+                android:numeric="integer"
+		android:defaultValue="30" />
+		<EditTextPreference 
+		android:key="time_lapse_factor"
+		android:title="Compress Time Factor"
+		android:summary="Slower down capture frame rate"
+		android:dialogTitle="Compress Time Factor"
+                android:numeric="integer"
+		android:defaultValue="1" />
 		<EditTextPreference
 		android:key="video_bitrate"
 		android:title="Bitrate video"
@@ -93,7 +107,7 @@
                         android:key="instruction_night"
                         android:selectable="false"
                         android:title="@string/night"
-                        android:summary="Modalità giorno/notte" />
+                        android:summary="Modalità giorno/notte.\nLong press = Time Compression Function works according to preferences TimeLapseFactor value." />
                         <Preference
                         android:key="instruction_exit"
                         android:selectable="false"

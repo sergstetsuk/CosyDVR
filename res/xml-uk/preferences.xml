@@ -49,17 +49,31 @@
                 <EditTextPreference 
                 android:key="video_width"
                 android:title="Ширина відео"
-                android:summary="Вкажіть ширину відео в px"
-                android:dialogTitle="Ширина відео в px"
+                android:summary="Вкажіть ширину відео у px"
+                android:dialogTitle="Ширина відео у px"
                 android:numeric="integer"  
                 android:defaultValue="1280" />
                 <EditTextPreference 
                 android:key="video_height"
                 android:title="Висота відео"
-                android:summary="Вкажіть висоту відео в px"
-                android:dialogTitle="Висота відео в px"
+                android:summary="Вкажіть висоту відео у px"
+                android:dialogTitle="Висота відео у px"
                 android:numeric="integer"  
                 android:defaultValue="720" />
+		<EditTextPreference 
+		android:key="video_frame_rate"
+		android:title="Частота кадрів відео"
+		android:summary="Вкажіть частоту кадрів за секунду"
+		android:dialogTitle="Частота кадрів у fps"
+                android:numeric="integer"
+		android:defaultValue="30" />
+		<EditTextPreference 
+		android:key="time_lapse_factor"
+		android:title="Коефіцієнт стиснення часу"
+		android:summary="Сповільнює частоту захоплення відео"
+		android:dialogTitle="Коефіцієнт стиснення часу"
+		android:numeric="integer"
+		android:defaultValue="1" />
                 <EditTextPreference 
                 android:key="video_bitrate"
                 android:title="Швидкість відеопотоку"
@@ -93,7 +107,7 @@
                         android:key="instruction_night"
                         android:selectable="false"
                         android:title="@string/night"
-                        android:summary="Денний/Нічний режими" />
+                        android:summary="Денний/Нічний режими.\nДовгий клік = Функція стиснення часу згідно налаштувань коефіцієнту стиснення." />
                         <Preference
                         android:key="instruction_flash"
                         android:selectable="false"
