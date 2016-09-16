@@ -605,8 +605,9 @@ public class BackgroundVideoRecorder extends Service implements
 				mediaRecorder.setVideoEncodingBitRate(this.MAX_VIDEO_BIT_RATE);
 				mediaRecorder.setVideoSize(this.VIDEO_WIDTH, this.VIDEO_HEIGHT);// 640x480,800x480
 				mediaRecorder.setVideoFrameRate(this.VIDEO_FRAME_RATE);
-				mediaRecorder.setCaptureRate(1.0 * this.VIDEO_FRAME_RATE / this.TIME_LAPSE_FACTOR);
-
+				if(this.TIME_LAPSE_FACTOR > 1) {
+					mediaRecorder.setCaptureRate(1.0 * this.VIDEO_FRAME_RATE / this.TIME_LAPSE_FACTOR);
+				}
 				currentfile = DateFormat.format("yyyy-MM-dd_kk-mm-ss",
 						new Date().getTime()).toString();
 				// if we write to file
