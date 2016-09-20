@@ -1,3 +1,7 @@
+### v.1.3.12 (2016.09.20 11:20)
+
+  * Fixed audiostream for normal video. Returned build.xml, project.properties etc for f-droid build system.y
+
 ### v.1.3.12 (2016.08.29 15:53)
 
   * Added experimental time lapse function (i.e. Capture Frame Rate is lower CompressTimeFactor times)

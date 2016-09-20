@@ -19,6 +19,6 @@ local.properties
 .classpath
 .project
 
-build.xml
-proguard-project.txt
-project.properties
+#build.xml
+#proguard-project.txt
+#project.properties
