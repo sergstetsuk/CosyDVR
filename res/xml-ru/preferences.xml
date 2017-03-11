@@ -28,13 +28,13 @@
         <EditTextPreference 
         android:key="max_temp_folder_size"
         android:title="Размер временного каталога"
-        android:summary="Укажите допустимый суммарный розмер файлов во временном каталоге"
+        android:summary="Укажите допустимый суммарный размер файлов во временном каталоге"
 		android:dialogTitle="Размер временного каталога в байтах"
         android:numeric="integer"  
         android:defaultValue="10000000" />
         <EditTextPreference 
         android:key="min_free_space"
-        android:title="Розмер свободного места"
+        android:title="Размер свободного места"
         android:summary="Укажите минимальный размер свободного места на карте памяти"
 		android:dialogTitle="Размер свободного места в байтах"
         android:numeric="integer"  
@@ -102,7 +102,7 @@
                         android:key="instruction_focus"
                         android:selectable="false"
                         android:title="@string/focus"
-                        android:summary="Изменение режима фокусування.\n I - бесконечность\n V - следящая фокусировка\n A - авто\n M - макро\n E - EDF" />
+                        android:summary="Изменение режима фокусирования.\n I - бесконечность\n V - следящая фокусировка\n A - авто\n M - макро\n E - EDF" />
                         <Preference
                         android:key="instruction_night"
                         android:selectable="false"
