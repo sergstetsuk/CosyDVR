@@ -1,4 +1,8 @@
-### v.1.3.12 (2016.09.20 11:20)
+### v.1.3.14 (2017.03.13 12:51)
+
+  * Fixed russian translation. Thanks to Alexey Vazhnov (https://github.com/vazhnov)
+
+### v.1.3.13 (2016.09.20 11:20)
 
   * Fixed audiostream for normal video. Returned build.xml, project.properties etc for f-droid build system.y
 
