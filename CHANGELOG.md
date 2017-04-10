@@ -1,3 +1,7 @@
+### v.1.3.15 (2017.04.10 20:39)
+
+  * Added japanese translation. Thanks to naofum <naofum@gmail.com> (https://github.com/naofum)
+
 ### v.1.3.14 (2017.03.13 12:51)
 
   * Fixed russian translation. Thanks to Alexey Vazhnov (https://github.com/vazhnov)
@@ -17,7 +21,7 @@
   * Some minor fixes in English Preferences texts. Thanks to snelltheta
 
 ### v.1.3.10 (2015.06.15 09:15)
-  
+
   * Added German interface thanks to Andy Dee <andi_d_@web.de>
 
 ### v.1.3.9 (2015.06.12 22:12)
@@ -50,7 +54,7 @@
 ### v.1.3.3 ()
 
   * Fixed russian translation in order to implement Dmitry Lahoda patch.
-  
+
 ### v.1.3.2 (2014.11.20 18:20)
 
   * Added preference to disable GPS usage
