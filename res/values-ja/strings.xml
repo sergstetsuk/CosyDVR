@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CosyDVR</string>
+    <string name="fav">FAV</string>
+    <string name="restart">ﾘｽﾀｰﾄ</string>
+    <string name="focus">ﾌｫｰｶｽ</string>
+    <string name="flash">ﾌﾗｯｼｭ</string>
+    <string name="night">夜間</string>
+    <string name="exit">終了</string>
+    <string name="gps_off">GPS ｵﾌ</string>
+</resources>
