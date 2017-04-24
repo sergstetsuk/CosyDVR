@@ -188,7 +188,13 @@ public class CosyDVR extends Activity{
 
   public void updateinterface(){
 	  if(mBound) {
-		  favButton.setText(getString(R.string.fav) + " [" + mService.isFavorite() + "]");	    
+		favButton.setText(getString(R.string.fav) + " [" + mService.isFavorite() + "]");
+		if(mService.isRecording()) {
+			recButton.setText(getString(R.string.restart));
+		} else {
+			recButton.setText(getString(R.string.start));
+		}
+
 	  }
 	}
   

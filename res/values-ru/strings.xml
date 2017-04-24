@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">CosyDVR</string>
     <string name="fav">СОХР</string>
+    <string name="start">СТАРТ</string>
     <string name="restart">РЕСТАРТ</string>
     <string name="focus">ФОКУС</string>
     <string name="flash">ВСПЫШ</string>

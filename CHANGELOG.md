@@ -1,3 +1,7 @@
+### v.1.3.16 (2017.04.24 12:55)
+
+  * Start/Restart button proper display with autostart off.
+
 ### v.1.3.15 (2017.04.10 20:39)
 
   * Added japanese translation. Thanks to naofum <naofum@gmail.com> (https://github.com/naofum)

@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">CosyDVR</string>
     <string name="fav">FAV</string>
+    <string name="start">打ち上げ</string>
     <string name="restart">ﾘｽﾀｰﾄ</string>
     <string name="focus">ﾌｫｰｶｽ</string>
     <string name="flash">ﾌﾗｯｼｭ</string>

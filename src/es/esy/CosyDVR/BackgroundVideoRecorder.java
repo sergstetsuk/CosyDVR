@@ -448,15 +448,18 @@ public class BackgroundVideoRecorder extends Service implements
 				tmpfile.renameTo(favfile);
 				if (isfavorite == 2) {
 					isfavorite = 0;
-					Intent intent = new Intent();
-					intent.setAction("es.esy.CosyDVR.updateinterface");
-					sendBroadcast(intent); 
 				}
 			}
 			isrecording = false;
 		}
 	}
 
+	public void UpdateLayoutInterface() {
+		Intent intent = new Intent();
+		intent.setAction("es.esy.CosyDVR.updateinterface");
+		sendBroadcast(intent); 
+	}
+	
 	public void RestartRecording() {
 		AudioManager manager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		manager.setStreamSolo(AudioManager.STREAM_SYSTEM, true);
@@ -555,6 +558,7 @@ public class BackgroundVideoRecorder extends Service implements
 			}
 		};
 		mTimer.scheduleAtFixedRate(mTimerTask, 0, REFRESH_TIME * TIME_LAPSE_FACTOR);
+		UpdateLayoutInterface();
 	}
 
 	private void Stop() {

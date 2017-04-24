@@ -97,6 +97,14 @@ Build Intructions under linux
   
   `ant debug`
   
+  * install compiled debug version of project
+  
+  `ant installd`
+  
+  * check available devices with adb
+  
+  `adb devices`
+  
   More info: http://developer.android.com/sdk/index.html#Other 
 
 License:
