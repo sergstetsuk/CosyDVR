@@ -1,10 +1,17 @@
 package es.esy.CosyDVR;
 
 import android.os.Bundle;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.preference.Preference;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import es.esy.CosyDVR.StorageUtils;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class CosyDVRPreferenceActivity extends PreferenceActivity
 {
@@ -16,6 +23,7 @@ public class CosyDVRPreferenceActivity extends PreferenceActivity
     }
 
     public static class MyPreferenceFragment extends PreferenceFragment
+        implements OnSharedPreferenceChangeListener
     {
         @Override
         public void onCreate(final Bundle savedInstanceState)
@@ -31,9 +39,22 @@ public class CosyDVRPreferenceActivity extends PreferenceActivity
             }
             LP.setEntries(entries);
             LP.setEntryValues(entryValues);
-            
+            SharedPreferences sharedPref = getPreferenceManager().getSharedPreferences();
+            sharedPref.registerOnSharedPreferenceChangeListener(this);
+            Map<String,?> keys = sharedPref.getAll();
+            for(Map.Entry<String,?> entry : keys.entrySet()){
+                onSharedPreferenceChanged(sharedPref,entry.getKey());
+            } 
+        }
 
-            
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+            String key) {
+            Preference pref = findPreference(key);
+            if (pref instanceof EditTextPreference 
+                || pref instanceof ListPreference ) {
+                String prefixStr = sharedPreferences.getString(key, "");
+                pref.setSummary(prefixStr);
+            }
         }
     }
 }

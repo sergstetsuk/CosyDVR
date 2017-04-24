@@ -6,78 +6,70 @@
 		<CheckBoxPreference 
 		android:key="autostart_recording"
 		android:title="Autostart Recording"
-		android:summary="Starts recording once program is opened"
+		android:summary="Automatically start recording upon program launch"
 		android:defaultValue="false"
 		android:enabled="true" />
         <CheckBoxPreference
         android:key="use_gps"
         android:title="Use GPS"
-        android:summary="Determine position and speed with GPS"
+        android:summary="Determine position and speed via GPS"
         android:defaultValue="true"
         android:enabled="true" />
         <CheckBoxPreference
         android:key="reverse_landscape"
         android:title="Reverse Landscape Orientation"
-        android:summary="Check for reverse Landscape Orientation"
+        android:summary="Use camera reverse landscape orientation"
         android:defaultValue="false"
         android:enabled="true" />
 		<ListPreference
 		    android:key="sd_card_path"
 		    android:title="External Storage Path"
-		    android:summary="Choose external storage path" />
+                    android:summary="Default storage" />
 		<EditTextPreference 
 		android:key="max_temp_folder_size"
 		android:title="Temp Folder Size"
-		android:summary="Enter temp folder size in bytes"
 		android:dialogTitle="Temp folder size in bytes"
 		android:numeric="integer"  
 		android:defaultValue="10000000" />
 		<EditTextPreference 
 		android:key="min_free_space"
 		android:title="Min Free Space"
-		android:summary="Enter minimum free space in bytes"
 		android:dialogTitle="Min free space in bytes"
 		android:numeric="integer"  
 		android:defaultValue="1000000" />
 		<EditTextPreference 
 		android:key="video_duration"
 		android:title="Split File Duration"
-		android:summary="Enter video file duration in ms"
 		android:dialogTitle="Duration of one fragment in ms"
 		android:numeric="integer"  
 		android:defaultValue="600000" />
 		<EditTextPreference 
 		android:key="video_width"
 		android:title="Video Width"
-		android:summary="Enter video width in px"
 		android:dialogTitle="Video width in px"
 		android:numeric="integer"  
 		android:defaultValue="1280" />
 		<EditTextPreference 
 		android:key="video_height"
 		android:title="Video Height"
-		android:summary="Enter video height in px"
 		android:dialogTitle="Video height in px"
 		android:numeric="integer"  
 		android:defaultValue="720" />
 		<EditTextPreference 
 		android:key="video_frame_rate"
 		android:title="Video Frame Rate"
-		android:summary="Enter video frame rate fps"
 		android:dialogTitle="Video Frame Rate in fps"
                 android:numeric="integer"
 		android:defaultValue="30" />
 		<EditTextPreference 
 		android:key="time_lapse_factor"
 		android:title="Compress Time Factor"
-		android:summary="Slower down capture frame rate"
-		android:dialogTitle="Compress Time Factor"
+		android:dialogTitle="Compress Time Factor (times)"
                 android:numeric="integer"
-		android:defaultValue="1" />
+		android:defaultValue="6" />
 		<EditTextPreference 
 		android:key="video_bitrate"
 		android:title="Video Bitrate"
-		android:summary="Enter video bitrate in bps"
 		android:dialogTitle="Video bitrate in bps"
 		android:numeric="integer"  
 		android:defaultValue="5000000" />

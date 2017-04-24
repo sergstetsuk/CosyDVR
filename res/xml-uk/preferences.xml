@@ -7,77 +7,66 @@
                 android:key="autostart_recording"
                 android:title="Автостарт запису"
                 android:summary="Починати запис відео при запуску програми"
-                android:defaultValue="false"
-                android:enabled="true" />
+                android:defaultValue="false" />
                 <CheckBoxPreference
                 android:key="use_gps"
                 android:title="Використовувати GPS"
                 android:summary="Визначати позицію і швидкість по GPS"
-                android:defaultValue="true"
-                android:enabled="true" />
+                android:defaultValue="true" />
                 <CheckBoxPreference
                 android:key="reverse_landscape"
                 android:title="Перевернуте альбомне положення"
-                android:summary="Перевернути альбомне відображення"
-                android:defaultValue="false"
-                android:enabled="true" />
+                android:summary="Перевернути альбомне відображення відео"
+                android:defaultValue="false" />
                 <ListPreference
                     android:key="sd_card_path"
                     android:title="Шлях до SD карти"
-                    android:summary="Виберіть шлях до карти пам'яті" />
+                    android:summary="Типове сховище" />
                 <EditTextPreference 
                 android:key="max_temp_folder_size"
                 android:title="Розмір тимчасового каталогу"
-                android:summary="Вкажіть допустимий сумарний розмір файлів в тимчасовому каталозі"
                 android:dialogTitle="Розмір тимчасового каталогу в байтах"
                 android:numeric="integer"
                 android:defaultValue="10000000" />
                 <EditTextPreference 
                 android:key="min_free_space"
                 android:title="Розмір вільного місця"
-                android:summary="Вкажіть мінімальний розмір вільного місця на карті"
                 android:dialogTitle="Розмір вільного місця в байтах"
                 android:numeric="integer"  
                 android:defaultValue="1000000" />
                 <EditTextPreference 
                 android:key="video_duration"
                 android:title="Тривалість відеофрагмента"
-                android:summary="Вкажіть тривалість відеофрагмента в мс"
                 android:dialogTitle="Тривалість відеофрагмента в мс"
                 android:numeric="integer"  
                 android:defaultValue="600000" />
                 <EditTextPreference 
                 android:key="video_width"
                 android:title="Ширина відео"
-                android:summary="Вкажіть ширину відео у px"
                 android:dialogTitle="Ширина відео у px"
                 android:numeric="integer"  
                 android:defaultValue="1280" />
                 <EditTextPreference 
                 android:key="video_height"
                 android:title="Висота відео"
-                android:summary="Вкажіть висоту відео у px"
                 android:dialogTitle="Висота відео у px"
                 android:numeric="integer"  
                 android:defaultValue="720" />
 		<EditTextPreference 
 		android:key="video_frame_rate"
 		android:title="Частота кадрів відео"
-		android:summary="Вкажіть частоту кадрів за секунду"
 		android:dialogTitle="Частота кадрів у fps"
                 android:numeric="integer"
 		android:defaultValue="30" />
 		<EditTextPreference 
 		android:key="time_lapse_factor"
 		android:title="Коефіцієнт стиснення часу"
-		android:summary="Сповільнює частоту захоплення відео"
-		android:dialogTitle="Коефіцієнт стиснення часу"
+		android:dialogTitle="Коефіцієнт стиснення часу (рази)"
 		android:numeric="integer"
-		android:defaultValue="1" />
+		android:defaultValue="6" />
                 <EditTextPreference 
                 android:key="video_bitrate"
                 android:title="Швидкість відеопотоку"
-                android:summary="Вкажіть швидкість відеопотоку в bps"
                 android:dialogTitle="Швидкість відеопотоку в bps"
                 android:numeric="integer"  
                 android:defaultValue="5000000" />

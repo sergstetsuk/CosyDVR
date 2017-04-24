@@ -101,6 +101,10 @@ Build Intructions under linux
   
   `ant installd`
   
+  * debug with adb logcat
+
+  `adb logcat | grep CosyDVR > logcat.txt`
+
   * check available devices with adb
   
   `adb devices`

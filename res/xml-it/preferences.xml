@@ -24,60 +24,52 @@
 		<ListPreference
 		    android:key="sd_card_path"
 		    android:title="Percorso archivio esterno"
-		    android:summary="Seleziona un percorso esterno di salvataggio" />
+		    android:summary="Predefinito" />
 		<EditTextPreference
 		android:key="max_temp_folder_size"
 		android:title="Dimensione cartella temporanea"
-		android:summary="Imposta la dimensione in byte della cartella temporanea"
 		android:dialogTitle="Dimensione in byte della cartella temporanea"
 		android:numeric="integer"
 		android:defaultValue="10000000" />
 		<EditTextPreference
 		android:key="min_free_space"
 		android:title="Minimo spazio libero"
-		android:summary="Imposta il minimo spazio libero in byte"
 		android:dialogTitle="Il minimo spazio libero in byte"
 		android:numeric="integer"
 		android:defaultValue="1000000" />
 		<EditTextPreference
 		android:key="video_duration"
 		android:title="Durata video"
-		android:summary="Imposta la durata del video in millisecondi"
 		android:dialogTitle="Durata del video di millisecondi"
 		android:numeric="integer"
 		android:defaultValue="600000" />
 		<EditTextPreference
 		android:key="video_width"
 		android:title="Larghezza video"
-		android:summary="Imposta la larghezza del video in pixel"
 		android:dialogTitle="Larghezza video in pixel"
 		android:numeric="integer"
 		android:defaultValue="1280" />
 		<EditTextPreference
 		android:key="video_height"
 		android:title="Altezza video"
-		android:summary="Imposta la altezza del video in pixel"
 		android:dialogTitle="Altezza video in pixel"
 		android:numeric="integer"
 		android:defaultValue="720" />
 		<EditTextPreference 
 		android:key="video_frame_rate"
 		android:title="Video Frame Rate"
-		android:summary="Enter video frame rate fps"
 		android:dialogTitle="Video Frame Rate in fps"
                 android:numeric="integer"
 		android:defaultValue="30" />
 		<EditTextPreference 
 		android:key="time_lapse_factor"
-		android:title="Compress Time Factor"
-		android:summary="Slower down capture frame rate"
-		android:dialogTitle="Compress Time Factor"
+		android:title="Fattore di tempo compresso"
+		android:dialogTitle="Fattore di tempo compresso (volte)"
                 android:numeric="integer"
-		android:defaultValue="1" />
+		android:defaultValue="6" />
 		<EditTextPreference
 		android:key="video_bitrate"
 		android:title="Bitrate video"
-		android:summary="Imposta il bitrate in bps"
 		android:dialogTitle="Bitrate video in bps"
 		android:numeric="integer"
 		android:defaultValue="5000000" />

@@ -24,60 +24,52 @@
 		<ListPreference
 		    android:key="sd_card_path"
 		    android:title="外部ストレージのパス"
-		    android:summary="外部ストレージのパスを選択します" />
+		    android:summary="デフォルト" />
 		<EditTextPreference 
 		android:key="max_temp_folder_size"
 		android:title="一時フォルダーサイズ"
-		android:summary="一時フォルダーのサイズを入力します (バイト)"
 		android:dialogTitle="一時フォルダーサイズ (バイト)"
 		android:numeric="integer"  
 		android:defaultValue="10000000" />
 		<EditTextPreference 
 		android:key="min_free_space"
 		android:title="最小空き容量"
-		android:summary="最小の空き容量を入力します (バイト)"
 		android:dialogTitle="最小空き容量 (バイト)"
 		android:numeric="integer"  
 		android:defaultValue="1000000" />
 		<EditTextPreference 
 		android:key="video_duration"
 		android:title="ファイル分割時間"
-		android:summary="ビデオファイルの時間を入力します (ミリ秒)"
 		android:dialogTitle="1 フラグメントの時間 (ミリ秒)"
 		android:numeric="integer"  
 		android:defaultValue="600000" />
 		<EditTextPreference 
 		android:key="video_width"
 		android:title="ビデオの幅"
-		android:summary="ビデオの幅を入力します (ピクセル)"
 		android:dialogTitle="ビデオの幅 (ピクセル)"
 		android:numeric="integer"  
 		android:defaultValue="1280" />
 		<EditTextPreference 
 		android:key="video_height"
 		android:title="ビデオの高さ"
-		android:summary="ビデオの高さを入力します (ピクセル)"
 		android:dialogTitle="ビデオの高さ (ピクセル)"
 		android:numeric="integer"  
 		android:defaultValue="720" />
 		<EditTextPreference 
 		android:key="video_frame_rate"
 		android:title="ビデオのフレームレート"
-		android:summary="ビデオのフレームレートを入力します (fps)"
 		android:dialogTitle="ビデオのフレームレート (fps)"
                 android:numeric="integer"
 		android:defaultValue="30" />
 		<EditTextPreference 
 		android:key="time_lapse_factor"
 		android:title="圧縮時間係数"
-		android:summary="キャプチャフレームレートを下げます"
 		android:dialogTitle="圧縮時間係数"
                 android:numeric="integer"
-		android:defaultValue="1" />
+		android:defaultValue="6" />
 		<EditTextPreference 
 		android:key="video_bitrate"
 		android:title="ビデオのビットレート"
-		android:summary="ビデオのビットレートを入力します (bps)"
 		android:dialogTitle="ビデオのビットレート (bps)"
 		android:numeric="integer"  
 		android:defaultValue="5000000" />

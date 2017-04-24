@@ -18,67 +18,59 @@
         <CheckBoxPreference
         android:key="reverse_landscape"
         android:title="Перевернутое альбомное положение"
-        android:summary="Включить переворачивание"
+        android:summary="Развернуть изображение на 180 градусов"
         android:defaultValue="false"
         android:enabled="true" />
         <ListPreference
             android:key="sd_card_path"
             android:title="Путь к SD карте"
-            android:summary="Укажите путь к карте памяти" />
+            android:summary="По умолчанию" />
         <EditTextPreference 
         android:key="max_temp_folder_size"
         android:title="Размер временного каталога"
-        android:summary="Укажите допустимый суммарный размер файлов во временном каталоге"
-		android:dialogTitle="Размер временного каталога в байтах"
+	android:dialogTitle="Размер временного каталога в байтах"
         android:numeric="integer"  
         android:defaultValue="10000000" />
         <EditTextPreference 
         android:key="min_free_space"
         android:title="Размер свободного места"
-        android:summary="Укажите минимальный размер свободного места на карте памяти"
-		android:dialogTitle="Размер свободного места в байтах"
+	android:dialogTitle="Размер свободного места в байтах"
         android:numeric="integer"  
         android:defaultValue="1000000" />
         <EditTextPreference 
         android:key="video_duration"
         android:title="Продолжительность видеофрагмента"
-        android:summary="Укажите продолжительность видеофрагмента в мс"
-		android:dialogTitle="Продолжительность видеофрагмента в мс"
+	android:dialogTitle="Продолжительность видеофрагмента в мс"
         android:numeric="integer"  
         android:defaultValue="600000" />
         <EditTextPreference 
         android:key="video_width"
         android:title="Ширина видео"
-        android:summary="Укажите ширину видео в px"
-		android:dialogTitle="Ширина видео в px"
+	android:dialogTitle="Ширина видео в px"
         android:numeric="integer"  
         android:defaultValue="1280" />
         <EditTextPreference 
         android:key="video_height"
         android:title="Высота видео"
-        android:summary="Укажите высоту видео в px"
-		android:dialogTitle="Высота видео в px"
+	android:dialogTitle="Высота видео в px"
         android:numeric="integer"  
         android:defaultValue="720" />
 	<EditTextPreference 
 	android:key="video_frame_rate"
 	android:title="Частота кадров видео"
-	android:summary="Укажите частоту кадров в fps"
-	android:dialogTitle="Частота кадров в fps"
-               android:numeric="integer"
+	android:dialogTitle="Частота кадров в секунду"
+        android:numeric="integer"
 	android:defaultValue="30" />
 	<EditTextPreference 
 	android:key="time_lapse_factor"
 	android:title="Коэффициент сжатия времени"
-	android:summary="Замедляет частоту захвата кадров"
-	android:dialogTitle="Коэффициент сжатия времени"
+	android:dialogTitle="Коэффициент сжатия времени (раз)"
 	android:numeric="integer"
-	android:defaultValue="1" />
+	android:defaultValue="6" />
         <EditTextPreference 
         android:key="video_bitrate"
         android:title="Скорость видеопотока"
-        android:summary="Укажите скорость видеопотока в bps"
-		android:dialogTitle="Скорость видеопотока в bps"
+	android:dialogTitle="Скорость видеопотока в bps"
         android:numeric="integer"  
         android:defaultValue="5000000" />
         </PreferenceCategory>
