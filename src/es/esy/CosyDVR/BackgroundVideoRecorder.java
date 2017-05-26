@@ -486,9 +486,9 @@ public class BackgroundVideoRecorder extends Service implements
 				"1"));
 		MAX_VIDEO_DURATION = Integer.parseInt(sharedPref.getString(
 				"video_duration", "600000"));
-		MAX_TEMP_FOLDER_SIZE = Integer.parseInt(sharedPref.getString(
+		MAX_TEMP_FOLDER_SIZE = Long.parseLong(sharedPref.getString(
 				"max_temp_folder_size", "600000"));
-		MIN_FREE_SPACE = Integer.parseInt(sharedPref.getString(
+		MIN_FREE_SPACE = Long.parseLong(sharedPref.getString(
 				"min_free_space", "600000"));
 		SD_CARD_PATH = sharedPref.getString("sd_card_path", Environment
 				.getExternalStorageDirectory().getAbsolutePath());

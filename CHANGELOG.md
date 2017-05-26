@@ -1,3 +1,7 @@
+### v.1.3.17 (2017.05.26 12:44)
+
+  * MIN_FREE_SPACE MAX_TEMP_SIZE are now parsed as truly long
+
 ### v.1.3.16 (2017.04.24 12:55)
 
   * Start/Restart button proper display with autostart off.
