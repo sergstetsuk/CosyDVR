@@ -93,18 +93,24 @@ public class StorageUtils {
             }
             if (Build.VERSION.SDK_INT >= 21) {
                 File[] mediadirs = context.getExternalMediaDirs();
-                for (int i = 0; i < mediadirs.length; i++) {
-                    list.add(0, new StorageInfo(mediadirs[i].getAbsolutePath(), 
-                            !Environment.isExternalStorageRemovable(mediadirs[i]), 
-                            Environment.getExternalStorageState(mediadirs[i]) == Environment.MEDIA_MOUNTED_READ_ONLY , -1));
+                if (mediadirs != null) {
+                    for (int i = 0; i < mediadirs.length; i++) {
+                        if (mediadirs[i] == null) continue;
+                        list.add(0, new StorageInfo(mediadirs[i].getAbsolutePath(), 
+                                !Environment.isExternalStorageRemovable(mediadirs[i]), 
+                                Environment.getExternalStorageState(mediadirs[i]) == Environment.MEDIA_MOUNTED_READ_ONLY , -1));
+                    }
                 }
             }
             if (Build.VERSION.SDK_INT >= 19) {
                 File[] filesdirs = context.getExternalFilesDirs("");
-                for (int i = 0; i < filesdirs.length; i++) {
-                    list.add(0, new StorageInfo(filesdirs[i].getAbsolutePath(), 
-                            !Environment.isExternalStorageRemovable(filesdirs[i]), 
-                            Environment.getExternalStorageState(filesdirs[i]) == Environment.MEDIA_MOUNTED_READ_ONLY, -1));
+                if (filesdirs != null) {
+                    for (int i = 0; i < filesdirs.length; i++) {
+                        if (filesdirs[i] == null) continue;
+                        list.add(0, new StorageInfo(filesdirs[i].getAbsolutePath(), 
+                                !Environment.isExternalStorageRemovable(filesdirs[i]), 
+                                Environment.getExternalStorageState(filesdirs[i]) == Environment.MEDIA_MOUNTED_READ_ONLY, -1));
+                    }
                 }
             }
 
