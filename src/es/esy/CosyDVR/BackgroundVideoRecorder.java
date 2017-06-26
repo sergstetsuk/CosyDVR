@@ -26,6 +26,7 @@ import android.media.MediaRecorder;
 import android.media.AudioManager;
 import android.os.Environment;
 import android.text.format.DateFormat;
+import android.os.Build;
 import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.IBinder;
@@ -68,10 +69,10 @@ public class BackgroundVideoRecorder extends Service implements
 	public String SRT_FILE_EXT = ".srt";
 	public String GPX_FILE_EXT = ".gpx";
 	// public int AUDIO_SOURCE = CAMERA;
-	public String SD_CARD_PATH = Environment.getExternalStorageDirectory()
-			.getAbsolutePath();
-	//~ public String BASE_FOLDER = "/CosyDVR";
-	public String BASE_FOLDER = "/Android/data/es.esy.CosyDVR/files"; //possible fix for KitKat
+	public String SD_CARD_PATH = "";//(getExternalMediaDirs())[0].getAbsolutePath();//Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
+//			.getAbsolutePath();
+	public String BASE_FOLDER = "";///CosyDVR";
+	//~ public String BASE_FOLDER = "/Android/data/es.esy.CosyDVR/files"; //possible fix for KitKat
 	public String FAV_FOLDER = "/fav/";
 	public String TEMP_FOLDER = "/temp/";
 /*for KitKat we can use something like:
@@ -305,8 +306,8 @@ public class BackgroundVideoRecorder extends Service implements
 		 * "600000")); MIN_FREE_SPACE =
 		 * Integer.parseInt(sharedPref.getString("min_free_space", "600000"));
 		 */
-		SD_CARD_PATH = sharedPref.getString("sd_card_path", Environment
-				.getExternalStorageDirectory().getAbsolutePath());
+		//SD_CARD_PATH = sharedPref.getString("sd_card_path", Environment
+		//		.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath());
 
 		// Start foreground service to avoid unexpected kill
 
@@ -490,9 +491,14 @@ public class BackgroundVideoRecorder extends Service implements
 				"max_temp_folder_size", "600000"));
 		MIN_FREE_SPACE = Long.parseLong(sharedPref.getString(
 				"min_free_space", "600000"));
-		SD_CARD_PATH = sharedPref.getString("sd_card_path", Environment
+		if (Build.VERSION.SDK_INT >= 21) {
+			SD_CARD_PATH = sharedPref.getString("sd_card_path",(getExternalMediaDirs())[0].getAbsolutePath());
+		} else if(Build.VERSION.SDK_INT >= 19) {
+			SD_CARD_PATH = sharedPref.getString("sd_card_path",(getExternalFilesDirs(Environment.DIRECTORY_MOVIES))[0].getAbsolutePath());
+		} else {
+			SD_CARD_PATH = sharedPref.getString("sd_card_path", Environment
 				.getExternalStorageDirectory().getAbsolutePath());
-
+		}
 		// create temp and fav folders
 		File mFolder = new File(SD_CARD_PATH + BASE_FOLDER + TEMP_FOLDER); //"/CosyDVR/temp/");
 		if (!mFolder.exists()) {
@@ -502,12 +508,12 @@ public class BackgroundVideoRecorder extends Service implements
 		if (!mFolder.exists()) {
 			mFolder.mkdirs();
 		}
-
 		//first of all make sure we have enough free space
 		freeSpace();
 
 		/* start */
 		OpenUnlockPrepareStart();
+
 		applyCameraParameters();
 		/*
 		 * debug Parameters parameters = camera.getParameters();
