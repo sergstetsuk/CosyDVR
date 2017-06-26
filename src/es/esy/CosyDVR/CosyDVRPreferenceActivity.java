@@ -1,6 +1,7 @@
 package es.esy.CosyDVR;
 
 import android.os.Bundle;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.Preference;
@@ -22,7 +23,7 @@ public class CosyDVRPreferenceActivity extends PreferenceActivity
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
     }
 
-    public static class MyPreferenceFragment extends PreferenceFragment
+    public class MyPreferenceFragment extends PreferenceFragment
         implements OnSharedPreferenceChangeListener
     {
         @Override
@@ -31,11 +32,14 @@ public class CosyDVRPreferenceActivity extends PreferenceActivity
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
             ListPreference LP = (ListPreference) findPreference("sd_card_path");
-            CharSequence[] entries = new CharSequence[StorageUtils.getStorageList().size()];
-            CharSequence[] entryValues = new CharSequence[StorageUtils.getStorageList().size()];
-            for (int i = 0; i < StorageUtils.getStorageList().size(); i++) {
-            	entries[i] = StorageUtils.getStorageList().get(i).getDisplayName();
-            	entryValues[i] = StorageUtils.getStorageList().get(i).path;
+            Context context = getActivity();
+            StorageUtils stutils = new StorageUtils();
+            stutils.getStorageList(context);
+            CharSequence[] entries = new CharSequence[stutils.getStorageList(context).size()];
+            CharSequence[] entryValues = new CharSequence[stutils.getStorageList(context).size()];
+            for (int i = 0; i < stutils.getStorageList(context).size(); i++) {
+            	entries[i] = stutils.getStorageList(context).get(i).getDisplayName();
+            	entryValues[i] = stutils.getStorageList(context).get(i).path;
             }
             LP.setEntries(entries);
             LP.setEntryValues(entryValues);

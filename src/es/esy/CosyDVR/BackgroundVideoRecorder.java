@@ -494,7 +494,7 @@ public class BackgroundVideoRecorder extends Service implements
 		if (Build.VERSION.SDK_INT >= 21) {
 			SD_CARD_PATH = sharedPref.getString("sd_card_path",(getExternalMediaDirs())[0].getAbsolutePath());
 		} else if(Build.VERSION.SDK_INT >= 19) {
-			SD_CARD_PATH = sharedPref.getString("sd_card_path",(getExternalFilesDirs(Environment.DIRECTORY_MOVIES))[0].getAbsolutePath());
+			SD_CARD_PATH = sharedPref.getString("sd_card_path",(getExternalFilesDirs(""))[0].getAbsolutePath());
 		} else {
 			SD_CARD_PATH = sharedPref.getString("sd_card_path", Environment
 				.getExternalStorageDirectory().getAbsolutePath());

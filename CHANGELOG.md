@@ -1,3 +1,9 @@
+### v.1.3.18 (2017.06.27 01:30)
+
+  * SD Card detection improved for Adroid 5.x. Now ExternalMediaDirs and ExternalFilesDirs are detected
+  * Not filtering tmpfs (ram drives) and other dirs like (obb, asec, secure etc) any more
+  * Default storage dir is one from getExternalStorageDirectory, getExtrernalMediaDirs or getExternalFilesDirs
+
 ### v.1.3.17 (2017.05.26 12:44)
 
   * MIN_FREE_SPACE MAX_TEMP_SIZE are now parsed as truly long
