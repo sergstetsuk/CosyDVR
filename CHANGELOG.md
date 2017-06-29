@@ -1,3 +1,7 @@
+### v.1.3.19 (2017.06.29 11:54)
+
+  * Fixed null dirs when there is no sd card present
+
 ### v.1.3.18 (2017.06.27 01:30)
 
   * SD Card detection improved for Adroid 5.x. Now ExternalMediaDirs and ExternalFilesDirs are detected
