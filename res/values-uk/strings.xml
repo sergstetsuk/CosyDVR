@@ -9,4 +9,7 @@
     <string name="night">НІЧ</string>
     <string name="exit">ВИХІД</string>
     <string name="gps_off">GPS ВІДКЛ</string>
+    <string name="longclick">LongClick</string>
+    <string name="preferences">налаштування і допомога</string>
+    <string name="timelapse">режим стиснення часу</string>
 </resources>

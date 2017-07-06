@@ -81,7 +81,9 @@ public class BackgroundVideoRecorder extends Service implements
 */
 	public boolean AUTOSTART = false;
 	public boolean USEGPS = true;
-        public boolean REVERSE_ORIENTATION = false;
+	public boolean REVERSE_ORIENTATION = false;
+        public int ORIENTATION_ANGLE = 0;
+        public int ORIENTATION_HINT = 0;
 
 	// Binder given to clients
 	private final IBinder mBinder = new LocalBinder();
@@ -291,8 +293,6 @@ public class BackgroundVideoRecorder extends Service implements
 		SharedPreferences sharedPref = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		AUTOSTART = sharedPref.getBoolean("autostart_recording", false);
-		USEGPS = sharedPref.getBoolean("use_gps", true);
-                REVERSE_ORIENTATION = sharedPref.getBoolean("reverse_landscape", false);
 		/*
 		 * MAX_VIDEO_BIT_RATE =
 		 * Integer.parseInt(sharedPref.getString("video_bitrate", "5000000"));
@@ -475,6 +475,11 @@ public class BackgroundVideoRecorder extends Service implements
 		/* Rereading preferences */
 		SharedPreferences sharedPref = PreferenceManager
 				.getDefaultSharedPreferences(this);
+		USEGPS = sharedPref.getBoolean("use_gps", true);
+                ORIENTATION_ANGLE = Integer.parseInt(sharedPref.getString(
+				"orientation_angle", "0"));
+                ORIENTATION_HINT = Integer.parseInt(sharedPref.getString(
+				"orientation_hint", "0"));
 		MAX_VIDEO_BIT_RATE = Integer.parseInt(sharedPref.getString(
 				"video_bitrate", "5000000"));
 		VIDEO_WIDTH = Integer.parseInt(sharedPref.getString("video_width",
@@ -492,12 +497,14 @@ public class BackgroundVideoRecorder extends Service implements
 		MIN_FREE_SPACE = Long.parseLong(sharedPref.getString(
 				"min_free_space", "600000"));
 		if (Build.VERSION.SDK_INT >= 21) {
-			SD_CARD_PATH = sharedPref.getString("sd_card_path",(getExternalMediaDirs())[0].getAbsolutePath());
+			SD_CARD_PATH = sharedPref.getString("sd_card_path"
+				,(getExternalMediaDirs())[0].getAbsolutePath());
 		} else if(Build.VERSION.SDK_INT >= 19) {
-			SD_CARD_PATH = sharedPref.getString("sd_card_path",(getExternalFilesDirs(""))[0].getAbsolutePath());
+			SD_CARD_PATH = sharedPref.getString("sd_card_path"
+				,(getExternalFilesDirs(""))[0].getAbsolutePath());
 		} else {
 			SD_CARD_PATH = sharedPref.getString("sd_card_path", Environment
-				.getExternalStorageDirectory().getAbsolutePath());
+				.getExternalStorageDirectory().getAbsolutePath()) + "/CosyDVR";
 		}
 		// create temp and fav folders
 		File mFolder = new File(SD_CARD_PATH + BASE_FOLDER + TEMP_FOLDER); //"/CosyDVR/temp/");
@@ -589,13 +596,9 @@ public class BackgroundVideoRecorder extends Service implements
 			mWakeLock.acquire();
 			try {
 				camera = Camera.open(/* CameraInfo.CAMERA_FACING_BACK */);
-                if(REVERSE_ORIENTATION) {
-                    camera.setDisplayOrientation(180);
-                } else {
-                    camera.setDisplayOrientation(0);
-                }
+				camera.setDisplayOrientation(ORIENTATION_ANGLE); //Display orientation
 				mediaRecorder = new MediaRecorder();
-                camera.unlock();
+				camera.unlock();
 
 				// mediaRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());
 				mediaRecorder.setCamera(camera);
@@ -654,11 +657,7 @@ public class BackgroundVideoRecorder extends Service implements
 				mediaRecorder.setMaxDuration(this.MAX_VIDEO_DURATION);
 				mediaRecorder.setMaxFileSize(0); // 0 - no limit
 				mediaRecorder.setOnInfoListener(this);
-                if(REVERSE_ORIENTATION) {
-                    mediaRecorder.setOrientationHint(180);
-                } else {
-                    mediaRecorder.setOrientationHint(0);
-                }
+				mediaRecorder.setOrientationHint(ORIENTATION_HINT); //mark videofile as rotated
 
 				mediaRecorder.prepare();
 				mediaRecorder.start();
@@ -785,14 +784,6 @@ public class BackgroundVideoRecorder extends Service implements
 
 	public void toggleFavorite() {
 		isfavorite = (isfavorite + 1) % 3;
-	}
-
-	public void toggleRecording() {
-		if (isrecording) {
-			StopRecording();
-		} else {
-			StartRecording();
-		}
 	}
 
 	public void ChangeSurface(int width, int height) {

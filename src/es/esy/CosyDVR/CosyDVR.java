@@ -12,13 +12,14 @@ import android.os.Bundle;
 import android.os.Environment;
 //import android.os.SystemClock;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
-//import android.widget.Toast;
+import android.widget.Toast;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.graphics.Point;
@@ -34,7 +35,6 @@ public class CosyDVR extends Activity{
     Button favButton,recButton,flsButton,exiButton,focButton,nigButton;
     View mainView;
     boolean mBound = false;
-    boolean recording = false;
     boolean mayclick = false;
     private int mWidth=1,mHeight=1;
     long ExitPressTime = 0;
@@ -66,24 +66,7 @@ public class CosyDVR extends Activity{
   public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
 
-      recording = false;
-      
-      SharedPreferences sharedPref = PreferenceManager
-                .getDefaultSharedPreferences(this);
-      boolean REVERSE_ORIENTATION = sharedPref.getBoolean("reverse_landscape", false);
-      if(REVERSE_ORIENTATION) {
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-      } else {
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-      }
-
-
       setContentView(R.layout.main);
-      
-      //~ File tmpdir = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/temp/");
-      //~ File favdir = new File(Environment.getExternalStorageDirectory() + "/CosyDVR/fav/");
-      //~ tmpdir.mkdirs();
-      //~ favdir.mkdirs();
 
       favButton = (Button)findViewById(R.id.fav_button);
       recButton = (Button)findViewById(R.id.rec_button);
@@ -98,6 +81,7 @@ public class CosyDVR extends Activity{
       focButton.setOnClickListener(focButtonOnClickListener);
       nigButton.setOnClickListener(nigButtonOnClickListener);
       flsButton.setOnClickListener(flsButtonOnClickListener);
+      exiButton.setOnClickListener(exiButtonOnClickListener);
       exiButton.setOnLongClickListener(exiButtonOnLongClickListener);
       recButton.setOnLongClickListener(recButtonOnLongClickListener);
       nigButton.setOnLongClickListener(nigButtonOnLongClickListener);
@@ -130,10 +114,8 @@ public class CosyDVR extends Activity{
          	 }
          	 return true;
           }
-
       });
-
-     
+            updateinterface();
   }
 
   @Override
@@ -179,6 +161,7 @@ public class CosyDVR extends Activity{
 
   @Override
   public void onResume(){
+    	updateinterface(); //after preferences
 	  if(mBound) {
 		  mService.ChangeSurface(mWidth, mHeight);
 	  }
@@ -186,17 +169,36 @@ public class CosyDVR extends Activity{
 	  this.registerReceiver(receiver,filter);
   }
 
-  public void updateinterface(){
-	  if(mBound) {
+public void showHint(String text){
+	SharedPreferences sharedPref = PreferenceManager
+			.getDefaultSharedPreferences(this);
+	boolean HIDE_HINTS = sharedPref.getBoolean("hide_hints", false);
+	if(!HIDE_HINTS) {
+		Toast infotoast = Toast.makeText(CosyDVR.this, text, Toast.LENGTH_LONG);
+		infotoast.setGravity(Gravity.BOTTOM/* | Gravity.FILL_HORIZONTAL*/,0,0);
+		infotoast.setMargin(0,0);
+		infotoast.show();
+	}
+}
+
+public void updateinterface(){
+	SharedPreferences sharedPref = PreferenceManager
+			.getDefaultSharedPreferences(this);
+	boolean REVERSE_ORIENTATION = sharedPref.getBoolean("reverse_landscape", false);
+	if(REVERSE_ORIENTATION) {
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+	} else {
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+	}
+	if(mBound) {
 		favButton.setText(getString(R.string.fav) + " [" + mService.isFavorite() + "]");
 		if(mService.isRecording()) {
 			recButton.setText(getString(R.string.restart));
 		} else {
 			recButton.setText(getString(R.string.start));
 		}
-
-	  }
 	}
+}
   
  Button.OnClickListener favButtonOnClickListener
   = new Button.OnClickListener(){
@@ -214,22 +216,14 @@ public class CosyDVR extends Activity{
 
 @Override
 public void onClick(View v) {
- // TODO Auto-generated method stub
-/* if(mService.isRecording()){
-	 recButton.setText(getString(R.string.rec));
- }else{
-     recButton.setText(getString(R.string.stop));
- }
- 	 mService.toggleRecording();
-*/
-	 mService.RestartRecording(); //stop
+	showHint(getString(R.string.longclick) + ": " + getString(R.string.preferences));
+	mService.RestartRecording(); //start/restart
 }};
 
 Button.OnClickListener focButtonOnClickListener
 = new Button.OnClickListener(){
 @Override
 public void onClick(View v) {
-// TODO Auto-generated method stub
 	  if(mBound) {
 		  mService.toggleFocus();
 		  focButton.setText(getString(R.string.focus) + " [" + mFocusNames[mService.getFocusMode()] + "]");
@@ -241,7 +235,7 @@ Button.OnClickListener nigButtonOnClickListener
 = new Button.OnClickListener(){
 @Override
 public void onClick(View v) {
-// TODO Auto-generated method stub
+	showHint(getString(R.string.longclick) + ": " + getString(R.string.timelapse));
 	  if(mBound) {
 		  mService.toggleNight();
 	  }
@@ -279,24 +273,17 @@ public boolean onLongClick(View v) {
 	  return true;
 }};
 
+Button.OnClickListener exiButtonOnClickListener
+= new Button.OnClickListener(){
+@Override
+public void onClick(View v) {
+	showHint(getString(R.string.longclick) + ": " + getString(R.string.exit));
+}};
+
 Button.OnLongClickListener exiButtonOnLongClickListener
 = new Button.OnLongClickListener(){
 @Override
 public boolean onLongClick(View v) {
-// TODO Auto-generated method stub
-/*	if(SystemClock.elapsedRealtime() > (ExitPressTime + 1000)
-	   && SystemClock.elapsedRealtime() < (ExitPressTime + 2000)) { 
-		if(mBound) {
-			unbindService(CosyDVR.this.mConnection);
-			CosyDVR.this.mBound = false;
-		}
-		stopService(new Intent(CosyDVR.this, BackgroundVideoRecorder.class));
-		CosyDVR.this.finish();
-		//System.exit(0);
-	} else {
-		ExitPressTime = SystemClock.elapsedRealtime();
-		//Toast.makeText(CosyDVR.this, R.string.exit_again, Toast.LENGTH_LONG).show();
-	}*/
 	if(mBound) {
 		unbindService(CosyDVR.this.mConnection);
 		CosyDVR.this.mBound = false;

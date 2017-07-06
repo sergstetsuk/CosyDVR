@@ -9,4 +9,7 @@
     <string name="night">NIGHT</string>
     <string name="exit">EXIT</string>
     <string name="gps_off">GPS OFF</string>
+    <string name="longclick">LongClick</string>
+    <string name="preferences">preferences and help</string>
+    <string name="timelapse">timelapse mode toggle</string>
 </resources>

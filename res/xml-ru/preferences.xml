@@ -21,10 +21,22 @@
         android:summary="Развернуть изображение на 180 градусов"
         android:defaultValue="false"
         android:enabled="true" />
+        <EditTextPreference 
+        android:key="orientation_angle"
+        android:title="Угол поворота видео на дисплее"
+        android:dialogTitle="Угол поворота на дисплее"
+        android:numeric="integer"  
+        android:defaultValue="0" />
+        <EditTextPreference 
+        android:key="orientation_hint"
+        android:title="Угол поворота видео в метаданных файла"
+        android:dialogTitle="Угол поворота в метаданных"
+        android:numeric="integer"  
+        android:defaultValue="0" />
         <ListPreference
-            android:key="sd_card_path"
-            android:title="Путь к SD карте"
-            android:summary="По умолчанию" />
+        android:key="sd_card_path"
+        android:title="Путь к SD карте"
+        android:summary="По умолчанию" />
         <EditTextPreference 
         android:key="max_temp_folder_size"
         android:title="Размер временного каталога"
@@ -120,6 +132,12 @@
                         android:selectable="false"
                         android:title="КЛИК ПО ЭКРАНУ"
                         android:summary="Повторная фокусировка в режимах A и M" />
+                        <CheckBoxPreference 
+                        android:key="hide_hints"
+                        android:title="Не показывать подсказки"
+                        android:summary="Не показывать подсказки на мультифункциональных кнопках"
+                        android:defaultValue="false"
+                        android:enabled="true" />
                 </PreferenceScreen>
                 <Preference
                 android:key="instruction_about"

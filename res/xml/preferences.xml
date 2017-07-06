@@ -21,6 +21,18 @@
         android:summary="Use camera reverse landscape orientation"
         android:defaultValue="false"
         android:enabled="true" />
+		<EditTextPreference 
+		    android:key="orientation_angle"
+		    android:title="Display Orientation Angle"
+                    android:dialogTitle="Display Rotation Angle"
+                    android:numeric="integer"  
+                    android:defaultValue="0" />
+		<EditTextPreference 
+		    android:key="orientation_hint"
+		    android:title="Video Rotation Angle Metadata"
+                    android:dialogTitle="Video Rotation Metadata"
+                    android:numeric="integer"  
+                    android:defaultValue="0" />
 		<ListPreference
 		    android:key="sd_card_path"
 		    android:title="External Storage Path"
@@ -120,6 +132,12 @@
                         android:selectable="false"
                         android:title="TAP ON SCREEN"
                         android:summary="Manual refocus in [A]uto and [M]acro modes only" />
+                        <CheckBoxPreference 
+                        android:key="hide_hints"
+                        android:title="Hide Hints on button functions"
+                        android:summary="Do not show annoying hints on multifunction buttons"
+                        android:defaultValue="false"
+                        android:enabled="true" />
                 </PreferenceScreen>
                 <Preference
                 android:key="instruction_about"

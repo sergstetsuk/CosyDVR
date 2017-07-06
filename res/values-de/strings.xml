@@ -9,4 +9,7 @@
     <string name="night">NACHT</string>
     <string name="exit">ENDE</string>
     <string name="gps_off">GPS AUS</string>
+    <string name="longclick">LongClick</string>
+    <string name="preferences">preferences and help</string>
+    <string name="timelapse">timelapse mode toggle</string>
 </resources>

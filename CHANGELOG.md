@@ -1,3 +1,13 @@
+### v.1.3.20 (2017.07.06 16:36)
+
+  * Default storage dir for Android 4.x =  ExternalStorageDirectory + "/CosyDVR"
+  * Custom video rotation angle
+  * Video rotation info in file metadata preference
+  * Separated interface layout rotation from video rotation and rotation metainfo
+  * Orientation parameters changes on the fly. No restart needed any more
+  * Buttons with long click functions have hints now
+  * Disable button hints option on help screen added
+
 ### v.1.3.19 (2017.06.29 11:54)
 
   * Fixed null dirs when there is no sd card present

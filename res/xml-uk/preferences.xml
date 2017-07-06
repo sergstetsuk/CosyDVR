@@ -18,6 +18,18 @@
                 android:title="Перевернуте альбомне положення"
                 android:summary="Перевернути альбомне відображення відео"
                 android:defaultValue="false" />
+		<EditTextPreference 
+		    android:key="orientation_angle"
+		    android:title="Кут повороту відео на екрані"
+                    android:dialogTitle="Кут повороту відео"
+                    android:numeric="integer"  
+                    android:defaultValue="0" />
+		<EditTextPreference 
+		    android:key="orientation_hint"
+		    android:title="Кут повороту метадані файлу"
+                    android:dialogTitle="Кут повороту метадані файлу"
+                    android:numeric="integer"  
+                    android:defaultValue="0" />
                 <ListPreference
                     android:key="sd_card_path"
                     android:title="Шлях до SD карти"
@@ -117,6 +129,12 @@
                         android:selectable="false"
                         android:title="КЛІК ПО ЕКРАНУ"
                         android:summary="Повторне фокусування в режимах A i M" />
+                        <CheckBoxPreference 
+                        android:key="hide_hints"
+                        android:title="Сховати показувати підказки"
+                        android:summary="Сховати підказки для кнопок з кількома функціями"
+                        android:defaultValue="false"
+                        android:enabled="true" />
                 </PreferenceScreen>
                 <Preference
                 android:key="instruction_about"
