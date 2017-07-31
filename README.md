@@ -1,7 +1,12 @@
 CosyDVR
 =======
 
-android open souce car blackbox DVR app (GPLv3+)
+An Android open souce car blackbox DVR app (GPLv3+)
+
+<a href="https://f-droid.org/packages/es.esy.CosyDVR/" target="_blank">
+<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80"/></a>
+<a href="https://play.google.com/store/apps/details?id=es.esy.CosyDVR" target="_blank">
+<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="80"/></a>
 
 Features:
 - Free and open source project forever
