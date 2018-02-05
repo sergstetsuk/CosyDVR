@@ -672,6 +672,7 @@ public class BackgroundVideoRecorder extends Service implements
 	public void freeSpace() {
 		File dir = new File(SD_CARD_PATH + BASE_FOLDER + TEMP_FOLDER); //"/CosyDVR/temp/");
 		File[] filelist = dir.listFiles();
+		if (filelist == null) return;
 		Arrays.sort(filelist, new Comparator<File>() {
 			public int compare(File f1, File f2) {
 				return Long.valueOf(f2.lastModified()).compareTo(
