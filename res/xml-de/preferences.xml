@@ -40,13 +40,13 @@
                 <EditTextPreference
                 android:key="max_temp_folder_size"
                 android:title="Größe des temporären Ordners"
-                android:dialogTitle="Größe des temp-Ordners in Bytes"
+                android:dialogTitle="Größe des temp-Ordners in Kilobyte"
                 android:numeric="integer"
                 android:defaultValue="10000000" />
                 <EditTextPreference
                 android:key="min_free_space"
                 android:title="Minimaler freier Restbereich"
-                android:dialogTitle="Minimaler freier Restbereich in Bytes"
+                android:dialogTitle="Minimaler freier Restbereich in Kilobyte"
                 android:numeric="integer"
                 android:defaultValue="1000000" />
                 <EditTextPreference

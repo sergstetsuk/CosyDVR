@@ -40,13 +40,13 @@
 		<EditTextPreference 
 		android:key="max_temp_folder_size"
 		android:title="Temp Folder Size"
-		android:dialogTitle="Temp folder size in bytes"
+		android:dialogTitle="Temp folder size in kilobytes"
 		android:numeric="integer"  
 		android:defaultValue="10000000" />
 		<EditTextPreference 
 		android:key="min_free_space"
 		android:title="Min Free Space"
-		android:dialogTitle="Min free space in bytes"
+		android:dialogTitle="Min free space in kilobytes"
 		android:numeric="integer"  
 		android:defaultValue="1000000" />
 		<EditTextPreference 

@@ -55,8 +55,8 @@ import android.preference.PreferenceManager;
 public class BackgroundVideoRecorder extends Service implements
 		SurfaceHolder.Callback, MediaRecorder.OnInfoListener, LocationListener {
 	// CONSTANTS-OPTIONS
-	public long MAX_TEMP_FOLDER_SIZE = 10000000;
-	public long MIN_FREE_SPACE = 1000000;
+	public long MAX_TEMP_FOLDER_SIZE_KB = 10000000;
+	public long MIN_FREE_SPACE_KB = 1000000;
 	public int MAX_VIDEO_DURATION = 600000;
 	public int VIDEO_WIDTH = 1280;// 1920;
 	public int VIDEO_HEIGHT = 720;// 1080;
@@ -301,9 +301,9 @@ public class BackgroundVideoRecorder extends Service implements
 		 * Integer.parseInt(sharedPref.getString("video_height", "720"));
 		 * MAX_VIDEO_DURATION =
 		 * Integer.parseInt(sharedPref.getString("video_duration", "600000"));
-		 * MAX_TEMP_FOLDER_SIZE =
+		 * MAX_TEMP_FOLDER_SIZE_KB =
 		 * Integer.parseInt(sharedPref.getString("max_temp_folder_size",
-		 * "600000")); MIN_FREE_SPACE =
+		 * "600000")); MIN_FREE_SPACE_KB =
 		 * Integer.parseInt(sharedPref.getString("min_free_space", "600000"));
 		 */
 		//SD_CARD_PATH = sharedPref.getString("sd_card_path", Environment
@@ -492,9 +492,9 @@ public class BackgroundVideoRecorder extends Service implements
 				"1"));
 		MAX_VIDEO_DURATION = Integer.parseInt(sharedPref.getString(
 				"video_duration", "600000"));
-		MAX_TEMP_FOLDER_SIZE = Long.parseLong(sharedPref.getString(
+		MAX_TEMP_FOLDER_SIZE_KB = Long.parseLong(sharedPref.getString(
 				"max_temp_folder_size", "600000"));
-		MIN_FREE_SPACE = Long.parseLong(sharedPref.getString(
+		MIN_FREE_SPACE_KB = Long.parseLong(sharedPref.getString(
 				"min_free_space", "600000"));
 		if (Build.VERSION.SDK_INT >= 21) {
 			SD_CARD_PATH = sharedPref.getString("sd_card_path"
@@ -678,23 +678,23 @@ public class BackgroundVideoRecorder extends Service implements
 						f1.lastModified());
 			}
 		});
-		long totalSize = 0; // in kB
+		long totalSizeKb = 0;
 		int i;
 		for (i = 0; i < filelist.length; i++) {
-			totalSize += filelist[i].length() / 1024;
+			totalSizeKb += filelist[i].length() / 1024;
 		}
 		i = filelist.length - 1;
 		// if(Build.VERSION.SDK_INT >= 11) {
 		while (i > 0
-				&& (totalSize > this.MAX_TEMP_FOLDER_SIZE
-				|| dir.getFreeSpace() < this.MIN_FREE_SPACE)) {
-			totalSize -= filelist[i].length() / 1024;
+				&& (totalSizeKb > this.MAX_TEMP_FOLDER_SIZE_KB)
+				|| (dir.getFreeSpace() / 1024) < this.MIN_FREE_SPACE_KB)) {
+			totalSizeKb -= filelist[i].length() / 1024;
 			filelist[i].delete();
 			i--;
 		}
 		// } else {
-		// while (i > 0 && totalSize > this.MAX_TEMP_FOLDER_SIZE) {
-		// totalSize -= filelist[i].length()/1024;
+		// while (i > 0 && totalSizeKb > this.MAX_TEMP_FOLDER_SIZE_KB) {
+		// totalSizeKb -= filelist[i].length()/1024;
 		// filelist[i].delete();
 		// i--;
 		// }
