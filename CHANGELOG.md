@@ -1,3 +1,7 @@
+### v.1.3.21 (2018.02.05 23:19)
+
+  * Bugfix: sizes of TEMP and FREE spaces are in kilobytes now
+
 ### v.1.3.20 (2017.07.06 16:36)
 
   * Default storage dir for Android 4.x =  ExternalStorageDirectory + "/CosyDVR"
