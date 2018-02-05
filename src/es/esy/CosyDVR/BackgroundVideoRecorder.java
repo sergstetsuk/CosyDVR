@@ -575,13 +575,13 @@ public class BackgroundVideoRecorder extends Service implements
 	}
 
 	private void Stop() {
-		if (isrecording) {
+		if (isrecording && mediaRecorder != null) {
 			mediaRecorder.stop();
 		}
 	}
 
 	private void ResetReleaseLock() {
-		if (isrecording) {
+		if (isrecording && mediaRecorder != null) {
 			mediaRecorder.reset();
 			mediaRecorder.release();
 
