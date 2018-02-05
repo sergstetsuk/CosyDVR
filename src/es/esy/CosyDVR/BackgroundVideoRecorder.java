@@ -685,9 +685,8 @@ public class BackgroundVideoRecorder extends Service implements
 		}
 		i = filelist.length - 1;
 		// if(Build.VERSION.SDK_INT >= 11) {
-		while (i > 0
-				&& (totalSizeKb > this.MAX_TEMP_FOLDER_SIZE_KB)
-				|| (dir.getFreeSpace() / 1024) < this.MIN_FREE_SPACE_KB)) {
+		while (i > 0 && (totalSizeKb > this.MAX_TEMP_FOLDER_SIZE_KB)
+		    || (dir.getFreeSpace() / 1024) < this.MIN_FREE_SPACE_KB) {
 			totalSizeKb -= filelist[i].length() / 1024;
 			filelist[i].delete();
 			i--;

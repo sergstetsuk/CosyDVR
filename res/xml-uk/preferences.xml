@@ -37,13 +37,13 @@
                 <EditTextPreference 
                 android:key="max_temp_folder_size"
                 android:title="Розмір тимчасового каталогу"
-                android:dialogTitle="Розмір тимчасового каталогу в байтах"
+                android:dialogTitle="Розмір тимчасового каталогу в кілобайтах"
                 android:numeric="integer"
                 android:defaultValue="10000000" />
                 <EditTextPreference 
                 android:key="min_free_space"
                 android:title="Розмір вільного місця"
-                android:dialogTitle="Розмір вільного місця в байтах"
+                android:dialogTitle="Розмір вільного місця в кілобайтах"
                 android:numeric="integer"  
                 android:defaultValue="1000000" />
                 <EditTextPreference 

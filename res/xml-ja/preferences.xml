@@ -40,13 +40,13 @@
 		<EditTextPreference 
 		android:key="max_temp_folder_size"
 		android:title="一時フォルダーサイズ"
-		android:dialogTitle="一時フォルダーサイズ (バイト)"
+		android:dialogTitle="一時フォルダーサイズ (キロバイト)"
 		android:numeric="integer"  
 		android:defaultValue="10000000" />
 		<EditTextPreference 
 		android:key="min_free_space"
 		android:title="最小空き容量"
-		android:dialogTitle="最小空き容量 (バイト)"
+		android:dialogTitle="最小空き容量 (キロバイト)"
 		android:numeric="integer"  
 		android:defaultValue="1000000" />
 		<EditTextPreference 

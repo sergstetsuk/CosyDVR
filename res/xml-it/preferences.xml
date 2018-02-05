@@ -39,14 +39,14 @@
 		    android:summary="Predefinito" />
 		<EditTextPreference
 		android:key="max_temp_folder_size"
-		android:title="Dimensione cartella temporanea"
+		android:title="Dimensione cartella temporanea in kilobyte"
 		android:dialogTitle="Dimensione in byte della cartella temporanea"
 		android:numeric="integer"
 		android:defaultValue="10000000" />
 		<EditTextPreference
 		android:key="min_free_space"
 		android:title="Minimo spazio libero"
-		android:dialogTitle="Il minimo spazio libero in byte"
+		android:dialogTitle="Il minimo spazio libero in kilobyte"
 		android:numeric="integer"
 		android:defaultValue="1000000" />
 		<EditTextPreference
