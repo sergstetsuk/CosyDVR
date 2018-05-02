@@ -11,5 +11,6 @@ Here is list of contributors to project. Thank you all guys!
   * vazhnov - fixes
   * snelltheta - fixes
   * edent - fixes
+  * princekelly1 - privacy policy improvement
 
 Excuse me if I've forgot someone.
